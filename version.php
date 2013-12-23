@@ -31,4 +31,4 @@ $plugin->requires  = 2012050100;
 // Full name of the plugin (used for diagnostics).
 $plugin->component = 'tinymce_mathslate';
 // Require Mathslate common modules.
-$plugin->dependencies = array('local_mathslate' => 2013080900)
+$plugin->dependencies = array('local_mathslate' => 2013080900);
