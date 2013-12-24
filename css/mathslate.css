@@ -1,26 +1,7 @@
-/* 
-    Document   : mathedit
-    Created on : Jul 6, 2013, 1:35:26 PM
-    Author     : daniel
-    Description:
-        Purpose of the stylesheet follows.
-*/
-
-root { 
-    display: block;
-}
 .highlight {
     color: green;
 }
 
-.mme-drop {
-    color: aquamarine;
-    background-color: aquamarine;
-}
-.highlight {
-    color: green;
-    background-color: red;
-}
 .hidden {
     height: 0;
     width: 0;
