@@ -13,7 +13,6 @@
                         ed.addCommand('mathSlate', function() {
 
                                 ed.windowManager.open({
-                                        //file : url + '/mathslate.php?lang=' + lang,
                                         file : ed.getParam("moodle_plugin_base") + '/mathslate/mathslate.php?lang=' + lang,
                                         width : 400,
                                         height : 400,
