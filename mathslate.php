@@ -70,7 +70,7 @@ $elementid=$PAGE->bodyid;
 
 $PAGE->requires->yui_module('moodle-tinymce_mathslate-dialogue',
                                 'M.tinymce_mathslate.init',
-                                array(array('elementid'=>$elementid, 'config'=>$CFG->wwwroot . '/lib/editor/atto/plugins/mathslate/config.json')),
+                                array(array('elementid'=>$elementid, 'config'=>$CFG->wwwroot . '/local/mathslate/config.json')),
                                 true);
 
 print $OUTPUT->footer();
