@@ -66,37 +66,27 @@ M.tinymce_mathslate={
         
         var editorID=Y.guid();
         dialogue.append('<div id="'+editorID+'" ></div>');
-        //dialogue.set('headerContent', M.util.get_string('mathslate', 'tinymce_mathslate'));
         var me=new M.local_mathslate.Editor('#'+editorID,M.tinymce_mathslate.config);
-        me.insertMath= function(math){
-            if (math !== '') {
-                //M.editor_tinymce.set_selection(M.tinymce_mathslate.selection);
-                //document.execCommand('insertHTML', false, math);
-            tinyMCEPopup.editor.execCommand('mceInsertContent', false, math);
+        var cancel=Y.one('#'+editorID).appendChild(Y.Node.create('<button>Cancel</button>'));
+        var displayTex=Y.one('#'+editorID).appendChild(Y.Node.create('<button>Display TeX</button>'));
+        var inlineTex=Y.one('#'+editorID).appendChild(Y.Node.create('<button>Inline TeX</button>'));
+
+        displayTex.on('click',function(){
+            tinyMCEPopup.editor.execCommand('mceInsertContent', false,  '\\['+me.output('tex')+'\\]');
             tinyMCEPopup.close();
-            }
-        };
+            });
+        inlineTex.on('click',function(){
+            tinyMCEPopup.editor.execCommand('mceInsertContent', false,  '\\('+me.output('tex')+'\\)');
+            tinyMCEPopup.close();
+            });
+        cancel.on('click',function(){
+            tinyMCEPopup.close();
+            });
+            
         MathJax.Hub.Queue(['Typeset',MathJax.Hub,me.node.generateID()]);
 
         M.tinymce_mathslate.dialogue = dialogue;
-    },
-
-
-    /**
-     * Callback for  math editor to insert markup into text editor
-     *
-     * @method insert_math
-     * @param {Object} math
-     */
-
-    insert_math: function(math){
-        if (math !== '') {
-            //M.editor_tinymce.set_selection(M.tinymce_mathslate.selection);
-            //document.execCommand('insertHTML', false, math);
-            tinyMCEPopup.editor.execCommand('mceInsertContent', false, math);
-            tinyMCEPopup.close();
-
-        }
+        
     }
 
 };
