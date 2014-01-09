@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for DragMath editor integration plugin.
+ * Strings for Mathslate editor integration plugin.
  *
  * @package   tinymce_mathslate
  * @copyright 2013 Daniel Thies
