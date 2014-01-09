@@ -27,3 +27,4 @@ $string['title'] = 'MathSlate Editor';
 
 /* All lang strings used from TinyMCE JavaScript code must be named 'pluginname:stringname', no need to create langs/en_dlg.js */
 $string['mathslate:desc'] = 'Insert equation';
+$string['mathslate'] = 'MathSlate';
