@@ -63,7 +63,7 @@ M.tinymce_mathslate={
         var dialogue = Y.one('#'+params.elementid);
         
         var editorID=Y.guid();
-        dialogue.append('<div id="'+editorID+'" ></div>');
+        dialogue.one('#page-content').append('<div id="'+editorID+'" ></div>');
         var me=new M.local_mathslate.Editor('#'+editorID,M.tinymce_mathslate.config);
         var cancel=Y.one('#'+editorID).appendChild(Y.Node.create('<button>Cancel</button>'));
         var displayTex=Y.one('#'+editorID).appendChild(Y.Node.create('<button>Display TeX</button>'));
