@@ -15,7 +15,7 @@
                                 ed.windowManager.open({
                                         file : ed.getParam("moodle_plugin_base") + '/mathslate/mathslate.php?lang=' + lang,
                                         width : 400,
-                                        height : 400,
+                                        height : 500,
                                         inline : 1
                                 }, {
                                         plugin_url : url, // Plugin absolute URL

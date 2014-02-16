@@ -61,16 +61,18 @@ $htmllang = get_html_lang();
 //Load tinymce popup control for inserting result
 $PAGE->requires->js('/lib/editor/tinymce/tiny_mce/3.5.8/tiny_mce_popup.js',true);
 
-//Loads YUI and MathJax it is included in theme
-print $OUTPUT->header();
-
 $PAGE->requires->strings_for_js(array( 'mathslate'),'tinymce_mathslate');
 
 $elementid=$PAGE->bodyid;
+
+//Loads YUI and MathJax it is included in theme
+print $OUTPUT->header();
 
 $PAGE->requires->yui_module('moodle-tinymce_mathslate-dialogue',
                                 'M.tinymce_mathslate.init',
                                 array(array('elementid'=>$elementid, 'config'=>$CFG->wwwroot . '/local/mathslate/config.json')),
                                 true);
+
+print $OUTPUT->container('','mathslate-container');
 
 print $OUTPUT->footer();
