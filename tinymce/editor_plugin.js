@@ -25,7 +25,7 @@
 
                         // Register button
                         ed.addButton('mathslate', {
-                                title : 'MathSlate',
+                                title : 'mathslate.desc',
                                 cmd : 'mathSlate',
                                 image : url + '/img/mathslate.png'
                         });

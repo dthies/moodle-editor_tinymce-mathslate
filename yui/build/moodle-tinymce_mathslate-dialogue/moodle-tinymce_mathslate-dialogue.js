@@ -65,12 +65,10 @@ M.tinymce_mathslate={
         var dialogue = Y.one('#'+params.elementid);
         
         var editorID=dialogue.one('.mathslate-container').generateID();
-        //dialogue.one('#page-content').append('<div id="'+editorID+'" ></div>');
-        //var me=new M.local_mathslate.Editor('#'+editorID,M.tinymce_mathslate.config);
         var me=new M.local_mathslate.Editor('#'+editorID,M.tinymce_mathslate.config);
-        var cancel=Y.one('#'+editorID).appendChild(Y.Node.create('<button>Cancel</button>'));
-        var displayTex=Y.one('#'+editorID).appendChild(Y.Node.create('<button>Display TeX</button>'));
-        var inlineTex=Y.one('#'+editorID).appendChild(Y.Node.create('<button>Inline TeX</button>'));
+        var cancel=Y.one('#'+editorID).appendChild(Y.Node.create('<button>'+M.util.get_string('cancel','tinymce_mathslate')+'</button>'));
+        var displayTex=Y.one('#'+editorID).appendChild(Y.Node.create('<button>'+M.util.get_string('display','tinymce_mathslate')+'</button>'));
+        var inlineTex=Y.one('#'+editorID).appendChild(Y.Node.create('<button>'+M.util.get_string('inline','tinymce_mathslate')+'</button>'));
 
         displayTex.on('click',function(){
             tinyMCEPopup.editor.execCommand('mceInsertContent', false,  '\\['+me.output('tex')+'\\]');
@@ -84,7 +82,9 @@ M.tinymce_mathslate={
             tinyMCEPopup.close();
             });
             
-        MathJax.Hub.Queue(['Typeset',MathJax.Hub,me.node.generateID()]);
+        if(MathJax){
+            MathJax.Hub.Queue(['Typeset',MathJax.Hub,me.node.generateID()]);
+        }
 
         M.tinymce_mathslate.dialogue = dialogue;
         

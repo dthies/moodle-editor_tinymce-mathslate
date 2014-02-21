@@ -61,7 +61,8 @@ $htmllang = get_html_lang();
 //Load tinymce popup control for inserting result
 $PAGE->requires->js('/lib/editor/tinymce/tiny_mce/3.5.8/tiny_mce_popup.js',true);
 
-$PAGE->requires->strings_for_js(array( 'mathslate'),'tinymce_mathslate');
+$PAGE->requires->strings_for_js(array( 'nomathjax','clear','undo','redo'),'local_mathslate');
+$PAGE->requires->strings_for_js(array( 'mathslate','cancel','inline','display'),'tinymce_mathslate');
 
 $elementid=$PAGE->bodyid;
 

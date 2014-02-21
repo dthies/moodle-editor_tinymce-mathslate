@@ -22,9 +22,12 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'Insert equation';
+$string['pluginname'] = 'TinyMCE Mathslate';
 $string['title'] = 'MathSlate Editor';
+$string['inline'] = 'Inline TeX';
+$string['display'] = 'Display TeX';
+$string['cancel'] = 'Cancel';
+$string['mathslate'] = 'MathSlate';
 
 /* All lang strings used from TinyMCE JavaScript code must be named 'pluginname:stringname', no need to create langs/en_dlg.js */
 $string['mathslate:desc'] = 'Insert equation';
-$string['mathslate'] = 'MathSlate';
