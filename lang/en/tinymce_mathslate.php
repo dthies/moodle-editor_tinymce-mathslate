@@ -28,6 +28,10 @@ $string['inline'] = 'Inline TeX';
 $string['display'] = 'Display TeX';
 $string['cancel'] = 'Cancel';
 $string['mathslate'] = 'MathSlate';
+$string['requiretex'] = 'Require TeX filter';
+$string['requiretex_desc'] = 'If enabled the Mathslate button is visible only when the TeX filter is enabled in the editor context. Disable if you want it to appear globally (normal if MathJax is included in header sitewide).';
+$string['mathjaxurl'] = 'MathJax url';
+$string['mathjaxurl_desc'] = 'The url for the MathJax.js file that mathslate should load if MathJax is not already present and configured';
 
 /* All lang strings used from TinyMCE JavaScript code must be named 'pluginname:stringname', no need to create langs/en_dlg.js */
 $string['mathslate:desc'] = 'Insert equation';

@@ -60,6 +60,9 @@ $htmllang = get_html_lang();
 
 //Load tinymce popup control for inserting result
 $PAGE->requires->js('/lib/editor/tinymce/tiny_mce/3.5.8/tiny_mce_popup.js',true);
+//Load MathJax
+$PAGE->requires->js( new moodle_url(get_config('tinymce_mathslate')->mathjaxurl . '?config=TeX-MML-AM_HTMLorMML-full'));
+
 
 $PAGE->requires->strings_for_js(array( 'nomathjax','clear','undo','redo'),'local_mathslate');
 $PAGE->requires->strings_for_js(array( 'mathslate','cancel','inline','display'),'tinymce_mathslate');
