@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Atto text editor mathslate plugin.
+ * Tinymce text editor mathslate plugin.
  *
  * @package    editor-tinymce
  * @subpackage    mathslate

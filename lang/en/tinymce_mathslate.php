@@ -24,8 +24,8 @@
 
 $string['pluginname'] = 'TinyMCE Mathslate';
 $string['title'] = 'MathSlate Editor';
-$string['inline'] = 'Inline TeX';
-$string['display'] = 'Display TeX';
+$string['inline'] = 'Inline Math';
+$string['display'] = 'Display Math';
 $string['cancel'] = 'Cancel';
 $string['mathslate'] = 'MathSlate';
 $string['requiretex'] = 'Require TeX filter';
