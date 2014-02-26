@@ -29,6 +29,6 @@ if ($ADMIN->fulltree) {
         get_string('requiretex', 'tinymce_mathslate'), get_string('requiretex_desc', 'tinymce_mathslate'), 0));
     $settings->add(new admin_setting_configtext('tinymce_mathslate/mathjaxurl',
         get_string('mathjaxurl', 'tinymce_mathslate'), get_string('mathjaxurl_desc', 'tinymce_mathslate'),
-        'http://localhost/MathJax/MathJax.js', PARAM_RAW));
+        'http://cdn.mathjax.org/mathjax/latest/MathJax.js', PARAM_RAW));
 
 }
