@@ -2,7 +2,8 @@
   "moodle-tinymce_mathslate-dialogue": {
     "requires": [
         "escape",
-        "moodle-local_mathslate-editor"
+        "moodle-local_mathslate-editor",
+        "moodle-tinymce_mathslate-editor"
     ]
   }
 }

@@ -65,7 +65,7 @@ $PAGE->requires->js( new moodle_url(get_config('tinymce_mathslate')->mathjaxurl 
 
 
 $PAGE->requires->strings_for_js(array( 'nomathjax','clear','undo','redo'),'local_mathslate');
-$PAGE->requires->strings_for_js(array( 'mathslate','cancel','inline','display'),'tinymce_mathslate');
+$PAGE->requires->strings_for_js(array( 'mathslate','cancel','inline','display','nomathjax','clear','undo','redo'),'tinymce_mathslate');
 
 $elementid=$PAGE->bodyid;
 
@@ -74,7 +74,7 @@ print $OUTPUT->header();
 
 $PAGE->requires->yui_module('moodle-tinymce_mathslate-dialogue',
                                 'M.tinymce_mathslate.init',
-                                array(array('elementid'=>$elementid, 'config'=>$CFG->wwwroot . '/local/mathslate/config.json')),
+                                array(array('elementid'=>$elementid, 'config'=>$CFG->wwwroot . '/lib/editor/tinymce/plugins/mathslate/config.json')),
                                 true);
 
 print $OUTPUT->container('','mathslate-container');
