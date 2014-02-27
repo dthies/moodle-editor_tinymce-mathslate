@@ -25,8 +25,15 @@
 $string['pluginname'] = 'TinyMCE Mathslate';
 $string['title'] = 'MathSlate Editor';
 $string['inline'] = 'Inline Math';
+$string['inline_desc'] = 'Insert math within a sentence or paragraph';
 $string['display'] = 'Display Math';
+$string['display_desc'] = 'Insert math on a separate line';
 $string['cancel'] = 'Cancel';
+$string['cancel_desc'] = 'Quit and do not save work';
+$string['undo'] = 'Undo previous action';
+$string['redo'] = 'Redo the action just undone';
+$string['clear'] = 'Delete selection or the entire expression';
+$string['help'] = 'Access documentation';
 $string['mathslate'] = 'MathSlate';
 $string['requiretex'] = 'Require TeX filter';
 $string['requiretex_desc'] = 'If enabled the Mathslate button is visible only when the TeX filter is enabled in the editor context. Disable if you want it to appear globally (normal if MathJax is included in header sitewide).';
