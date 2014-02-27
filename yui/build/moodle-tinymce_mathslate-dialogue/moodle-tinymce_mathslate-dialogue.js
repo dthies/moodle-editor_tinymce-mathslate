@@ -24,7 +24,7 @@ YUI.add('moodle-tinymce_mathslate-dialogue', function (Y, NAME) {
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 M.tinymce_mathslate = M.tinymce_mathslate || {};
-M.tinymce_mathslate={
+var NS=M.tinymce_mathslate;
     /**
      * The window used to hold the editor.
      *
@@ -32,7 +32,7 @@ M.tinymce_mathslate={
      * @type M.core.dialogue
      * @default null
      */
-    dialogue : null,
+    NS.dialogue = null;
 
     /**
      * The selection object returned by the browser.
@@ -41,7 +41,7 @@ M.tinymce_mathslate={
      * @type Range
      * @default null
      */
-    selection : null,
+    NS.selection = null;
 
     /**
      * The configuration json string for math tools.
@@ -51,7 +51,7 @@ M.tinymce_mathslate={
      * @default null
      */
 
-    config: null,
+    NS.config = null;
 
     /**
      * Add this button to the form.
@@ -60,12 +60,13 @@ M.tinymce_mathslate={
      * @param {Object} params
      */
 
-    init : function(params) {
-        M.tinymce_mathslate.config=params.config||M.local_mathslate.config;
+    NS.init = function(params) {
+        M.tinymce_mathslate=M.tinymce_mathslate||{};
+        M.tinymce_mathslate.config=params.config||M.tinymce_mathslate.config;
         var dialogue = Y.one('#'+params.elementid);
         
         var editorID=dialogue.one('.mathslate-container').generateID();
-        var me=new M.local_mathslate.Editor('#'+editorID,M.tinymce_mathslate.config);
+        var me=new M.tinymce_mathslate.Editor('#'+editorID,M.tinymce_mathslate.config);
         var cancel=Y.one('#'+editorID).appendChild(Y.Node.create('<button>'+M.util.get_string('cancel','tinymce_mathslate')+'</button>'));
         var displayTex=Y.one('#'+editorID).appendChild(Y.Node.create('<button>'+M.util.get_string('display','tinymce_mathslate')+'</button>'));
         var inlineTex=Y.one('#'+editorID).appendChild(Y.Node.create('<button>'+M.util.get_string('inline','tinymce_mathslate')+'</button>'));
@@ -88,9 +89,8 @@ M.tinymce_mathslate={
 
         M.tinymce_mathslate.dialogue = dialogue;
         
-    }
-
-};
+    };
 
 
-}, '@VERSION@', {"requires": ["escape", "moodle-local_mathslate-editor"]});
+
+}, '@VERSION@', {"requires": ["escape", "moodle-local_mathslate-editor", "moodle-tinymce_mathslate-editor"]});
