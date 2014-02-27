@@ -45,10 +45,10 @@
     border-left: solid 5px #1E1;
     }
     65% {
-    border-left: solid 5px #121;
+    border-left: solid 5px #131;
     }
     to {
-    border-left: solid 5px #131;
+    border-left: solid 5px #121;
     }
 }
 
