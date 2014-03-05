@@ -49,51 +49,9 @@ M.tinymce_mathslate.Editor=function(editorID,config){
     this.node.appendChild(Y.Node.create('<div id="' +workID +'" >'));
 
     var mje=new M.tinymce_mathslate.MathJaxEditor('#'+workID);
-    //Place buttons for internal editor functions
-/*
-    var undo=Y.Node.create('<button type="button" class="'
-           +CSS.UNDO+'">'+ '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
-           + M.util.image_url('undo', 'tinymce_mathslate') + '" title="'+M.util.get_string('undo','tinymce_mathslate')+'"/></button>');
-    var redo=Y.Node.create('<button type="button" class="'
-           +CSS.REDO+'">'+ '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
-           + M.util.image_url('redo', 'tinymce_mathslate') + '" title="'+M.util.get_string('redo','tinymce_mathslate')+'"/></button>');
-    var clear=Y.Node.create('<button type="button" class="'
-           +CSS.CLEAR+'">'+ '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
-           + M.util.image_url('delete', 'tinymce_mathslate') + '" title="'+M.util.get_string('clear','tinymce_mathslate')+'"/></button>');
-*/
-
-    var undo=Y.Node.create('<button type="button" class="' + CSS.UNDO+'"'
-           + '" title="'+M.util.get_string('undo','tinymce_mathslate')+'"/>'
-           +'<math><mo>&#x2190;</mo></math>'
-           +'</button>');
-
-    var redo=Y.Node.create('<button type="button" class="' + CSS.REDO+'"'
-           + '" title="'+M.util.get_string('redo','tinymce_mathslate')+'"/>'
-           +'<math><mo>&#x2192;</mo></math>'
-           +'</button>');
-
-    var clear=Y.Node.create('<button type="button" class="' + CSS.CLEAR+'"'
-           + '" title="'+M.util.get_string('clear','tinymce_mathslate')+'"/>'
-           +'<math><mi>A&#x338;</mi></math>'
-           +'</button>');
-
-    var help=Y.Node.create('<button type="submit" class="'
-           +CSS.HELP+'", formaction="https://github.com/dthies/moodle-tinymce_mathslate/wiki/Using-Mathslate" formtarget="_blank" title="'
-           + M.util.get_string('help','tinymce_mathslate')+'">'
-           + '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
-           + M.util.image_url('help', 'core') + '"`/></button>');
-    var toolbar=Y.Node.create('<form></form>');
-    mje.workspace.insert(toolbar,1);
-    toolbar.appendChild(clear);
-    toolbar.appendChild(undo);
-    toolbar.appendChild(redo);
-    toolbar.appendChild(help);
-
+ 
     var me=this;
     me.output = function(f){return mje.output(f);};
-    redo.on('click',function(){mje.redo();});
-    undo.on('click',function(){mje.undo();});
-    clear.on('click',function(){mje.clear();});
 
     var tbox={tools: [],
         fillToolBox: function(tools){
@@ -192,6 +150,19 @@ M.tinymce_mathslate.Editor=function(editorID,config){
         Y.io(config);
     }
 };
+    //Place buttons for internal editor functions
+/*
+    var undo=Y.Node.create('<button type="button" class="'
+           +CSS.UNDO+'">'+ '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
+           + M.util.image_url('undo', 'tinymce_mathslate') + '" title="'+M.util.get_string('undo','tinymce_mathslate')+'"/></button>');
+    var redo=Y.Node.create('<button type="button" class="'
+           +CSS.REDO+'">'+ '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
+           + M.util.image_url('redo', 'tinymce_mathslate') + '" title="'+M.util.get_string('redo','tinymce_mathslate')+'"/></button>');
+    var clear=Y.Node.create('<button type="button" class="'
+           +CSS.CLEAR+'">'+ '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
+           + M.util.image_url('delete', 'tinymce_mathslate') + '" title="'+M.util.get_string('clear','tinymce_mathslate')+'"/></button>');
+*/
+
 
 
 }, '@VERSION@', {
