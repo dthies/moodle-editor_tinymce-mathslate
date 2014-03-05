@@ -21,7 +21,8 @@ var CSS = {
     PREVIEW: 'mathslate-preview',
     HIGHLIGHT: 'mathslate-highlight',
     DRAGNODE: 'mathslate-workspace-drag',
-    DRAGGEDNODE: 'mathslate-workspace-dragged'
+    DRAGGEDNODE: 'mathslate-workspace-dragged',
+    PANEL: 'mathslate-bottom-panel'
 };
 var SELECTORS = {
     SELECTED: '.' + CSS.SELECTED,
@@ -34,7 +35,8 @@ M.tinymce_mathslate.MathJaxEditor=function(id){
         var se=new M.tinymce_mathslate.mSlots();
         se.slots.push(math);
         this.workspace=Y.one(id).append('<div id="canvas" class="'+CSS.WORKSPACE+'"/>');
-        var preview = Y.one(id).appendChild(Y.Node.create('<div class="'+CSS.PREVIEW+'">'));
+        var toolbar= Y.one(id).appendChild(Y.Node.create('<form></form>'));
+        var preview = Y.one(id).appendChild(Y.Node.create('<div class="'+CSS.PANEL+'"/>'));
         preview.delegate('click',function(e){
             e.stopPropagation();
             canvas.get('node').one('#'+this.getAttribute('id')).handleClick();
@@ -46,11 +48,78 @@ M.tinymce_mathslate.MathJaxEditor=function(id){
             se.select();
             render();
         });
+
+    //Place buttons for internal editor functions
+/*
+    var undo=Y.Node.create('<button type="button" class="'
+           +CSS.UNDO+'">'+ '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
+           + M.util.image_url('undo', 'editor_tinymce') + '" title="'+M.util.get_string('undo','tinymce_mathslate')+'"/></button>');
+    var redo=Y.Node.create('<button type="button" class="'
+           +CSS.REDO+'">'+ '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
+           + M.util.image_url('redo', 'editor_tinymce') + '" title="'+M.util.get_string('redo','tinymce_mathslate')+'"/></button>');
+    var clear=Y.Node.create('<button type="button" class="'
+           +CSS.CLEAR+'">'+ '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
+           + M.util.image_url('delete', 'editor_tinymce') + '" title="'+M.util.get_string('clear','tinymce_mathslate')+'"/></button>');
+    var help=Y.Node.create('<button type="button" class="'
+           +CSS.HELP+'">'+ '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
+           + M.util.image_url('help', 'core') + '" title="'+M.util.get_string('help','tinymce_mathslate')+'"/></button>');
+*/
+
+    var undo=Y.Node.create('<button type="button" class="' + CSS.UNDO+'"'
+           + '" title="'+M.util.get_string('undo','tinymce_mathslate')+'"/>'
+           +'<math><mo>&#x25C1;</mo></math>'
+           +'</button>');
+
+    var redo=Y.Node.create('<button type="button" class="' + CSS.REDO+'"'
+           + '" title="'+M.util.get_string('redo','tinymce_mathslate')+'"/>'
+           +'<math><mo>&#x25B7;</mo></math>'
+           +'</button>');
+    var clear=Y.Node.create('<button type="button" class="' + CSS.CLEAR+'"'
+           + '" title="'+M.util.get_string('clear','tinymce_mathslate')+'"/>'
+           +'<math><mi>&#x2718;</mi></math>'
+           +'</button>');
+
+    var help=Y.Node.create('<button type="button" class="'
+           +CSS.HELP+'" title="'
+           + M.util.get_string('help','tinymce_mathslate')+'">'
+           +'<math><mi>&#xE47C;</mi></math>'
+           + '</button>');
+    toolbar.appendChild(clear);
+    toolbar.appendChild(undo);
+    toolbar.appendChild(redo);
+    toolbar.appendChild(help);
+
+        redo.on('click',function(){
+            se=se.redo();
+            math = se.slots[0];
+            render();
+        });
+        undo.on('click',function(){
+            se=se.undo();
+            math = se.slots[0];
+            render();
+        });
+        clear.on('click',function(){
+            if(Y.one(SELECTORS.SELECTED)){
+                se.removeSnippet(Y.one(SELECTORS.SELECTED).getAttribute('id'));
+            } else {
+                math=[];
+                se.next=new M.tinymce_mathslate.mSlots();
+                se.next.previous=se;
+                se=se.next;
+                se.slots.push(math);
+            }
+            render();
+        });
+ 
+    help.on('click', function(){
+        preview.setHTML('<iframe src="http://docs.moodle.org/26/en/TinyMCE_Mathslate" />');
+    });
 /* Add drag and drop functionality
  * @function makeDraggable
  */
         function makeDraggable () {
-            preview.setHTML(se.preview('tex'));
+            preview.setHTML('<div class="'+CSS.PREVIEW+'">'+se.preview('tex')+'</div>');
             se.forEach(function(m){
                 var node=canvas.get('node').one('#'+m[1].id);
                 if(!node){return;}
@@ -185,9 +254,6 @@ M.tinymce_mathslate.MathJaxEditor=function(id){
             if(format==='HTML') {
                 return canvas.get('node').one('span').getHTML();
             }
-            return se.output(format);
-        };
-        this.preview = function(format){
             return se.output(format);
         };
         this.getHTML = function(){

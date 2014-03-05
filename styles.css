@@ -22,15 +22,29 @@
     background: #111;
     color: #FFF;
 }
+
 .mathslate-tinymce .mathslate-preview div {
-    padding-left: 5px;
-    border-left: solid 5px #111;
+    padding-left: 10px;
+}
+
+.mathslate-tinymce .mathslate-preview .mathslate-selected div {
 }
 
 .mathslate-tinymce .mathslate-preview .mathslate-selected {
-    padding-left: 5px;
-    border-left: solid 5px green;
+    border-left: solid 5px #green;
     background-color: #121;
+}
+
+.mathslate-tinymce iframe {
+    background: #FFF;
+    height: 130px;
+    padding: 0;
+    border: 0px;
+}
+
+.mathslate-tinymce .mathslate-preview .mathslate-selected {
+    background-color: #333;
+    border-left: solid 5px green;
     animation-duration: 750ms;
     animation-name: flash;
     animation-iteration-count: infinite;
@@ -56,7 +70,6 @@
 }
 
 .mathslate-tinymce .mathslate-workspace {
-    background-image: none;
     background-color: #333; 
     color: #EEE; 
     height: 100px;
@@ -116,3 +129,9 @@ height: 100px
 .mathslate-tinymce .mathslate-redo-button {
 }
 
+.mathslate-tinymce form button {
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    padding: 0px;
+}
