@@ -150,19 +150,6 @@ M.tinymce_mathslate.Editor=function(editorID,config){
         Y.io(config);
     }
 };
-    //Place buttons for internal editor functions
-/*
-    var undo=Y.Node.create('<button type="button" class="'
-           +CSS.UNDO+'">'+ '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
-           + M.util.image_url('undo', 'tinymce_mathslate') + '" title="'+M.util.get_string('undo','tinymce_mathslate')+'"/></button>');
-    var redo=Y.Node.create('<button type="button" class="'
-           +CSS.REDO+'">'+ '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
-           + M.util.image_url('redo', 'tinymce_mathslate') + '" title="'+M.util.get_string('redo','tinymce_mathslate')+'"/></button>');
-    var clear=Y.Node.create('<button type="button" class="'
-           +CSS.CLEAR+'">'+ '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
-           + M.util.image_url('delete', 'tinymce_mathslate') + '" title="'+M.util.get_string('clear','tinymce_mathslate')+'"/></button>');
-*/
-
 
 
 }, '@VERSION@', {

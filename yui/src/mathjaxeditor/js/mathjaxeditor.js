@@ -113,7 +113,7 @@ M.tinymce_mathslate.MathJaxEditor=function(id){
         });
  
     help.on('click', function(){
-        preview.setHTML('<iframe src="http://localhost" />');
+        preview.setHTML('<iframe src="http://docs.moodle.org/26/en/TinyMCE_Mathslate" />');
     });
 /* Add drag and drop functionality
  * @function makeDraggable
