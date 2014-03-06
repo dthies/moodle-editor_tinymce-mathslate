@@ -63,6 +63,7 @@ var NS=M.tinymce_mathslate;
     NS.init = function(params) {
         M.tinymce_mathslate=M.tinymce_mathslate||{};
         M.tinymce_mathslate.config=params.config||M.tinymce_mathslate.config;
+        M.tinymce_mathslate.help=params.help||M.tinymce_mathslate.help;
         var dialogue = Y.one('#'+params.elementid);
         
         var editorID=dialogue.one('.mathslate-container').generateID();
