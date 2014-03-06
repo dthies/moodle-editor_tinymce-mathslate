@@ -22,6 +22,7 @@ var CSS = {
     HIGHLIGHT: 'mathslate-highlight',
     DRAGNODE: 'mathslate-workspace-drag',
     DRAGGEDNODE: 'mathslate-workspace-dragged',
+    HELPBOX: 'mathslate-help-box',
     PANEL: 'mathslate-bottom-panel'
 };
 var SELECTORS = {
@@ -113,7 +114,8 @@ M.tinymce_mathslate.MathJaxEditor=function(id){
         });
  
     help.on('click', function(){
-        preview.setHTML('<iframe src="http://docs.moodle.org/26/en/TinyMCE_Mathslate" />');
+        preview.setHTML('<iframe src="'+M.tinymce_mathslate.help+'" style="width: ' 
+            + preview.getStyle('width') + '" class="'+CSS.HELPBOX+'"/>');
     });
 /* Add drag and drop functionality
  * @function makeDraggable
