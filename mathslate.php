@@ -74,7 +74,9 @@ print $OUTPUT->header();
 
 $PAGE->requires->yui_module('moodle-tinymce_mathslate-dialogue',
                                 'M.tinymce_mathslate.init',
-                                array(array('elementid'=>$elementid, 'config'=>$CFG->wwwroot . '/lib/editor/tinymce/plugins/mathslate/config.json')),
+                                array(array('elementid'=>$elementid, 
+                                   'config'=>$CFG->wwwroot . '/lib/editor/tinymce/plugins/mathslate/config.json',
+                                   'help'=>$CFG->wwwroot . '/lib/editor/tinymce/plugins/mathslate/help.php')),
                                 true);
 
 print $OUTPUT->container('','mathslate-container');
