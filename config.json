@@ -1,5 +1,5 @@
 [
-    {"label":"<math><mo>=</mo><mo>&#x2297;</mo><mo>&#x2285;</mo></math>",
+    {"label":"<math><mo>=</mo><mo>&#x2285;</mo></math>",
         "tools":[
             ["mo",{},"+"],
             ["mo",{"tex":["-"]},"−"],
