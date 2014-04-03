@@ -114,7 +114,7 @@ M.tinymce_mathslate.MathJaxEditor=function(id){
         });
  
     help.on('click', function(){
-        preview.setHTML('<iframe src="'+M.tinymce_mathslate.help+'" style="width: ' 
+        preview.setHTML('<iframe src="'+M.tinymce_mathslate.help+'" style="width: '
             + preview.getStyle('width') + '" class="'+CSS.HELPBOX+'"/>');
     });
 /* Add drag and drop functionality
@@ -125,6 +125,7 @@ M.tinymce_mathslate.MathJaxEditor=function(id){
             se.forEach(function(m){
                 var node=canvas.get('node').one('#'+m[1].id);
                 if(!node){return;}
+                node.setAttribute('title', preview.one('#'+m[1].id).getHTML().replace(/<div *[^>]*>|<\/div>|<br>/g,''));
                 node.handleClick = function() {
                     var selectedNode = canvas.get('node').one(SELECTORS.SELECTED);
                     if(!selectedNode){

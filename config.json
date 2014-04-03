@@ -1,5 +1,5 @@
 [
-    {"label":"<math><mo>=</mo><mo>&#x2297;</mo><mo>&#x2285;</mo></math>",
+    {"label":"<span title='=&#x2285;'><math><mo>=</mo><mo>&#x2285;</mo></math></span>",
         "tools":[
             ["mo",{},"+"],
             ["mo",{"tex":["-"]},"−"],
@@ -36,7 +36,7 @@
             ["mrow", {"tex":["\\exists "]},[["mo",{},"\u2203"]]]
         ]
     },
-    {"label":"<math><mi>&#x03B1;</mi><mi>&#x03B2;</mi><mi>&#x03B3;</mi></math>",
+    {"label":"<span title='Greek alphabet and symbols'><math><mi>&#x03B1;</mi><mi>&#x03B2;</mi><mi>&#x03B3;</mi></math></span>",
         "tools":[
             ["mi",{"tex":["\\alpha "],"am":[" alpha "]},"α"],
             ["mi",{"tex":["\\beta "],"am":[" beta "]},"β"],
@@ -100,7 +100,7 @@
             ["mi", {"tex":["\\hbar"]},"\u210F"]
         ]
     },
-    {"label":"<math><mi>A</mi><mi>b</mi><mi>3</mi></math>",
+    {"label":"<span title='Latin alphabet'><math><mi>A</mi><mi>b</mi><mi>3</mi></math></span>",
         "tools":[
             ["mi",{},"a"],
             ["mi",{},"b"],
@@ -168,7 +168,7 @@
             ["mn",{},"0"]
         ]
     },
-    {"label":"<math><mi>tan</mi><mn>&angle;</mn></math>",
+    {"label":"<span title='tan &angle;'><math><mi>tan</mi><mn>&angle;</mn></math></span>",
         "tools":[
             ["mi", {"tex":["\\angle"]},"\u2220"],
             ["mrow",{"tex":["f (",2,")"]},[["mi",{},"f"],["mo",{},"("],"[]",["mo",{},")"]]],
@@ -184,11 +184,11 @@
             ["msup",{"tex":["{",0,"}^\\circ"]},["[]",["mo",{},"\u2218"]]],
             ["mrow",{"tex":["\\log {",2,"}"]},[["mi",{},"log"],["mo",{},"\u2061"],"[]"]],
             ["mrow",{"tex":["\\ln {",2,"}"]},[["mi",{},"ln"],["mo",{},"\u2061"],"[]"]],
-            ["mrow",{"tex":["\\log_{",0,"} {",2,"}"]},[["msub",{"tex":["x",1]},[["mo",{},"log"],"[]"]],["mo",{},"\u2061"],"[]"]],
+            ["mrow",{"tex":["\\log_{",0,"} {",2,"}"]},[["msub",{"tex":["",1]},[["mo",{},"log"],"[]"]],["mo",{},"\u2061"],"[]"]],
             ["msup",{"tex":["e^{",1,"}"]},[["mi",{},"e"],"[]"]]
         ]
     },
-    {"label":"<math><mroot><msup><mi>x</mi><mn>2</mn></msup><mn>3</mn></mroot></math>",
+    {"label":"<span title='Roots and brackets'><math><mroot><msup><mi>x</mi><mn>2</mn></msup><mn>3</mn></mroot></math></span>",
         "tools":[
             ["mfrac",{"tex":["\\frac{",0,"}{",1,"}"],"am":["(",0,")/(",1,")"]},["[]","[]"]],
             ["msup",{"tex":[" { ",0," }^{ ",1," } "]},["[]","[]"]],
@@ -216,7 +216,7 @@
             ["mrow",{},[["mroot",{"tex":["\\sqrt[",1,"]{ ",0," }"]},[ "[]","[]"]]]]
         ]
     },
-    {"label":"<math><mo>&#x222B;</mo><mi>&#x2207;</mi><mi>f</mi></math>",
+    {"label":"<span title='Calculus'><math><mo>&#x222B;</mo><mi>&#x2207;</mi><mi>f</mi></math></span>",
         "tools":[
             ["mfrac",{"tex":["\\frac{",0,"}{",1,"}"]},[
                  ["mrow",{},[["mi",{},["d"]], "[]" ]],
@@ -226,7 +226,7 @@
                  ["mrow",{"tex":["\\partial",1]},[["mi",{},["\u2202"]], "[]" ]],
                  ["mrow",{"tex":["\\partial",1]},[["mi",{},["\u2202"]], "[]" ]]
             ]],
-            ["mi",{"tex":["\\nabla"],"mathvariant": "normal"},"\u2207"],
+            ["mi",{"tex":["\\nabla "],"mathvariant": "normal"},"\u2207"],
             ["munderover",{"tex":["\\sum_{",1,"}^{",2,"} "]},[["mo",{},"&sum;"],"[]","[]"]],
             ["munderover",{"tex":["\\prod_{",1,"}^{",2,"} "]},[["mo",{},"\u220F"],"[]","[]"]],
             ["mrow", {},[

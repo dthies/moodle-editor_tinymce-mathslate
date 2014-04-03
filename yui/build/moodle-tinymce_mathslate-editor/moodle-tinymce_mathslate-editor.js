@@ -71,16 +71,33 @@ M.tinymce_mathslate.Editor=function(editorID,config){
             }
             this.id=Y.guid();
             
+            function title(s){
+                if(typeof s==='string'){return s;}
+                if(s[1]==='undefined'){return '';}
+                var o='';
+                if(typeof s[1].tex!=='undefined'){
+                    s[1].tex.forEach(function(t){
+                         if(typeof t==='string'){o+=t;}
+                         else {o+=title(s[2][t]);}
+                    });
+                    return o;
+                }
+                if(typeof s[2]==='string'){return s[2];}
+                if(typeof s[2]==='undefined'){return '';}
+                s[2].forEach(function(t){o+=title(t);});
+                return o;
+            }
             this.json=JSON.stringify(snippet);
-            this.HTMLsnippet=[['span', {id: this.id}, [['math', {}, [snippet]]]]];
+            this.HTMLsnippet=[['span', {id: this.id, title: title(snippet)}, [['math', {}, [snippet]]]]];
             
+           
             findBlank(snippet);
             tbox.tools.push(this);
         }
-        var tabs={children: [{label: "<math><mi>T</mi><mspace width=\"-.14em\" />"
+        var tabs={children: [{label: "<span title=\"TeX\"><math><mi>T</mi><mspace width=\"-.14em\"/>"
              +"<mpadded height=\"-.5ex\" depth=\"+.5ex\" voffset=\"-.5ex\">"
              +"<mrow class=\"MJX-TeXAtom-ORD\"><mi>E</mi></mrow></mpadded>"
-             +"<mspace width=\"-.115em\" /> <mi>X</mi> </math>",
+             +"<mspace width=\"-.115em\" /> <mi>X</mi> </math></span>",
         content: "<span id='latex-input'></span>"}]};
         tools.forEach(function(tab){
             var q=Y.Node.create('<p></p>');
