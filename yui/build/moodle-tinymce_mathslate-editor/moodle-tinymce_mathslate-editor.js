@@ -87,6 +87,7 @@ M.tinymce_mathslate.Editor=function(editorID,config){
                 s[2].forEach(function(t){o+=title(t);});
                 return o;
             }
+            this.json=JSON.stringify(snippet);
             this.HTMLsnippet=[['span', {id: this.id, title: title(snippet)}, [['math', {}, [snippet]]]]];
             
            
