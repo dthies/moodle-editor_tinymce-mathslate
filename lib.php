@@ -38,7 +38,6 @@ class tinymce_mathslate extends editor_tinymce_plugin {
             }
         }
 
-
         // Add button before 'nonbreaking' in advancedbuttons3.
         $this->add_button_before($params, 3, 'mathslate', 'nonbreaking');
 
