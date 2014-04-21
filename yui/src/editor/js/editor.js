@@ -47,7 +47,7 @@ M.tinymce_mathslate.Editor=function(editorID,config){
     this.node.appendChild(Y.Node.create('<div id="' +workID +'" >'));
 
     var mje=new M.tinymce_mathslate.MathJaxEditor('#'+workID);
- 
+
     var me=this;
     me.output = function(f){return mje.output(f);};
 
@@ -68,7 +68,7 @@ M.tinymce_mathslate.Editor=function(editorID,config){
                 }
             }
             this.id=Y.guid();
-            
+
             function title(s){
                 if(typeof s==='string'){return s;}
                 if(s[1]==='undefined'){return '';}
@@ -87,8 +87,7 @@ M.tinymce_mathslate.Editor=function(editorID,config){
             }
             this.json=JSON.stringify(snippet);
             this.HTMLsnippet=[['span', {id: this.id, title: title(snippet)}, [['math', {}, [snippet]]]]];
-            
-           
+
             findBlank(snippet);
             tbox.tools.push(this);
         }
@@ -113,7 +112,7 @@ M.tinymce_mathslate.Editor=function(editorID,config){
             tabview.render('#'+toolboxID);
             new M.tinymce_mathslate.TeXTool('#latex-input',function(json){mje.addMath(json);});
         }
-    
+
     },
         getToolByID: function(id){
         var t;
@@ -150,7 +149,7 @@ M.tinymce_mathslate.Editor=function(editorID,config){
             });
         });
     }
-    
+
     //Fetch configuration string for tools and initialyze
     Y.on('io:success',function(id,o){
         if(tbox.tools.length===0) {

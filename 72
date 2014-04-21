@@ -39,7 +39,7 @@ if (isset($SESSION->lang)) {
 }
 
 // Find language.
-$langmapping = array('cs' => 'cz', 'pt_br' => 'pt-br');
+$langmapping = array('cs'=>'cz', 'pt_br'=>'pt-br');
 
 // Fix non-standard lang names.
 if (array_key_exists($lang, $langmapping)) {
@@ -58,7 +58,7 @@ $relroot = preg_replace('|^http.?://[^/]+|', '', $CFG->wwwroot);
 
 $htmllang = get_html_lang();
 
-// Load tinymce popup control for inserting result.
+//Load tinymce popup control for inserting result.
 $PAGE->requires->js('/lib/editor/tinymce/tiny_mce/3.5.8/tiny_mce_popup.js', true);
 // Load MathJax.
 $PAGE->requires->js( new moodle_url(get_config('tinymce_mathslate')->mathjaxurl . '?config=TeX-MML-AM_HTMLorMML-full'));
@@ -69,17 +69,18 @@ $PAGE->requires->strings_for_js(array( 'mathslate', 'cancel', 'cancel_desc',
         'inline', 'display', 'inline_desc', 'display_desc', 'nomathjax',
         'clear', 'undo', 'redo'), 'tinymce_mathslate');
 
-$elementid = $PAGE->bodyid;
+$elementid=$PAGE->bodyid;
 
-// Loads YUI and MathJax it is included in theme.
+//Loads YUI and MathJax it is included in theme
 print $OUTPUT->header();
 
 $PAGE->requires->yui_module('moodle-tinymce_mathslate-dialogue',
                                 'M.tinymce_mathslate.init',
-                                array(array('elementid' => $elementid,
-                                   'config' => $CFG->wwwroot . '/lib/editor/tinymce/plugins/mathslate/config.json',
-                                   'help' => $CFG->wwwroot . '/lib/editor/tinymce/plugins/mathslate/help.php')), true);
+                                array(array('elementid' => $elementid, 
+                                   'config'=>$CFG->wwwroot . '/lib/editor/tinymce/plugins/mathslate/config.json',
+                                   'help'=>$CFG->wwwroot . '/lib/editor/tinymce/plugins/mathslate/help.php')),
+                                true);
 
-print $OUTPUT->container('', 'mathslate-container');
+print $OUTPUT->container('','mathslate-container');
 
 print $OUTPUT->footer();

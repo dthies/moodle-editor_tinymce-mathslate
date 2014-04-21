@@ -35,7 +35,6 @@
                         });
                 },
 
-               
                 /**
                  * @return {Object} Name/value array containing information about the plugin.
                  */
