@@ -226,7 +226,7 @@
                  ["mrow",{"tex":["\\partial",1]},[["mi",{},["\u2202"]], "[]" ]],
                  ["mrow",{"tex":["\\partial",1]},[["mi",{},["\u2202"]], "[]" ]]
             ]],
-            ["mi",{"tex":["\\nabla"],"mathvariant": "normal"},"\u2207"],
+            ["mi",{"tex":["\\nabla "],"mathvariant": "normal"},"\u2207"],
             ["munderover",{"tex":["\\sum_{",1,"}^{",2,"} "]},[["mo",{},"&sum;"],"[]","[]"]],
             ["munderover",{"tex":["\\prod_{",1,"}^{",2,"} "]},[["mo",{},"\u220F"],"[]","[]"]],
             ["mrow", {},[
