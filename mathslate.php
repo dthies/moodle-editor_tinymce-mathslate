@@ -59,7 +59,13 @@ $relroot = preg_replace('|^http.?://[^/]+|', '', $CFG->wwwroot);
 $htmllang = get_html_lang();
 
 // Load tinymce popup control for inserting result.
-$PAGE->requires->js('/lib/editor/tinymce/tiny_mce/3.5.8/tiny_mce_popup.js', true);
+function tinymce_release() {
+    $plugin = new stdClass;
+    require('../../version.php') ;
+    return $plugin->release;
+}
+$PAGE->requires->js('/lib/editor/tinymce/tiny_mce/' .  tinymce_release() . '/tiny_mce_popup.js',true);
+
 // Load MathJax.
 $PAGE->requires->js( new moodle_url(get_config('tinymce_mathslate')->mathjaxurl . '?config=TeX-MML-AM_HTMLorMML-full'), true);
 
