@@ -15,10 +15,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 M.tinymce_mathslate = M.tinymce_mathslate|| {};
+var NS = M && M.tinymce_mathslate || {};
 /* Constructor function for Snippet editor
- * @function M.tinymce_mathstal.mSlots
+ * @function NS.mSlots
  */
-M.tinymce_mathslate.mSlots= function(){
+NS.mSlots= function(){
     var selected;
     var stack=[];
     var stackPointer=0;

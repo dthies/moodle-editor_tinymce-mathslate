@@ -17,7 +17,8 @@ YUI.add('moodle-tinymce_mathslate-editor', function (Y, NAME) {
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-M.tinymce_mathslate = M.tinymce_mathslate|| {};
+if (M) {M.tinymce_mathslate = M.tinymce_mathslate || {};}
+var NS = M && M.tinymce_mathslate || {};
 var CSS = {
    EDITOR: 'mathslate-tinymce',
    TOOLBOX: 'mathslate-toolbox',
@@ -32,7 +33,7 @@ var CSS = {
  * @param string editorID
  * @param string config
  */
-M.tinymce_mathslate.Editor=function(editorID,config){
+NS.Editor=function(editorID,config){
     this.node=Y.one(editorID);
     this.node.setHTML(M.util.get_string('nomathjax','tinymce_mathslate'));
     if(!MathJax){
@@ -48,7 +49,7 @@ M.tinymce_mathslate.Editor=function(editorID,config){
     this.node.appendChild(Y.Node.create('<div id="' +toolboxID +'" class="'+CSS.TOOLBOX+'">'));
     this.node.appendChild(Y.Node.create('<div id="' +workID +'" >'));
 
-    var mje=new M.tinymce_mathslate.MathJaxEditor('#'+workID);
+    var mje=new NS.MathJaxEditor('#'+workID);
 
     var me=this;
     me.output = function(f){return mje.output(f);};
@@ -112,7 +113,7 @@ M.tinymce_mathslate.Editor=function(editorID,config){
             );
         if(Y.one('#'+toolboxID)){
             tabview.render('#'+toolboxID);
-            new M.tinymce_mathslate.TeXTool('#latex-input',function(json){mje.addMath(json);});
+            new NS.TeXTool('#latex-input',function(json){mje.addMath(json);});
         }
 
     },
@@ -161,7 +162,7 @@ M.tinymce_mathslate.Editor=function(editorID,config){
         }
     });
     if(config===undefined) {
-        Y.io(M.tinymce_mathslate.config);
+        Y.io(NS.config);
     } else {
         Y.io(config);
     }

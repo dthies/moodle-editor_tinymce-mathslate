@@ -15,6 +15,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 M.tinymce_mathslate = M.tinymce_mathslate|| {};
+NS = M && M.tinymce_mathslate || {};
 var CSS = {
     SELECTED: 'mathslate-selected',
     WORKSPACE: 'mathslate-workspace',
@@ -31,9 +32,9 @@ var SELECTORS = {
 };
        
 //Constructor for equation workspace
-M.tinymce_mathslate.MathJaxEditor=function(id){
+NS.MathJaxEditor=function(id){
         var math=[];
-        var se=new M.tinymce_mathslate.mSlots();
+        var se=new NS.mSlots();
         se.slots.push(math);
         this.workspace=Y.one(id).append('<div id="canvas" class="'+CSS.WORKSPACE+'"/>');
         var toolbar= Y.one(id).appendChild(Y.Node.create('<form></form>'));
@@ -105,7 +106,7 @@ M.tinymce_mathslate.MathJaxEditor=function(id){
                 se.removeSnippet(Y.one(SELECTORS.SELECTED).getAttribute('id'));
             } else {
                 math=[];
-                se.next=new M.tinymce_mathslate.mSlots();
+                se.next=new NS.mSlots();
                 se.next.previous=se;
                 se=se.next;
                 se.slots.push(math);
@@ -114,7 +115,7 @@ M.tinymce_mathslate.MathJaxEditor=function(id){
         });
  
     help.on('click', function(){
-        preview.setHTML('<iframe src="'+M.tinymce_mathslate.help+'" style="width: '
+        preview.setHTML('<iframe src="'+NS.help+'" style="width: '
             + preview.getStyle('width') + '" class="'+CSS.HELPBOX+'"/>');
     });
 /* Add drag and drop functionality
@@ -239,7 +240,7 @@ M.tinymce_mathslate.MathJaxEditor=function(id){
                 se.removeSnippet(Y.one(SELECTORS.SELECTED).getAttribute('id'));
             } else {
                 math=[];
-                se.next=new M.tinymce_mathslate.mSlots();
+                se.next=new NS.mSlots();
                 se.next.previous=se;
                 se=se.next;
                 se.slots.push(math);
@@ -251,11 +252,32 @@ M.tinymce_mathslate.MathJaxEditor=function(id){
  * @param string format
  */
         this.output = function(format){
+            function cleanSnippet(s) {
+                if (typeof s !== "object") { return s; }
+                var t = s.slice(0);
+                t.forEach(function(m,index) {
+                    if (typeof m !== "object") { return; }
+                    if (m[1] && m[1]['class']) {
+                        t[index] = '[]';
+                        return;
+                    }
+                    if (m[1] && m[1].id) {
+                        delete m[1].id;
+                    }
+                    if (m[2]) {
+                        m[2] = cleanSnippet(m[2]);
+                    }
+                });
+                return t;
+            }
             if(format==='MathML') {
                 return canvas.get('node').one('script').getHTML();
             }
             if(format==='HTML') {
                 return canvas.get('node').one('span').getHTML();
+            }
+            if(format==='JSON') {
+                return Y.JSON.stringify(cleanSnippet(math));
             }
             return se.output(format);
         };
