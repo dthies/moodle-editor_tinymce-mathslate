@@ -93,7 +93,7 @@ NS.mSlots= function(){
                     }
                     else if(a==='[]') {
                         var newID=Y.guid();
-                        slots.push([['mi',{id: newID, "class": 'blank', tex: [''],color:'blue'},'\u25FB']]);
+                        slots.push([['mi',{id: newID, "class": 'blank', tex: ['']},'\u25FB']]);
                         snippet[2][snippet[2].indexOf(a)]=['mrow',{},slots[slots.length-1]];
                     }
                 });
@@ -303,12 +303,7 @@ NS.mSlots= function(){
  * @param string id
  */
     this.select = function(id){
-        selected=null;
-        this.slots.forEach(function(slot){
-            slot.forEach(function (m){
-                if(m[1].id===id) {selected = m;}
-            });
-        });
+        selected = this.getItemByID(id);
     };
 /* Get ID of the selected expression
  * @method getSelected

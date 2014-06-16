@@ -40,8 +40,7 @@ NS.MathJaxEditor=function(id){
         var toolbar= Y.one(id).appendChild(Y.Node.create('<form></form>'));
         var preview = Y.one(id).appendChild(Y.Node.create('<div class="'+CSS.PANEL+'"/>'));
         preview.delegate('click',function(e){
-            e.stopPropagation();
-            canvas.get('node').one('#'+this.getAttribute('id')).handleClick();
+            canvas.get('node').one('#'+this.getAttribute('id')).handleClick(e);
         },'div');
         var canvas=new Y.DD.Drop({
             node: this.workspace.one('#canvas')});
@@ -127,9 +126,11 @@ NS.MathJaxEditor=function(id){
                 var node=canvas.get('node').one('#'+m[1].id);
                 if(!node){return;}
                 node.setAttribute('title', preview.one('#'+m[1].id).getHTML().replace(/<div *[^>]*>|<\/div>|<br>/g,''));
-                node.handleClick = function() {
-                    var selectedNode = canvas.get('node').one(SELECTORS.SELECTED);
+                node.handleClick = function(e) {
+                    var selectedNode;
+                    selectedNode = canvas.get('node').one(SELECTORS.SELECTED);
                     if(!selectedNode){
+                        e.stopPropagation();
                         node.addClass(CSS.SELECTED);
                         se.select(node.getAttribute('id'));
                         preview.one('#'+node.getAttribute('id')).addClass(CSS.SELECTED);
@@ -142,13 +143,18 @@ NS.MathJaxEditor=function(id){
                         se.select();
                         return;
                     }
-                    if(node.one('#'+selectedNode.getAttribute('id'))){return;}
+                    if(selectedNode.one('#'+this.getAttribute('id'))){
+                        return;
+                    }
+                    if(node.one('#'+selectedNode.getAttribute('id'))){
+                        return;
+                    }
+                    e.stopPropagation();
                     se.insertSnippet(selectedNode.getAttribute('id'), se.removeSnippet(node.getAttribute('id')));
                     render();
                 };
                 node.on('click',function(e) {
-                    e.stopPropagation();
-                    this.handleClick();
+                    this.handleClick(e);
                 });
                 node.on('dblclick',function(e){
                     e.stopPropagation();
