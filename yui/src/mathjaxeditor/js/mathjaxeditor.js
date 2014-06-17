@@ -122,13 +122,13 @@ NS.MathJaxEditor=function(id){
  */
         function makeDraggable () {
             preview.setHTML('<div class="'+CSS.PREVIEW+'">'+se.preview('tex')+'</div>');
+                
             se.forEach(function(m){
                 var node=canvas.get('node').one('#'+m[1].id);
                 if(!node){return;}
                 node.setAttribute('title', preview.one('#'+m[1].id).getHTML().replace(/<div *[^>]*>|<\/div>|<br>/g,''));
                 node.handleClick = function(e) {
-                    var selectedNode;
-                    selectedNode = canvas.get('node').one(SELECTORS.SELECTED);
+                    var selectedNode = canvas.get('node').one(SELECTORS.SELECTED);
                     if(!selectedNode){
                         e.stopPropagation();
                         node.addClass(CSS.SELECTED);
@@ -161,7 +161,9 @@ NS.MathJaxEditor=function(id){
                     se.removeSnippet(node.getAttribute('id'));
                     render();
                 });
-                if(!m[1]||!m[1]['class']||m[1]['class']!=='blank'){
+                var selectedNode = canvas.get('node').one(SELECTORS.SELECTED);
+                if((!m[1]||!m[1]['class']||m[1]['class']!=='blank') &&
+                        !(selectedNode && selectedNode.one('#'+node.id))){
                     var drag = new Y.DD.Drag({node: node}).plug(Y.Plugin.DDProxy, {
                         resizeFrame: false,
                         moveOnEnd: false
