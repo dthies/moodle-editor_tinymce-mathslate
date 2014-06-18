@@ -311,7 +311,6 @@ NS.mSlots= function(){
                 if(m[1].id===id) {selected = m;}
             });
         });
-        //selected = this.getItemByID(id);
     };
 /* Get ID of the selected expression
  * @method getSelected

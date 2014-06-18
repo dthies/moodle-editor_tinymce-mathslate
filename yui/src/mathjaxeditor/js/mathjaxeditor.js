@@ -121,7 +121,6 @@ NS.MathJaxEditor=function(id){
  * @function makeDraggable
  */
         function makeDraggable () {
-            //if(se.getSelected()&&canvas.get('node').one('#'+se.getSelected())) {
             preview.setHTML('<div class="'+CSS.PREVIEW+'">'+se.preview('tex')+'</div>');
             if(se.getSelected()&&preview.one('#'+se.getSelected())) {
                 canvas.get('node').one('#'+se.getSelected()).addClass(CSS.SELECTED);
@@ -184,12 +183,11 @@ NS.MathJaxEditor=function(id){
                             this.get('dragNode').getDOMNode(),'span',{id: id},
                             [['math',{display: "block"},[Y.JSON.parse(se.getItemByID(m[1].id))]]]]);
                         MathJax.Hub.Queue(['Typeset',MathJax.Hub,id]);
-                   });
+                    });
                     drag.on('drag:end', function(){
                         this.get('node').removeClass(CSS.DRAGGEDNODE);
                     });
                 }
-
 
                 var drop = new Y.DD.Drop({node: node});
                 drop.on('drop:hit',function(e){
