@@ -17,12 +17,13 @@ YUI.add('moodle-tinymce_mathslate-textool', function (Y, NAME) {
  */
 
 M.tinymce_mathslate = M.tinymce_mathslate|| {};
+var NS = M && M.tinymce_mathslate || {};
 /* Constructor function for an editor of a page.
  * @method Editor
  * @param string editorID
  * @param string config
  */
-M.tinymce_mathslate.TeXTool=function(editorID,addMath){
+NS.TeXTool=function(editorID,addMath){
     var input=Y.Node.create('<input type="text">');
     var tool=Y.Node.create('<span>\\[ \\]</span>');
     if(addMath){

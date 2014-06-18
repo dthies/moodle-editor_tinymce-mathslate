@@ -59,12 +59,7 @@ $relroot = preg_replace('|^http.?://[^/]+|', '', $CFG->wwwroot);
 $htmllang = get_html_lang();
 
 // Load tinymce popup control for inserting result.
-function tinymce_release() {
-    $plugin = new stdClass;
-    require('../../version.php') ;
-    return $plugin->release;
-}
-$PAGE->requires->js('/lib/editor/tinymce/tiny_mce/' .  tinymce_release() . '/tiny_mce_popup.js',true);
+$PAGE->requires->js('/lib/editor/tinymce/tiny_mce/' . $editor->version . '/tiny_mce_popup.js', true);
 
 // Load MathJax.
 $PAGE->requires->js( new moodle_url(get_config('tinymce_mathslate')->mathjaxurl . '?config=TeX-MML-AM_HTMLorMML-full'), true);
@@ -83,7 +78,7 @@ $PAGE->requires->yui_module('moodle-tinymce_mathslate-dialogue',
                                 'M.tinymce_mathslate.init',
                                 array(array('elementid' => $elementid,
                                    'config' => $CFG->wwwroot . '/lib/editor/tinymce/plugins/mathslate/config.json',
-                                   'help' => $CFG->wwwroot . '/lib/editor/tinymce/plugins/mathslate/help.php')), true);
+                                   'help' => $CFG->wwwroot . '/lib/editor/tinymce/plugins/mathslate/help.php')));
 
 print $OUTPUT->container('', 'mathslate-container');
 
