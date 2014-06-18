@@ -303,7 +303,13 @@ NS.mSlots= function(){
  * @param string id
  */
     this.select = function(id){
-        selected = this.getItemByID(id);
+        selected=null;
+        this.slots.forEach(function(slot){
+            slot.forEach(function (m){
+                if(m[1].id===id) {selected = m;}
+            });
+        });
+        //selected = this.getItemByID(id);
     };
 /* Get ID of the selected expression
  * @method getSelected
