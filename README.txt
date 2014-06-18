@@ -8,11 +8,10 @@ subdirectory of the Moodle directory lib/editor/tinymce/plugins with
 the name mathslate.  Then visit the administrators notification page to
 install the plugin to the database and adjust the settings.
 
-This plugin requires MathJax to run.  If MathJax is configured globally
-without the 'Safe' option, Mathslate is able to use it. If the TeX
-notation filter is used instead of MathJax or if 'Safe' configuration
-option is set, then the url to load MathJax must be set in the admin
-setting so that Mathslate can load a appropriately configured instance.
+This plugin requires MathJax to run.  If MathJax is configured 
+on the Moodle site either within theme or using MathJaxloader, Mathslate is able to use it. If the TeX
+notation filter is used instead of MathJax, then the url to load MathJax must be set in the admin
+setting so that Mathslate can load MathJax on demand.
 For more information about MathJax see mathjax.org.
 
 All original files are copyright Daniel Thies 2013-4 dthies@ccal.edu

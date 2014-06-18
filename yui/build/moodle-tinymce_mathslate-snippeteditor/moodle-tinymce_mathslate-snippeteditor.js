@@ -203,7 +203,7 @@ NS.mSlots= function(){
         var buffer=this;
         this.slots.forEach(function(s){
             if(s.length===0)  {
-                s.push(['mi',{id: Y.guid(), "class": 'blank', tex: ['']},'\u25FB']);
+                s.push(['mi',{id: 'MJX-'+Y.guid(), "class": 'blank', tex: ['']},'\u25FB']);
             }
             else {
                 s.forEach(function(m){
