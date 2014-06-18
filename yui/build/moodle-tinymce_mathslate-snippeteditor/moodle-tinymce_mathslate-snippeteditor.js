@@ -17,10 +17,11 @@ YUI.add('moodle-tinymce_mathslate-snippeteditor', function (Y, NAME) {
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 M.tinymce_mathslate = M.tinymce_mathslate|| {};
+var NS = M && M.tinymce_mathslate || {};
 /* Constructor function for Snippet editor
- * @function M.tinymce_mathstal.mSlots
+ * @function NS.mSlots
  */
-M.tinymce_mathslate.mSlots= function(){
+NS.mSlots= function(){
     var selected;
     var stack=[];
     var stackPointer=0;
@@ -94,7 +95,7 @@ M.tinymce_mathslate.mSlots= function(){
                     }
                     else if(a==='[]') {
                         var newID=Y.guid();
-                        slots.push([['mi',{id: newID, "class": 'blank', tex: [''],color:'blue'},'\u25FB']]);
+                        slots.push([['mi',{id: newID, "class": 'blank', tex: ['']},'\u25FB']]);
                         snippet[2][snippet[2].indexOf(a)]=['mrow',{},slots[slots.length-1]];
                     }
                 });

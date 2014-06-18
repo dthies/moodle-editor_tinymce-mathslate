@@ -75,6 +75,14 @@ var NS=M.tinymce_mathslate;
         var inlineTex=Y.one('#'+editorID).appendChild(Y.Node.create('<button title="'+M.util.get_string('inline_desc','tinymce_mathslate')+'">'
             +M.util.get_string('inline','tinymce_mathslate')+'</button>'));
 
+/* This code shows a button to saves work as JSON that can be incorporated in config.json.
+        var saveJSON=Y.one('#'+editorID).appendChild(Y.Node.create('<button title="'+'JSON'+'">'
+            +'JSON'+'</button>'));
+        saveJSON.on('click',function(){
+            tinyMCEPopup.editor.execCommand('mceInsertContent', false, me.output('JSON'));
+            tinyMCEPopup.close();
+            });
+*/
         displayTex.on('click',function(){
             tinyMCEPopup.editor.execCommand('mceInsertContent', false,  '\\['+me.output('tex')+'\\]');
             tinyMCEPopup.close();

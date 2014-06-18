@@ -15,6 +15,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 M.tinymce_mathslate = M.tinymce_mathslate|| {};
+NS = M && M.tinymce_mathslate || {};
 var CSS = {
     SELECTED: 'mathslate-selected',
     WORKSPACE: 'mathslate-workspace',
@@ -31,16 +32,15 @@ var SELECTORS = {
 };
        
 //Constructor for equation workspace
-M.tinymce_mathslate.MathJaxEditor=function(id){
+NS.MathJaxEditor=function(id){
         var math=[];
-        var se=new M.tinymce_mathslate.mSlots();
+        var se=new NS.mSlots();
         se.slots.push(math);
         this.workspace=Y.one(id).append('<div id="canvas" class="'+CSS.WORKSPACE+'"/>');
         var toolbar= Y.one(id).appendChild(Y.Node.create('<form></form>'));
         var preview = Y.one(id).appendChild(Y.Node.create('<div class="'+CSS.PANEL+'"/>'));
         preview.delegate('click',function(e){
-            e.stopPropagation();
-            canvas.get('node').one('#'+this.getAttribute('id')).handleClick();
+            canvas.get('node').one('#'+this.getAttribute('id')).handleClick(e);
         },'div');
         var canvas=new Y.DD.Drop({
             node: this.workspace.one('#canvas')});
@@ -105,7 +105,7 @@ M.tinymce_mathslate.MathJaxEditor=function(id){
                 se.removeSnippet(Y.one(SELECTORS.SELECTED).getAttribute('id'));
             } else {
                 math=[];
-                se.next=new M.tinymce_mathslate.mSlots();
+                se.next=new NS.mSlots();
                 se.next.previous=se;
                 se=se.next;
                 se.slots.push(math);
@@ -114,7 +114,7 @@ M.tinymce_mathslate.MathJaxEditor=function(id){
         });
  
     help.on('click', function(){
-        preview.setHTML('<iframe src="'+M.tinymce_mathslate.help+'" style="width: '
+        preview.setHTML('<iframe src="'+NS.help+'" style="width: '
             + preview.getStyle('width') + '" class="'+CSS.HELPBOX+'"/>');
     });
 /* Add drag and drop functionality
@@ -122,17 +122,21 @@ M.tinymce_mathslate.MathJaxEditor=function(id){
  */
         function makeDraggable () {
             preview.setHTML('<div class="'+CSS.PREVIEW+'">'+se.preview('tex')+'</div>');
+            if(se.getSelected()&&preview.one('#'+se.getSelected())) {
+                canvas.get('node').one('#'+se.getSelected()).addClass(CSS.SELECTED);
+                preview.one('#'+se.getSelected()).addClass(CSS.SELECTED);
+            }
+                
             se.forEach(function(m){
                 var node=canvas.get('node').one('#'+m[1].id);
                 if(!node){return;}
                 node.setAttribute('title', preview.one('#'+m[1].id).getHTML().replace(/<div *[^>]*>|<\/div>|<br>/g,''));
-                node.handleClick = function() {
+                node.handleClick = function(e) {
                     var selectedNode = canvas.get('node').one(SELECTORS.SELECTED);
                     if(!selectedNode){
-                        node.addClass(CSS.SELECTED);
-                        se.select(node.getAttribute('id'));
-                        preview.one('#'+node.getAttribute('id')).addClass(CSS.SELECTED);
-                        preview.one('#'+node.getAttribute('id')).focus();
+                        e.stopPropagation();
+                        se.select(this.getAttribute('id'));
+                        render();
                         return;
                     }
                     if(selectedNode===node){
@@ -141,20 +145,27 @@ M.tinymce_mathslate.MathJaxEditor=function(id){
                         se.select();
                         return;
                     }
-                    if(node.one('#'+selectedNode.getAttribute('id'))){return;}
+                    if(selectedNode.one('#'+this.getAttribute('id'))){
+                        return;
+                    }
+                    if(node.one('#'+selectedNode.getAttribute('id'))){
+                        return;
+                    }
+                    e.stopPropagation();
                     se.insertSnippet(selectedNode.getAttribute('id'), se.removeSnippet(node.getAttribute('id')));
                     render();
                 };
                 node.on('click',function(e) {
-                    e.stopPropagation();
-                    this.handleClick();
+                    this.handleClick(e);
                 });
                 node.on('dblclick',function(e){
                     e.stopPropagation();
                     se.removeSnippet(node.getAttribute('id'));
                     render();
                 });
-                if(!m[1]||!m[1]['class']||m[1]['class']!=='blank'){
+                var selectedNode = canvas.get('node').one(SELECTORS.SELECTED);
+                if((!m[1]||!m[1]['class']||m[1]['class']!=='blank') &&
+                        !(selectedNode && selectedNode.one('#'+node.getAttribute('id')))){
                     var drag = new Y.DD.Drag({node: node}).plug(Y.Plugin.DDProxy, {
                         resizeFrame: false,
                         moveOnEnd: false
@@ -177,7 +188,6 @@ M.tinymce_mathslate.MathJaxEditor=function(id){
                         this.get('node').removeClass(CSS.DRAGGEDNODE);
                     });
                 }
-
 
                 var drop = new Y.DD.Drop({node: node});
                 drop.on('drop:hit',function(e){
@@ -203,10 +213,6 @@ M.tinymce_mathslate.MathJaxEditor=function(id){
                 });
                 
             });
-            if(se.getSelected()&&canvas.get('node').one('#'+se.getSelected())) {
-                canvas.get('node').one('#'+se.getSelected()).addClass(CSS.SELECTED);
-                preview.one('#'+se.getSelected()).addClass(CSS.SELECTED);
-            }
         }
         function render() {
             se.rekey();
@@ -239,7 +245,7 @@ M.tinymce_mathslate.MathJaxEditor=function(id){
                 se.removeSnippet(Y.one(SELECTORS.SELECTED).getAttribute('id'));
             } else {
                 math=[];
-                se.next=new M.tinymce_mathslate.mSlots();
+                se.next=new NS.mSlots();
                 se.next.previous=se;
                 se=se.next;
                 se.slots.push(math);
@@ -251,11 +257,32 @@ M.tinymce_mathslate.MathJaxEditor=function(id){
  * @param string format
  */
         this.output = function(format){
+            function cleanSnippet(s) {
+                if (typeof s !== "object") { return s; }
+                var t = s.slice(0);
+                t.forEach(function(m,index) {
+                    if (typeof m !== "object") { return; }
+                    if (m[1] && m[1]['class']) {
+                        t[index] = '[]';
+                        return;
+                    }
+                    if (m[1] && m[1].id) {
+                        delete m[1].id;
+                    }
+                    if (m[2]) {
+                        m[2] = cleanSnippet(m[2]);
+                    }
+                });
+                return t;
+            }
             if(format==='MathML') {
                 return canvas.get('node').one('script').getHTML();
             }
             if(format==='HTML') {
                 return canvas.get('node').one('span').getHTML();
+            }
+            if(format==='JSON') {
+                return Y.JSON.stringify(cleanSnippet(math));
             }
             return se.output(format);
         };
