@@ -30,5 +30,5 @@ $plugin->version   = 2014061800;
 $plugin->requires  = 2013111801;
 // Full name of the plugin (used for diagnostics).
 $plugin->component = 'tinymce_mathslate';
-$plugin->maturity = MATURITY_BETA;
+$plugin->maturity = MATURITY_RC;
 $plugin->release = '1.0RC';
