@@ -92,11 +92,16 @@ NS.Editor=function(editorID,config){
             findBlank(snippet);
             tbox.tools.push(this);
         }
-        var tabs={children: [{label: "<span title=\"TeX\"><math><mi>T</mi><mspace width=\"-.14em\"/>"
-             +"<mpadded height=\"-.5ex\" depth=\"+.5ex\" voffset=\"-.5ex\">"
-             +"<mrow class=\"MJX-TeXAtom-ORD\"><mi>E</mi></mrow></mpadded>"
-             +"<mspace width=\"-.115em\" /> <mi>X</mi> </math></span>",
-        content: "<span id='latex-input'></span>"}]};
+        var tabs={children: []};
+        if(MathJax.Hub.config.extensions.indexOf('toMathML.js') !== -1) {
+            tabs.children.push({
+                label: "<span title=\"TeX\"><math><mi>T</mi><mspace width=\"-.14em\"/>"
+                    +"<mpadded height=\"-.5ex\" depth=\"+.5ex\" voffset=\"-.5ex\">"
+                    +"<mrow class=\"MJX-TeXAtom-ORD\"><mi>E</mi></mrow></mpadded>"
+                    +"<mspace width=\"-.115em\" /> <mi>X</mi> </math></span>",
+                content: "<span id='latex-input'></span>"
+            });
+        }
         tools.forEach(function(tab){
             var q=Y.Node.create('<p></p>');
             tab.tools.forEach(function(snippet){
@@ -109,9 +114,11 @@ NS.Editor=function(editorID,config){
         var tabview = new Y.TabView(
             tabs
             );
-        if(Y.one('#'+toolboxID)){
+        if (Y.one('#'+toolboxID)) {
             tabview.render('#'+toolboxID);
-            new NS.TeXTool('#latex-input',function(json){mje.addMath(json);});
+            if (Y.one('#latex-input')) {
+                new NS.TeXTool('#latex-input',function(json){mje.addMath(json);});
+            }
         }
 
     },
