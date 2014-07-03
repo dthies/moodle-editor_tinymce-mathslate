@@ -93,7 +93,6 @@ NS.Editor=function(editorID,config){
             tbox.tools.push(this);
         }
         var tabs={children: []};
-        //if(MathJax.Hub.config.extensions.indexOf('toMathML.js') !== -1) {
         MathJax.Hub.Register.StartupHook('toMathML Ready', function() {
             tabs.children.push({
                 label: "<span title=\"TeX\"><math><mi>T</mi><mspace width=\"-.14em\"/>"
