@@ -93,14 +93,17 @@ NS.Editor=function(editorID,config){
             tbox.tools.push(this);
         }
         var tabs={children: []};
-        MathJax.Hub.Register.StartupHook('toMathML Ready', function() {
-            tabs.children.push({
-                label: "<span title=\"TeX\"><math><mi>T</mi><mspace width=\"-.14em\"/>"
-                    +"<mpadded height=\"-.5ex\" depth=\"+.5ex\" voffset=\"-.5ex\">"
-                    +"<mrow class=\"MJX-TeXAtom-ORD\"><mi>E</mi></mrow></mpadded>"
-                    +"<mspace width=\"-.115em\" /> <mi>X</mi> </math></span>",
-                content: "<span id='latex-input'></span>"
-            });
+        MathJax.Hub.Register.StartupHook('End Extensions', function() {
+            var ext = MathJax.Hub.config.extensions;
+            if ((ext.indexOf('toMathML.js') !== -1) && (ext.indexOf('tex2jax.js') !== -1)) {
+                tabs.children.push({
+                    label: "<span title=\"TeX\"><math><mi>T</mi><mspace width=\"-.14em\"/>"
+                        +"<mpadded height=\"-.5ex\" depth=\"+.5ex\" voffset=\"-.5ex\">"
+                        +"<mrow class=\"MJX-TeXAtom-ORD\"><mi>E</mi></mrow></mpadded>"
+                        +"<mspace width=\"-.115em\" /> <mi>X</mi> </math></span>",
+                    content: "<span id='latex-input'></span>"
+                });
+            }
         });
         MathJax.Hub.Register.StartupHook('End', function() {
             tools.forEach(function(tab){
