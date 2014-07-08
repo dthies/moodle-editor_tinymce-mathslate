@@ -67,6 +67,9 @@ var NS=M.tinymce_mathslate;
         var dialogue = Y.one('#'+params.elementid);
         
         var editorID=dialogue.one('.mathslate-container').generateID();
+        if(typeof MathJax === 'undefined'){
+            return;
+        }
         var me=new M.tinymce_mathslate.Editor('#'+editorID,M.tinymce_mathslate.config);
 
         var cancel=Y.one('#'+editorID).appendChild(Y.Node.create('<button title="'+M.util.get_string('cancel_desc','tinymce_mathslate')+'">'
@@ -97,7 +100,7 @@ var NS=M.tinymce_mathslate;
             tinyMCEPopup.close();
             });
             
-        if(MathJax){
+        if(typeof MathJax === 'Object'){
             MathJax.Hub.Queue(['Typeset',MathJax.Hub,me.node.generateID()]);
         }
 
