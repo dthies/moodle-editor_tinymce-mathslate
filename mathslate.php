@@ -62,7 +62,7 @@ $htmllang = get_html_lang();
 $PAGE->requires->js('/lib/editor/tinymce/tiny_mce/' . $editor->version . '/tiny_mce_popup.js', true);
 
 // Load MathJax.
-$PAGE->requires->js( new moodle_url(get_config('tinymce_mathslate')->mathjaxurl . '?config=TeX-MML-AM_HTMLorMML-full'), true);
+$PAGE->requires->js(new moodle_url(get_config('tinymce_mathslate')->mathjaxurl . '?config=TeX-MML-AM_HTMLorMML,Safe'), true);
 
 $PAGE->requires->strings_for_js(array( 'nomathjax', 'clear', 'undo', 'redo', 'help'), 'tinymce_mathslate');
 $PAGE->requires->strings_for_js(array( 'mathslate', 'cancel', 'cancel_desc',
