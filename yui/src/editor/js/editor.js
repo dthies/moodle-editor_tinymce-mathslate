@@ -40,13 +40,13 @@ NS.Editor=function(editorID,config){
     }
     //Set MathJax to us HTML-CSS rendering on all browsers
     MathJax.Hub.setRenderer('HTML-CSS');
-    //MathJax.Ajax.Require("[MathJax]/extensions/toMathML.js");
     var toolboxID=Y.guid();
     var workID=Y.guid();
     this.node.addClass(CSS.EDITOR);
     //Place math editor on page
     this.node.setHTML('<div id="' +toolboxID +'" class="'+CSS.TOOLBOX+'">'
-            + '<div style="background-color: white; color: green; height: 300px; line-height: 75px; font-size: 18px; text-align:center"><br />Mathslate Mathematics Editor<br />v. 1.0RC</div><script type="math/tex">\\quad</script><math> <mo> </mo></math></div>'
+            + '<div style="background-color: white; color: green; height: 300px; line-height: 75px; font-size: 18px; text-align:center"><br />Mathslate Mathematics Editor<br />'
+            + 'v. 1.0RC1</div><script type="math/tex">\\quad</script><math> <mo> </mo></math></div>'
             + '<div id="' +workID +'" ></div>');
 
     var tbox={tools: [],
@@ -90,12 +90,6 @@ NS.Editor=function(editorID,config){
             tbox.tools.push(this);
         }
         var tabs={children: []};
-            //initialized=false;
-        //MathJax.Hub.Register.StartupHook('toMathML Ready', function() {
-         //   if (initialized) {
-          //      return;
-           // }
-            //initialized = true;
             MathJax.Hub.Register.StartupHook('TeX Jax Config', function() {
                 MathJax.Ajax.Require("[MathJax]/extensions/toMathML.js");
                 tabs.children.push({
