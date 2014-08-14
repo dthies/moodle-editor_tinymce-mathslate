@@ -46,7 +46,7 @@ NS.Editor=function(editorID,config){
     //Place math editor on page
     this.node.setHTML('<div id="' +toolboxID +'" class="'+CSS.TOOLBOX+'">'
             + '<div style="background-color: white; color: green; height: 300px; line-height: 75px; font-size: 18px; text-align:center"><br />Mathslate Mathematics Editor<br />'
-            + 'v. 1.0RC1</div><script type="math/tex">\\quad</script><math> <mo> </mo></math></div>'
+            + 'Version 1.0</div><script type="math/tex">\\quad</script><math> <mo> </mo></math></div>'
             + '<div id="' +workID +'" ></div>');
 
     var tbox={tools: [],
