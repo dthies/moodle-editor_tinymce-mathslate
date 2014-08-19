@@ -8,10 +8,46 @@
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-    <title>Moodle-editor tinymce-mathslate</title>
-  </head>
+    <title>Tinymce Mathslate plugin for Moodle</title>
+    <link rel="stylesheet" type="text/css" href="http:./styles.css">
+    <script src="http://yui.yahooapis.com/3.17.2/build/yui/yui-min.js"></script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+    <script>
+       if(typeof M === "undefined") M = {};
+       M.mathslateURL = M.mathslateURL || document.location.toString().replace(/\/[^/]*$/, '');
 
-  <body>
+    </script>
+
+<script>
+if (typeof M === "undefined") M={};
+M.util=M.util||{};
+M.util.image_url=M.util.image_url||function(image,module){
+    return 'http:'+(module=='tinymce_mathslate'?'./pix/':'../../pix/')+image+'.svg';
+}
+M.util.get_string = function(image,module){
+    return 'http:'+(module=='tinymce_mathslate'?'./pix/':'../../pix/')+image+'.svg';
+}
+M.tinymce_mathslate=M.tinymce_mathslate||{};
+M.tinymce_mathslate.config="http:./config.json";
+M.tinymce_mathslate.help="http:./help.html";
+</script>
+<script src="./strings.js"></script>
+<script src="./yui/build/moodle-tinymce_mathslate-snippeteditor/moodle-tinymce_mathslate-snippeteditor-debug.js"> </script>
+<script src="./yui/build/moodle-tinymce_mathslate-editor/moodle-tinymce_mathslate-editor-debug.js"> </script>
+<script src="./yui/build/moodle-tinymce_mathslate-mathjaxeditor/moodle-tinymce_mathslate-mathjaxeditor-debug.js"> </script>
+<script src="./yui/build/moodle-tinymce_mathslate-textool/moodle-tinymce_mathslate-textool-debug.js"> </script>
+<script src="./yui/build/moodle-tinymce_mathslate-dialogue/moodle-tinymce_mathslate-dialogue-debug.js"> </script>
+<script>
+YUI().use('moodle-tinymce_mathslate-editor','moodle-tinymce_mathslate-textool', function (Y) {
+MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
+var editor = new M.tinymce_mathslate.Editor('#editor',"http:./config.json");
+var mathEditor = top.tinymce.activeEditor.windowManager.getParams();
+mathEditor.output = function(format) { return editor.output(format); }
+});
+
+</script>
+</head>
+<body class="yui3-skin-sam">
 
     <!-- HEADER -->
     <div id="header_wrap" class="outer">
@@ -32,36 +68,17 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+<a name="welcome" class="anchor" href="#welcome"><span class="octicon octicon-link"></span></a>A demonstration of Mathslate.</h3>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p>Mathslate is a javascript editor for producing mathematical expressions. It is available as a plugin for Moodle text editor to insert mathematics in the form of TeX commands. The demonstration version below is an approximation to the popup opened by the editor dialogue. </p>
+<div class="mathslate-container" style="width: 504px; text-align: center">
+    <div style="border: solid 2px #333;">
+        <div id='editor' style="width: 500px; border: solid 0px; font-size: 10pt"></div>
+    </div>
+</div>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
-
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
-
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
-
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<p>The expressions contained under the tabs may be dragged into the workspace or if clicked they will be inserted before a selected expression or at the end of the workspace. Clicking an expression on the workspace selects it for editing. Clicking a selection selects the mathematical expression that contains it.  Once selected an expression may be drag to a new postition in the expression and dropped in place. Editing buttons for <i>undo</i>, <i>redo</i>, and <i>delete</i> are immediately under the workspace. The TeX code is displayed below the workspace or by hovering over a selection.
+</p>
       </section>
     </div>
 
