@@ -152,8 +152,8 @@ NS.MathJaxEditor=function(id){
                     //    return;
                     //}
                     e.stopPropagation();
-                    //se.insertSnippet(selectedNode.getAttribute('id'), se.removeSnippet(node.getAttribute('id')));
                     se.insertSnippet(node.getAttribute('id'), se.removeSnippet(selectedNode.getAttribute('id')));
+                    se.select();
                     render();
                 };
                 node.on('click',function(e) {
