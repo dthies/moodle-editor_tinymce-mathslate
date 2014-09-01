@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Moodle-editor tinymce-mathslate : Moodle tinymce plugin for constructing mathematical expressions">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Tinymce Mathslate plugin for Moodle</title>
+    <link rel="stylesheet" type="text/css" href="http:./styles.css">
+    <script src="http://localhost/moodle/lib/yuilib/3.17.2/yui/yui-min.js"></script>
+    <script src="http://yui.yahooapis.com/3.17.2/build/yui/yui-min.js"></script>
+<script type="text/javascript" src="http://localhost/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+    <script>
+         if(typeof M === "undefined") M = {};
+         M.mathslateURL = M.mathslateURL || document.location.toString().replace(/\/[^/]*$/, '');
+         M.util=M.util||{};
+         M.util.image_url=M.util.image_url||function(image,module){
+             return 'http:'+(module=='tinymce_mathslate'?'./pix/':'../../pix/')+image+'.svg';
+         }
+         M.util.get_string = function(image,module){
+             return 'http:'+(module=='tinymce_mathslate'?'./pix/':'../../pix/')+image+'.svg';
+         }
+         M.tinymce_mathslate=M.tinymce_mathslate||{};
+         M.tinymce_mathslate.config="http:./config.json";
+         M.tinymce_mathslate.help="http:./help.html";
+     </script>
+     <script src="./strings.js"></script>
+     <script src="./yui/build/moodle-tinymce_mathslate-snippeteditor/moodle-tinymce_mathslate-snippeteditor-debug.js"> </script>
+     <script src="./yui/build/moodle-tinymce_mathslate-config/moodle-tinymce_mathslate-config-debug.js"> </script>
+     <script src="./yui/build/moodle-tinymce_mathslate-mathjaxeditor/moodle-tinymce_mathslate-mathjaxeditor-debug.js"> </script>
+     <script src="./yui/build/moodle-tinymce_mathslate-textool/moodle-tinymce_mathslate-textool-debug.js"> </script>
+     <script src="./yui/build/moodle-tinymce_mathslate-dialogue/moodle-tinymce_mathslate-dialogue-debug.js"> </script>
+     <script>
+         YUI().use('moodle-tinymce_mathslate-config','moodle-tinymce_mathslate-mathjaxeditor','moodle-tinymce_mathslate-textool', function (Y) {
+         MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
+         var editor = new M.tinymce_mathslate.Editor('#editor',"http:./config.json");
+         var mathEditor = top.tinymce.activeEditor.windowManager.getParams();
+         mathEditor.output = function(format) { return editor.output(format); }
+});
+
+</script>
+</head>
+<body class="yui3-skin-sam">
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/dthies/moodle-editor_tinymce-mathslate">View on GitHub</a>
+
+          <h1 id="project_title">Moodle-editor tinymce-mathslate</h1>
+          <h2 id="project_tagline">Moodle tinymce plugin for constructing mathematical expressions</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/dthies/moodle-editor_tinymce-mathslate/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/dthies/moodle-editor_tinymce-mathslate/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h3>
+<a name="welcome" class="anchor" href="#welcome"><span class="octicon octicon-link"></span></a>Configuration of available macros</h3>
+
+<p>The mathematical expressions that are available to the user in the tabs in Mathslate can be configured on the system level so that mathematics appropriate to the level of material are present.</p>
+<textarea id="json-data" style="width: 500px">
+</textarea>
+<div class="mathslate-container" style="width: 504px; text-align: center">
+    <div style="border: solid 2px #333;">
+        <div id='editor' style="width: 500px; border: solid 0px; font-size: 10pt"></div>
+    </div>
+</div>
+
+<p>The expressions contained under the tabs may be dragged into the workspace or if clicked they will be inserted before a selected expression or at the end of the workspace. Clicking an expression on the workspace selects it for editing. Clicking a selection selects the mathematical expression that contains it.  Once selected an expression may be drag to a new postition in the expression and dropped in place. Editing buttons for <em>undo</em>, <em>redo</em>, and <em>delete</em> are available immediately under the workspace. The TeX code is displayed below the workspace or by hovering over a selection.
+</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Moodle-editor tinymce-mathslate maintained by <a href="https://github.com/dthies">dthies</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
