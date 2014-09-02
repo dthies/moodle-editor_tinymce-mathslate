@@ -233,6 +233,9 @@ NS.Editor=function(editorID,config){
     } else {
         Y.io(config);
     }
+    Y.one('#json-data').on('change', function() {
+        MathJax.Hub.Queue(['fillToolBox',tbox, Y.JSON.parse(this.getDOMNode().value)]);
+    });
 };
 
 
