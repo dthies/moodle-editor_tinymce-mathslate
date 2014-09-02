@@ -50,7 +50,12 @@ NS.Editor=function(editorID,config){
             + '<div id="' +workID +'" ></div>');
 
     var tbox={tools: [],
+        toolsLast: null,
         fillToolBox: function(tools){
+        if(tools === this.toolsLast) {
+            return;
+        }
+        this.toolsLast = tools;
         this.tools = [];
         function Tool(snippet) {
             function findBlank(snippet) {
@@ -120,6 +125,7 @@ NS.Editor=function(editorID,config){
             });
                 output += tabcontent.join(',') + '\n]';
 
+            tbox.toolsLast = output;
             Y.one('#json-data').getDOMNode().value =  output;
         }
 
@@ -131,7 +137,6 @@ NS.Editor=function(editorID,config){
                     var t = new Tool(snippet);
                     t.parent = tab.tools;
                     MathJax.HTML.addElement(q.getDOMNode(),'span',{}, [' ', ['span', {}, t.HTMLsnippet], ' '] );
-                    q.one('span').setStyle('background-color', 'green');
                     if(snippet[0]&&snippet[0]!=='br'&&false){
                         q.append('&thinsp; &thinsp;');}
                 });
@@ -173,7 +178,7 @@ NS.Editor=function(editorID,config){
                     var drop=new Y.DD.Drop({node: '#'+tool.id});
                     drop.on('drop:hit', function(e) {
                         var dragTool = null;
-                        var dragNode = Y.one('#' + e.drag.get('node').get('id')).get('parentNode');
+                        var dragNode = Y.one('#' + e.drag.get('node').get('id')).get('parentNode').get('parentNode');
                         tbox.tools.forEach(function (t) {
                             if (t.id ===  e.drag.get('node').get('id')) {
                                 dragTool = t;
@@ -185,7 +190,6 @@ NS.Editor=function(editorID,config){
                     });
                     
                     var d=new Y.DD.Drag({node: '#'+tool.id});
-                    d.get('node').setStyle('backgroundColor', 'green');
                     d.set('data',tool.json);
                     d.on('drag:start', function() {
                         this.get('dragNode').addClass(CSS.DRAGNODE);
