@@ -103,6 +103,7 @@ NS.Editor=function(editorID,config){
                 });
             });
             MathJax.Hub.Register.StartupHook('End', function() {
+                if (Y.one('.mathslate-workspace')) { return;}
                 tools.forEach(function(tab){
                     var q=Y.Node.create('<p></p>');
                     tab.tools.forEach(function(snippet){

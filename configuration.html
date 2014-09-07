@@ -10,8 +10,11 @@
 
     <title>Tinymce Mathslate plugin for Moodle</title>
     <link rel="stylesheet" type="text/css" href="http:./styles.css">
-    <script src="http://yui.yahooapis.com/3.17.2/build/yui/yui-min.js"></script>
-<script type="text/javascript" src="http://localhost/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+    <script src="http://yui.yahooapis.com/3.17.2/build/yui/yui-min.js">
+    //<script src="http://localhost/moodle/lib/yuilib/3.17.2/yui/yui-debug.js">
+</script>
+<script type="text/javascript" src="http://localhost/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> 
+</script>
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
     <script>
          if(typeof M === "undefined") M = {};
@@ -29,16 +32,20 @@
      </script>
      <script src="./strings.js"></script>
      <script src="./yui/build/moodle-tinymce_mathslate-snippeteditor/moodle-tinymce_mathslate-snippeteditor-debug.js"> </script>
+     <script src="./yui/build/moodle-tinymce_mathslate-editor/moodle-tinymce_mathslate-editor-debug.js"> </script>
      <script src="./yui/build/moodle-tinymce_mathslate-config/moodle-tinymce_mathslate-config-debug.js"> </script>
      <script src="./yui/build/moodle-tinymce_mathslate-mathjaxeditor/moodle-tinymce_mathslate-mathjaxeditor-debug.js"> </script>
      <script src="./yui/build/moodle-tinymce_mathslate-textool/moodle-tinymce_mathslate-textool-debug.js"> </script>
      <script src="./yui/build/moodle-tinymce_mathslate-dialogue/moodle-tinymce_mathslate-dialogue-debug.js"> </script>
      <script>
-         YUI().use('moodle-tinymce_mathslate-config','moodle-tinymce_mathslate-mathjaxeditor','moodle-tinymce_mathslate-textool', function (Y) {
+         YUI().use('moodle-tinymce_mathslate-config','moodle-tinymce_mathslate-editor','moodle-tinymce_mathslate-mathjaxeditor','moodle-tinymce_mathslate-textool', function (Y) {
          MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
-         var editor = new M.tinymce_mathslate.Editor('#editor',"http:./config.json");
-         var mathEditor = top.tinymce.activeEditor.windowManager.getParams();
-         mathEditor.output = function(format) { return editor.output(format); }
+         var tabeditor = new M.tinymce_mathslate.TabEditor('#tabeditor',"http:./config.json");
+         Y.one('#insert-expression').on('click' ,function() {
+             tabeditor.addTool(Y.one('#dialogue').getDOMNode().contentDocument.mathEditor.output('JSON'));
+         });
+         //var mathEditor = top.tinymce.activeEditor.windowManager.getParams();
+         //mathEditor.output = function(format) { return editor.output(format); }
 });
 
 </script>
@@ -71,9 +78,17 @@
 </textarea>
 <div class="mathslate-container" style="width: 504px; text-align: center">
     <div style="border: solid 2px #333;">
+        <div id='tabeditor' style="width: 500px; border: solid 0px; font-size: 10pt"></div>
         <div id='editor' style="width: 500px; border: solid 0px; font-size: 10pt"></div>
     </div>
+<p>
+Create expressions below, and insert and insert them into the tabs above.</p>
+<p><button id="insert-expression">Insert</button></p>
+<div class="mathslate-container2" style="width: 504px; text-align: center">
+        <div id='editor' style="width: 500px; border: solid 0px; font-size: 10pt"></div>
 </div>
+</div>
+<iframe id="dialogue" src="./dialogue.html" style="width: 520px; height: 500px"></iframe>
 
 <p>The expressions contained under the tabs may be dragged into the workspace or if clicked they will be inserted before a selected expression or at the end of the workspace. Clicking an expression on the workspace selects it for editing. Clicking a selection selects the mathematical expression that contains it.  Once selected an expression may be drag to a new postition in the expression and dropped in place. Editing buttons for <em>undo</em>, <em>redo</em>, and <em>delete</em> are available immediately under the workspace. The TeX code is displayed below the workspace or by hovering over a selection.
 </p>

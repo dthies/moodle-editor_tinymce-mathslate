@@ -38,14 +38,14 @@ NS.MathJaxEditor=function(id){
         var math=[];
         var se=new NS.mSlots();
         se.slots.push(math);
-        this.workspace=Y.one(id).append('<div id="canvas" class="'+CSS.WORKSPACE+'"/>');
+        this.workspace=Y.one(id).append('<div id="canvas2" class="'+CSS.WORKSPACE+'"/>');
         var toolbar= Y.one(id).appendChild(Y.Node.create('<form></form>'));
         var preview = Y.one(id).appendChild(Y.Node.create('<div class="'+CSS.PANEL+'"/>'));
         preview.delegate('click',function(e){
             canvas.get('node').one('#'+this.getAttribute('id')).handleClick(e);
         },'div');
         var canvas=new Y.DD.Drop({
-            node: this.workspace.one('#canvas')});
+            node: this.workspace.one('#canvas2')});
         this.canvas=canvas;
         this.canvas.get('node').on('click',function(){
             se.select();
@@ -180,7 +180,7 @@ NS.MathJaxEditor=function(id){
                         }
                         this.get('node').addClass(CSS.DRAGGEDNODE);
                         var id = Y.guid();
-                        this.get('dragNode').set('innerHTML', '');
+                        this.get('dragNode').set('innerHTML','' );
                         this.get('dragNode').addClass(CSS.DRAGNODE);
                         MathJax.Hub.Queue(['addElement',MathJax.HTML,
                             this.get('dragNode').getDOMNode(),'span',{id: id},
@@ -285,7 +285,7 @@ NS.MathJaxEditor=function(id){
                 return canvas.get('node').one('span').getHTML();
             }
             if(format==='JSON') {
-                return Y.JSON.stringify(cleanSnippet(math));
+                return Y.JSON.stringify(cleanSnippet(Y.JSON.parse(Y.JSON.stringify(math))));
             }
             return se.output(format);
         };
