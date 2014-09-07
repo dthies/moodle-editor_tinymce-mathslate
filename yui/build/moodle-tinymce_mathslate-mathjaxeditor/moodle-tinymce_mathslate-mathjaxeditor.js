@@ -38,14 +38,14 @@ NS.MathJaxEditor=function(id){
         var math=[];
         var se=new NS.mSlots();
         se.slots.push(math);
-        this.workspace=Y.one(id).append('<div id="canvas2" class="'+CSS.WORKSPACE+'"/>');
+        this.workspace=Y.one(id).append('<div id="canvas" class="'+CSS.WORKSPACE+'"/>');
         var toolbar= Y.one(id).appendChild(Y.Node.create('<form></form>'));
         var preview = Y.one(id).appendChild(Y.Node.create('<div class="'+CSS.PANEL+'"/>'));
         preview.delegate('click',function(e){
             canvas.get('node').one('#'+this.getAttribute('id')).handleClick(e);
         },'div');
         var canvas=new Y.DD.Drop({
-            node: this.workspace.one('#canvas2')});
+            node: this.workspace.one('#canvas')});
         this.canvas=canvas;
         this.canvas.get('node').on('click',function(){
             se.select();
