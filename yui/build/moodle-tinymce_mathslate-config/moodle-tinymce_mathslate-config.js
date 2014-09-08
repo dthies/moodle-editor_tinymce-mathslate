@@ -237,6 +237,7 @@ NS.TabEditor=function(editorID,config){
             MathJax.HTML.addElement(q.getDOMNode(),'span',{}, [' ', ['span', {}, t.HTMLsnippet], ' '] );
             MathJax.Hub.Queue(['Typeset',MathJax.Hub,q.getDOMNode()]);
             MathJax.Hub.Queue(['makeToolDraggable', tbox, t]);
+            MathJax.Hub.Queue(['outputJSON', tbox]);
     };
     if(config===undefined) {
         Y.io(NS.config);
