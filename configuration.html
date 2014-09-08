@@ -8,7 +8,7 @@
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-    <title>Tinymce Mathslate plugin for Moodle</title>
+    <title>Mathslate Configuration</title>
     <link rel="stylesheet" type="text/css" href="http:./styles.css">
     <script src="http://yui.yahooapis.com/3.17.2/build/yui/yui-min.js">
     //<script src="http://localhost/moodle/lib/yuilib/3.17.2/yui/yui-debug.js">
@@ -55,15 +55,8 @@
     <!-- HEADER -->
     <div id="header_wrap" class="outer">
         <header class="inner">
-          <a id="forkme_banner" href="https://github.com/dthies/moodle-editor_tinymce-mathslate">View on GitHub</a>
+            <h1 id="project_title">Mathslate Configuration Tool</h1>
 
-          <h1 id="project_title">Moodle-editor tinymce-mathslate</h1>
-          <h2 id="project_tagline">Moodle tinymce plugin for constructing mathematical expressions</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/dthies/moodle-editor_tinymce-mathslate/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/dthies/moodle-editor_tinymce-mathslate/tarball/master">Download this project as a tar.gz file</a>
-            </section>
         </header>
     </div>
 
@@ -74,24 +67,24 @@
 <a name="welcome" class="anchor" href="#welcome"><span class="octicon octicon-link"></span></a>Configuration of available macros</h3>
 
 <p>The mathematical expressions that are available to the user in the tabs in Mathslate can be configured on the system level so that mathematics appropriate to the level of material are present.</p>
+
+<p>The configuration file (config.json). You may begin with what is loaded here or cut and paste your current configuration into this text area. The tabs below will be update accordingly when you move outside the box.
 <textarea id="json-data" style="width: 500px">
 </textarea>
 <div class="mathslate-container" style="width: 504px; text-align: center">
     <div style="border: solid 2px #333;">
         <div id='tabeditor' style="width: 500px; border: solid 0px; font-size: 10pt"></div>
-        <div id='editor' style="width: 500px; border: solid 0px; font-size: 10pt"></div>
     </div>
-<p>
-Create expressions below, and insert and insert them into the tabs above.</p>
+<p>Drag the tools below to the place you want them or doubleclick to delete them. The text area above updates as you make changes. When you are done you can cut and paste the results back to your installation.
+
+If you do not have an expression you want available above, you can create the expression below, and click the insert button to insert it into the tab selected above.</p>
 <p><button id="insert-expression">Insert</button></p>
 <div class="mathslate-container2" style="width: 504px; text-align: center">
         <div id='editor' style="width: 500px; border: solid 0px; font-size: 10pt"></div>
 </div>
 </div>
-<iframe id="dialogue" src="./dialogue.html" style="width: 520px; height: 500px"></iframe>
+<iframe id="dialogue" seamless="seamless" src="./dialogue.html" style="width: 520px; height: 500px"></iframe>
 
-<p>The expressions contained under the tabs may be dragged into the workspace or if clicked they will be inserted before a selected expression or at the end of the workspace. Clicking an expression on the workspace selects it for editing. Clicking a selection selects the mathematical expression that contains it.  Once selected an expression may be drag to a new postition in the expression and dropped in place. Editing buttons for <em>undo</em>, <em>redo</em>, and <em>delete</em> are available immediately under the workspace. The TeX code is displayed below the workspace or by hovering over a selection.
-</p>
       </section>
     </div>
 
