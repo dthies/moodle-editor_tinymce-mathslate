@@ -134,16 +134,16 @@ NS.TabEditor=function(editorID,config){
             MathJax.Hub.Register.StartupHook('End', function() {
                 tools.forEach(function(tab){
 
-                var q=Y.Node.create('<p></p>');
-                tab.tools.forEach(function(snippet){
-                    var t = new tbox.Tool(snippet);
-                    t.parent = tab.tools;
-                    MathJax.HTML.addElement(q.getDOMNode(),'span',{}, [' ', ['span', {}, t.HTMLsnippet], ' '] );
-                    if(snippet[0]&&snippet[0]!=='br'&&false){
-                        q.append('&thinsp; &thinsp;');}
+                    var q=Y.Node.create('<p></p>');
+                    tab.tools.forEach(function(snippet){
+                        var t = new tbox.Tool(snippet);
+                        t.parent = tab.tools;
+                        MathJax.HTML.addElement(q.getDOMNode(),'span',{}, [' ', ['span', {}, t.HTMLsnippet], ' '] );
+                        if(snippet[0]&&snippet[0]!=='br'&&false){
+                            q.append('&thinsp; &thinsp;');}
+                    });
+                    tabs.children.push({label: tab.label, content: q.getHTML()});
                 });
-                tabs.children.push({label: tab.label, content: q.getHTML()});
-            });
                 var tabview = new Y.TabView(
                     tabs
                 );
@@ -165,13 +165,26 @@ NS.TabEditor=function(editorID,config){
                         //new NS.TeXTool('#latex-input',function(json){mje.addMath(json);});
                     }
                 }
+                MathJax.Hub.Queue(["Typeset",MathJax.Hub,toolboxID]);
                 /* function passed to MathJax to initiate dragging after math is formated
                  * @function makeToolsDraggable
                  */
                 function makeToolsDraggable(){
                     tbox.tools.forEach(tbox.makeToolDraggable);
+                    Y.one('#'+toolboxID).all('li').each(function(li) {
+                        console.log(li);
+                        var drop=new Y.DD.Drop({node: li});
+                        drop.on('drop:hit', function(e) {
+                            var id = e.drag.get('node').getAttribute('id');
+                            var index = li.get('parentNode').get('children').indexOf(li);
+                            var tool = tbox.getToolByID(id);
+                            tools[index].tools.push(tool.remove());
+                            tool.parent = tools[index].tools;
+                            li.get('parentNode').get('parentNode').get('children').item(1).get('children').item(index).appendChild(Y.one('#'
+                               + id).get('parentNode').get('parentNode'));
+                        });
+                    });
                 }
-                MathJax.Hub.Queue(["Typeset",MathJax.Hub,toolboxID]);
 
                 MathJax.Hub.Queue(makeToolsDraggable);
             });
@@ -256,6 +269,7 @@ NS.TabEditor=function(editorID,config){
         "dd-proxy",
         "dd-drop",
         "event",
+        "event-delegate",
         "event-valuechange",
         "tabview",
         "io-base",
