@@ -247,7 +247,8 @@ NS.TabEditor=function(editorID,config){
     this.addTool = function(snippet) {
         var q = Y.one(editorID).one('.yui3-tab-panel-selected');
             var t = new tbox.Tool(["mrow",{},Y.JSON.parse(snippet)]);
-            //t.parent = tab.tools;
+            var index = Y.one(editorID).one('ul').get('children').indexOf(Y.one(editorID).one('.yui3-tab-selected'));
+            t.parent = tbox.toolsLast[index].tools;
             MathJax.HTML.addElement(q.getDOMNode(),'span',{}, [' ', ['span', {}, t.HTMLsnippet], ' '] );
             MathJax.Hub.Queue(['Typeset',MathJax.Hub,q.getDOMNode()]);
             MathJax.Hub.Queue(['makeToolDraggable', tbox, t]);
