@@ -180,6 +180,7 @@ NS.TabEditor=function(editorID,config){
                             tool.parent = tools[index].tools;
                             li.get('parentNode').get('parentNode').get('children').item(1).get('children').item(index).appendChild(Y.one('#'
                                + id).get('parentNode').get('parentNode'));
+                            tbox.outputJSON();
                         });
                     });
                 }
