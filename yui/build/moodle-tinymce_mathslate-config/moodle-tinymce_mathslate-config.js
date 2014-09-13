@@ -52,7 +52,6 @@ NS.TabEditor=function(editorID,config){
             + '<div id="' +workID +'" ></div>');
 
     var tbox={tools: [],
-        toolsLast: null,
         Tool: function(snippet) {
             function findBlank(snippet) {
                 if (Array.isArray(snippet[2])) {
@@ -95,10 +94,7 @@ NS.TabEditor=function(editorID,config){
             tbox.tools.push(this);
         },
         fillToolBox: function(tools){
-            if(tools === this.toolsLast) {
-                return;
-            }
-            this.toolsLast = tools;
+            this.tabs = tools;
             this.tools = [];
             var tabs={children: []};
             /*
@@ -127,7 +123,6 @@ NS.TabEditor=function(editorID,config){
                 });
                 output += tabcontent.join(',') + '\n]';
 
-                tbox.toolsLast = output;
                 Y.one('#json-data').getDOMNode().value =  output;
             }
 
@@ -248,7 +243,7 @@ NS.TabEditor=function(editorID,config){
         var q = Y.one(editorID).one('.yui3-tab-panel-selected');
             var t = new tbox.Tool(["mrow",{},Y.JSON.parse(snippet)]);
             var index = Y.one(editorID).one('ul').get('children').indexOf(Y.one(editorID).one('.yui3-tab-selected'));
-            t.parent = tbox.toolsLast[index].tools;
+            t.parent = tbox.tabs[index].tools;
             MathJax.HTML.addElement(q.getDOMNode(),'span',{}, [' ', ['span', {}, t.HTMLsnippet], ' '] );
             MathJax.Hub.Queue(['Typeset',MathJax.Hub,q.getDOMNode()]);
             MathJax.Hub.Queue(['makeToolDraggable', tbox, t]);
