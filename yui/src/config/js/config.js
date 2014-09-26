@@ -122,7 +122,7 @@ NS.TabEditor=function(editorID,config){
                 output += tabcontent.join(',') + '\n]';
 
                 Y.one('#json-data').getDOMNode().value =  output;
-            }
+            };
 
             MathJax.Hub.Register.StartupHook('End', function() {
                 tools.forEach(function(tab){
@@ -140,6 +140,80 @@ NS.TabEditor=function(editorID,config){
                 var tabview = new Y.TabView(
                     tabs
                 );
+    Y.one('#label-remove').on('click', function() {
+        var index = Y.one(editorID).one('ul').get('children').indexOf(Y.one(editorID).one('.yui3-tab-selected'));
+        tabview.remove(index);
+        tbox.tabs.splice(index,1);
+        tbox.outputJSON();
+    });
+    Y.one('#label-add').on('click', function() {
+        var title = "title";
+        var label = "label";
+        var index = Y.one(editorID).one('ul').get('children').indexOf(Y.one(editorID).one('.yui3-tab-selected'));
+        tabview.add(
+            {
+                childType: "Tab",
+                label: "<span title=\"" + title + "\">" + label + "</span>",
+                content: "<span id='latex-input'></span>"
+            },
+            index
+        );
+        tbox.registerTab(Y.one(editorID).one('ul').get('children').item(index));
+        tbox.tabs.splice(index,0,{
+            label: "<span title=\"" + title + "\">" + label + "</span>",
+            content: "",
+            tools: []
+        });
+        tbox.outputJSON();
+    });
+    Y.one('#mathslate-tab-label').on('click', function() {
+        var tab = Y.one(editorID).one('.yui3-tab-selected');
+        var index = Y.one(editorID).one('ul').get('children').indexOf(Y.one(editorID).one('.yui3-tab-selected'));
+        var label = Y.Node.create(tbox.tabs[index].label);
+        var textBox = Y.Node.create('<input type="text" value="' + label.getHTML() + '"></input>');
+        Y.one('#mathslate-tab-text').appendChild(textBox);
+        textBox.focus();
+        textBox.on('blur', function() {
+            this.remove();
+        });
+        textBox.on('change', function() {
+            label.setHTML(this.getDOMNode().value);
+            tab.one('a').setHTML('');
+            tab.one('a').appendChild(label);
+            tbox.tabs[index].label = tab.one('a').getHTML();
+            MathJax.Hub.Queue(['Typeset', MathJax.Hub, tab.getDOMNode()]);
+            tbox.outputJSON();
+        });
+    });
+    Y.one('#mathslate-tab-title').on('click', function() {
+        var tab = Y.one(editorID).one('.yui3-tab-selected');
+        var index = Y.one(editorID).one('ul').get('children').indexOf(Y.one(editorID).one('.yui3-tab-selected'));
+        var label = Y.Node.create(tbox.tabs[index].label);
+        var textBox = Y.Node.create('<input type="text" value="' + label.getAttribute('title') + '"></input>');
+        Y.one('#mathslate-tab-text').appendChild(textBox);
+        textBox.focus();
+        textBox.on('blur', function() {
+            this.remove();
+        });
+        textBox.on('change', function() {
+            label.setAttribute('title', this.getDOMNode().value);
+            tab.one('a').setHTML('');
+            tab.one('a').appendChild(label);
+            tbox.tabs[index].label = tab.one('a').getHTML();
+            MathJax.Hub.Queue(['Typeset', MathJax.Hub, tab.getDOMNode()]);
+            tbox.outputJSON();
+        });
+    });
+/*
+    Y.one('#label-text').on('change', function() {
+        var index = Y.one(editorID).one('ul').get('children').indexOf(Y.one(editorID).one('.yui3-tab-selected'));
+        tbox.tabs[index].label = this.getDOMNode().value;
+        Y.one(editorID).one('.yui3-tab-selected').one('a').one('span').setHTML(this.getDOMNode().value);
+        tbox.outputJSON();
+        MathJax.Hub.Queue(['Typeset', MathJax.Hub, Y.one(editorID).one('.yui3-tab-selected').getDOMNode()]);
+    });
+*/
+
                 //var mje=new NS.MathJaxEditor('#'+workID);
 
                 /* me.output = function(f){return mje.output(f);};
@@ -165,20 +239,23 @@ NS.TabEditor=function(editorID,config){
                 function makeToolsDraggable(){
                     tbox.tools.forEach(tbox.makeToolDraggable);
                     Y.one('#'+toolboxID).all('li').each(function(li) {
-                        console.log(li);
-                        var drop=new Y.DD.Drop({node: li});
-                        drop.on('drop:hit', function(e) {
-                            var id = e.drag.get('node').getAttribute('id');
-                            var index = li.get('parentNode').get('children').indexOf(li);
-                            var tool = tbox.getToolByID(id);
-                            tools[index].tools.push(tool.remove());
-                            tool.parent = tools[index].tools;
-                            li.get('parentNode').get('parentNode').get('children').item(1).get('children').item(index).appendChild(Y.one('#'
-                               + id).get('parentNode').get('parentNode'));
-                            tbox.outputJSON();
-                        });
+                        tbox.registerTab(li);
                     });
                 }
+                tbox.registerTab = function(li) {
+                    var drop=new Y.DD.Drop({node: li});
+                    drop.on('drop:hit', function(e) {
+                        var id = e.drag.get('node').getAttribute('id');
+                        var index = li.get('parentNode').get('children').indexOf(li);
+                        var tool = tbox.getToolByID(id);
+                        tools[index].tools.push(tool.remove());
+                        tool.parent = tools[index].tools;
+                        li.get('parentNode').get('parentNode').get('children').item(1).one('[aria-labelledby="'+li.one('a').getAttribute('id')+'"]').appendChild(Y.one('#'
+                           + id).get('parentNode').get('parentNode'));
+                        //li.get('parentNode').get('parentNode').get('children').item(1).get('children').item(index).appendChild(Y.one('#'
+                        tbox.outputJSON();
+                    });
+                };
 
                 MathJax.Hub.Queue(makeToolsDraggable);
             });
@@ -255,4 +332,5 @@ NS.TabEditor=function(editorID,config){
     Y.one('#json-data').on('change', function() {
         MathJax.Hub.Queue(['fillToolBox',tbox, Y.JSON.parse(this.getDOMNode().value)]);
     });
+
 };

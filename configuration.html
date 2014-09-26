@@ -70,9 +70,16 @@
 
 <p>The mathematical expressions that are available to the user in the tabs in Mathslate can be configured on the system level so that mathematics appropriate to the level of material are present.</p>
 
-<p>The configuration file (config.json in plugin directory) may be edited here. You may begin with what is loaded already or cut and paste your current configuration into this text area. The tabs below will be update accordingly when you move outside the box.
-<textarea id="json-data" style="width: 500px">
-</textarea>
+<p>The configuration file (config.json in plugin directory) may be edited here. You may begin with what is loaded already or cut and paste your current configuration into this text area. The tabs below will be update accordingly when you move outside the box.</p>
+
+<textarea id="json-data" style="width: 500px"> </textarea>
+<p>
+    <button id="mathslate-tab-title" title="Edit the title of selected tab">Title</button>
+    <span id="mathslate-tab-text" />
+    <button id="mathslate-tab-label" title="Edit the label displayed on selected tab">Label</button>
+    <button id="label-add" title="Add a new tab in front of selected one">Add</button>
+    <button id="label-remove" title="Delete currently selected tab">Remove</button>
+</p>
 <div class="mathslate-container" style="width: 504px; text-align: center">
     <div style="border: solid 2px #333;">
         <div id='tabeditor' style="width: 500px; border: solid 0px; font-size: 10pt"></div>
@@ -81,7 +88,7 @@
 <p>Drag the tools above to the place you want them or doubleclick to delete them. Drag them to a tab to move them to the corresponding panel. The text area above updates as you make changes. When you are done you can cut and paste the results back to your installation.
 
 If you do not have an expression you want available above, you can create the expression below, and click the insert button to insert it into the tab selected above.</p>
-<p><button id="insert-expression">Insert</button></p>
+<p><button id="insert-expression" title="Insert the expression below into the selected tab above">Insert</button></p>
 <div class="mathslate-container2" style="width: 504px; text-align: center">
         <div id='editor' style="width: 500px; border: solid 0px; font-size: 10pt"></div>
 </div>
