@@ -113,8 +113,9 @@ NS.TabEditor=function(editorID,config){
                 var tabcontent = [];
                 tools.forEach(function(tab) {
                     var tabmembers = [];
-
-                    Y.one(editorID).one('.yui3-tabview-content').get('children').item(1).get('children').item(tools.indexOf(tab)).all('.yui3-dd-drop').each(function(t) {
+                var id = Y.one(editorID).one('.yui3-tabview-content').get('children').item(0).get('children').item(tools.indexOf(tab)).one('a').getAttribute('id');
+                    //Y.one(editorID).one('.yui3-tabview-content').get('children').item(1).get('children').item(tools.indexOf(tab)).all('.yui3-dd-drop').each(function(t) {
+                Y.one(editorID).one('.yui3-tabview-content').get('children').item(1).one('[aria-labelledby="' + id + '"]').all('.yui3-dd-drop').each(function(t) {
                         tabmembers.push('\n            ' + tbox.getToolByID(t.getAttribute('id')).json);
                     });
                     tabcontent.push('\n    {"label": "' + tab.label + '",\n        "tools": [' + tabmembers.join(',') + ']\n    }');
@@ -158,11 +159,61 @@ NS.TabEditor=function(editorID,config){
             },
             index
         );
-        tbox.registerTab(Y.one(editorID).one('ul').get('children').item(index));
         tbox.tabs.splice(index,0,{
             label: "<span title=\"" + title + "\">" + label + "</span>",
             content: "",
             tools: []
+        });
+        tbox.outputJSON();
+        tbox.registerTab(Y.one(editorID).one('ul').get('children').item(index));
+    });
+    Y.one('#mathslate-tab-left').on('click', function() {
+        var index = Y.one(editorID).one('ul').get('children').indexOf(Y.one(editorID).one('.yui3-tab-selected'));
+        if (index < 1) {
+            return;
+        }
+        var li = Y.one(editorID).one('ul').get('children').item(index);
+        var content = li.get('parentNode').get('parentNode').get('children').item(1).one('[aria-labelledby="'+li.one('a').getAttribute('id')+'"]').getHTML();
+        tabview.remove(index);
+        tabview.add(
+            {
+                childType: "Tab",
+                label: li.one('a').getHTML(),
+                content: content
+            },
+            index-1
+        );
+        tabview.selectChild(index-1);
+        tbox.tabs.splice(index-1, 0, tbox.tabs.splice(index, 1)[0]);
+        tbox.registerTab(Y.one(editorID).one('ul').get('children').item(index-1));
+        li = Y.one(editorID).one('ul').get('children').item(index-1);
+        li.get('parentNode').get('parentNode').get('children').item(1).one('[aria-labelledby="'+li.one('a').getAttribute('id')+'"]').all('.yui3-dd-drop').each(function(t) {
+            tbox.makeToolDraggable(tbox.getToolByID(t.getAttribute('id')));
+        });
+        tbox.outputJSON();
+    });
+    Y.one('#mathslate-tab-right').on('click', function() {
+        var index = Y.one(editorID).one('ul').get('children').indexOf(Y.one(editorID).one('.yui3-tab-selected')) + 1;
+        if (index > tbox.tabs.length - 1) {
+            return;
+        }
+        var li = Y.one(editorID).one('ul').get('children').item(index);
+        var content = li.get('parentNode').get('parentNode').get('children').item(1).one('[aria-labelledby="'+li.one('a').getAttribute('id')+'"]').getHTML();
+        tabview.remove(index);
+        tabview.add(
+            {
+                childType: "Tab",
+                label: li.one('a').getHTML(),
+                content: content
+            },
+            index-1
+        );
+        tabview.selectChild(index);
+        tbox.tabs.splice(index-1, 0, tbox.tabs.splice(index, 1)[0]);
+        tbox.registerTab(Y.one(editorID).one('ul').get('children').item(index-1));
+        li = Y.one(editorID).one('ul').get('children').item(index-1);
+        li.get('parentNode').get('parentNode').get('children').item(1).one('[aria-labelledby="'+li.one('a').getAttribute('id')+'"]').all('.yui3-dd-drop').each(function(t) {
+            tbox.makeToolDraggable(tbox.getToolByID(t.getAttribute('id')));
         });
         tbox.outputJSON();
     });
