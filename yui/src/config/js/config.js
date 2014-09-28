@@ -113,7 +113,10 @@ NS.TabEditor=function(editorID,config){
                 var tabcontent = [];
                 tools.forEach(function(tab) {
                     var tabmembers = [];
-                var id = Y.one(editorID).one('.yui3-tabview-content').get('children').item(0).get('children').item(tools.indexOf(tab)).one('a').getAttribute('id');
+                    if (!Y.one(editorID).one('.yui3-tabview-content').get('children').item(0).get('children').item(tools.indexOf(tab))) {
+                        return;
+                    }
+                    var id = Y.one(editorID).one('.yui3-tabview-content').get('children').item(0).get('children').item(tools.indexOf(tab)).one('a').getAttribute('id');
                     //Y.one(editorID).one('.yui3-tabview-content').get('children').item(1).get('children').item(tools.indexOf(tab)).all('.yui3-dd-drop').each(function(t) {
                 Y.one(editorID).one('.yui3-tabview-content').get('children').item(1).one('[aria-labelledby="' + id + '"]').all('.yui3-dd-drop').each(function(t) {
                         tabmembers.push('\n            ' + tbox.getToolByID(t.getAttribute('id')).json);
@@ -154,13 +157,13 @@ NS.TabEditor=function(editorID,config){
         tabview.add(
             {
                 childType: "Tab",
-                label: "<span title=\"" + title + "\">" + label + "</span>",
+                label: "<span title='" + title + "'>" + label + "</span>",
                 content: "<span id='latex-input'></span>"
             },
             index
         );
         tbox.tabs.splice(index,0,{
-            label: "<span title=\"" + title + "\">" + label + "</span>",
+            label: "<span title='" + title + "'>" + label + "</span>",
             content: "",
             tools: []
         });
@@ -206,7 +209,7 @@ NS.TabEditor=function(editorID,config){
             label.setHTML(this.getDOMNode().value);
             tab.one('a').setHTML('');
             tab.one('a').appendChild(label);
-            tbox.tabs[index].label = tab.one('a').getHTML();
+            tbox.tabs[index].label = "<span title='" + label.getAttribute('title') + "'>" + label.getHTML() + "</span>";
             MathJax.Hub.Queue(['Typeset', MathJax.Hub, tab.getDOMNode()]);
             tbox.outputJSON();
         });
@@ -225,7 +228,7 @@ NS.TabEditor=function(editorID,config){
             label.setAttribute('title', this.getDOMNode().value);
             tab.one('a').setHTML('');
             tab.one('a').appendChild(label);
-            tbox.tabs[index].label = tab.one('a').getHTML();
+            tbox.tabs[index].label =  "<span title='" + this.getDOMNode().value + "'>" + label.getHTML() + "</span>";
             MathJax.Hub.Queue(['Typeset', MathJax.Hub, tab.getDOMNode()]);
             tbox.outputJSON();
         });
