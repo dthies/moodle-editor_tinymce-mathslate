@@ -178,11 +178,8 @@ NS.MathJaxEditor=function(id){
                         }
                         this.get('node').addClass(CSS.DRAGGEDNODE);
                         var id = Y.guid();
-                        this.get('dragNode').set('innerHTML','' );
+                        this.get('dragNode').set('innerHTML','<math>' + toMathML([Y.JSON.parse(se.getItemByID(m[1].id))]) + '</math>' );
                         this.get('dragNode').addClass(CSS.DRAGNODE);
-                        MathJax.Hub.Queue(['addElement',MathJax.HTML,
-                            this.get('dragNode').getDOMNode(),'span',{id: id},
-                            [['math',{display: "block"},[Y.JSON.parse(se.getItemByID(m[1].id))]]]]);
                         MathJax.Hub.Queue(['Typeset',MathJax.Hub,id]);
                     });
                     drag.on('drag:end', function(){
