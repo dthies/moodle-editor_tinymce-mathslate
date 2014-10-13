@@ -217,11 +217,38 @@ NS.MathJaxEditor=function(id){
                 
             });
         }
+        /* Return snippet as MathML string
+         * @method toMathML
+         * @param object element
+         */
+        function toMathML(element) {
+            if (typeof element !== "object") { return element; }
+            var str = '';
+            element.forEach(function(m) {
+                var attr;
+                if (typeof m !== "object") { return; }
+                str += '<' + m[0];
+                if (m[1] && (typeof m[1] === "object")) {
+                    for (attr in m[1]) {
+                        if (typeof m[1][attr] !== "object") {
+                            str += " " + attr + '="' + m[1][attr] + '"';
+                        }
+                    }
+                }
+                str += '>';
+                if (m[2]) {
+                    str += toMathML(m[2]);
+                }
+                str += '</' + m[0] +'>';
+            });
+            return str;
+        }
         function render() {
             se.rekey();
             canvas.get('node').setHTML('');
             MathJax.Hub.Queue(['addElement',MathJax.HTML,canvas.get('node').getDOMNode(),'math',{display: "block"},math]);
             MathJax.Hub.Queue(["Typeset",MathJax.Hub, 'canvas']);
+MathJax.Hub.Queue(function(){console.log(toMathML(math));});
             MathJax.Hub.Queue(makeDraggable);
         }
         this.render = render;
@@ -240,7 +267,7 @@ NS.MathJaxEditor=function(id){
             }
             render();
         };
-/* Unselected the selected node if any
+/* Unselect the selected node if any
  * @method clear
  */
         this.clear = function(){
@@ -255,10 +282,10 @@ NS.MathJaxEditor=function(id){
             }
             render();
         };
-/* Return output in various formats
- * @method output
- * @param string format
- */
+        /* Return output in various formats
+         * @method output
+         * @param string format
+         */
         this.output = function(format){
             function cleanSnippet(s) {
                 if (typeof s !== "object") { return s; }
