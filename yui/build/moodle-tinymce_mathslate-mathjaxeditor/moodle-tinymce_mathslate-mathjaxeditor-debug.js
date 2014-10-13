@@ -245,11 +245,19 @@ NS.MathJaxEditor=function(id){
         }
         function render() {
             se.rekey();
-            canvas.get('node').setHTML('');
-            MathJax.Hub.Queue(['addElement',MathJax.HTML,canvas.get('node').getDOMNode(),'math',{display: "block"},math]);
-            MathJax.Hub.Queue(["Typeset",MathJax.Hub, 'canvas']);
-MathJax.Hub.Queue(function(){console.log(toMathML(math));});
-            MathJax.Hub.Queue(makeDraggable);
+            var jax = MathJax.Hub.getAllJax('canvas')[0];
+            if (jax) {
+                MathJax.Hub.Queue(function() {
+                    MathJax.Hub.Queue(["Text", jax, '<math>' + toMathML(math) + '</math>']);
+                    MathJax.Hub.Queue(makeDraggable);
+                });
+            } else {
+                canvas.get('node').setHTML('');
+                MathJax.Hub.Queue(['addElement',MathJax.HTML,canvas.get('node').getDOMNode(),'math',{display: "block"},math]);
+                MathJax.Hub.Queue(["Typeset",MathJax.Hub, 'canvas']);
+                MathJax.Hub.Queue(makeDraggable);
+            }
+            MathJax.Hub.Queue(function(){console.log(toMathML(math));});
         }
         this.render = render;
 /* Method for add adding an object to the workspace
