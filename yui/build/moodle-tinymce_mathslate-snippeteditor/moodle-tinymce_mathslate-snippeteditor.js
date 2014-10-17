@@ -94,19 +94,19 @@ NS.mSlots= function(){
                         findBlank(a);
                     }
                     else if(a==='[]') {
-                        var newID='MJX-'+Y.guid();
-                        slots.push([['mi',{id: newID, "class": 'blank', tex: ['']},'\u25FB']]);
+                        var newID='MJX-' + Y.guid();
+                        slots.push([['mi', {id: newID, "class": 'blank', tex: ['']}, '\u25FB']]);
                         snippet[2][snippet[2].indexOf(a)]=['mrow',{},slots[slots.length-1]];
                     }
                 });
             }
         }
    
-        var newID=Y.Node.create('<span></span').generateID();
+        var newID = 'MJX-' + Y.Node.create('<span></span').generateID();
         var newMath;
 
         newMath=Y.JSON.parse(json);
-        newMath[1].id=newID;
+        newMath[1].id = newID;
             findBlank(newMath);
         return newMath;
     };

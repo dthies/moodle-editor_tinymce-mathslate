@@ -14,7 +14,7 @@
 
                                 ed.windowManager.open({
                                         file : ed.getParam("moodle_plugin_base") + '/mathslate/mathslate.php?lang=' + lang,
-                                        width : 400,
+                                        width : 500,
                                         height : 500,
                                         inline : 1
                                 }, {

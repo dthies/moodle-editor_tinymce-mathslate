@@ -50,56 +50,63 @@ NS.TeXTool=function(editorID,addMath){
     };
     input.on ('change',function(){
         var jax = MathJax.Hub.getAllJax(tool.generateID())[0];
+        var tex = this.getDOMNode().value;
         if (!jax) {return;}
-        var snippet;
+        var output = '';
         MathJax.Hub.Queue(['Text',jax,this.getDOMNode().value]);
         MathJax.Hub.Queue(["Typeset",MathJax.Hub,tool.generateID()]);
-        function findSnippet(mml) {
-            mml = mml.replace(/.*<math xmlns=\"http:\/\/www.w3.org\/1998\/Math\/MathML\" display=\"block\">\s*/,'[').replace(/\s*<\/math.*/,']');
-            if (/<mtext mathcolor="red">/.test(mml)||/<merror/.test(mml)) {
-                console.log(mml);
-                snippet=[''];
-                tool.json=null;
-                MathJax.Hub.Queue(['Text',jax,'']);
-                //tool.setHTML('Unrecognized Expression');
-                return;
-            }
-            //console.log(mml);
-            snippet = mml.replace('<mrow>', '["mrow",{"tex": "'+input.getDOMNode().value +'"},[');
-            snippet = snippet.replace(/ class="[^"]*"/g,'');
-            ['mrow','mfrac','msub','msup','msubsup','munder','mover','munderover','msqrt','mroot','mtable','mtr','mtd'].forEach(function(tag){
-                snippet = snippet.replace(new RegExp('<'+tag+'>','g'),'["'+tag+'",{},[').replace(new RegExp('</'+tag+'>',"g"),"]],");
-            });
-            snippet=snippet.replace(/<mo stretchy="false">/g,'["mo",{"stretchy": "false"},"');
-    
-            ['mo','mi','mn','mtext'].forEach(function(tag){
-                snippet = snippet.replace(new RegExp('<'+tag+'>','g'),'["'+tag+'",{},"').replace(new RegExp('</'+tag+'>',"g"),'"],');
-            });
 
-            snippet=snippet.replace(/<mi mathvariant="([a-z]*)">/g,'["mi",{"mathvariant": "$1"},"');
-            snippet=snippet.replace(/<mtable rowspacing="([^"]*)" columnspacing="([^"]*)">/g,'["mtable", {"rowspacing":"$1","columnspacing":"$2"},[');
-            snippet=snippet.replace(/<mstyle displaystyle="true">/g,'["mstyle",{"displaystyle": "true"},[').replace(/<\/mstyle>/g,']]');
-            snippet=snippet.replace(/,\s*\]/g,']');
-            snippet=snippet.replace(/\\/g,'\\\\');
-            snippet=snippet.replace(/<!--.*?-->/g,'');
-            snippet=snippet.replace(/&#x([\dA-F]{4});/g,'\\u$1');
+        var parse = function (mml) {
+            mml = mml.replace(/$\s+/mg, ' ');
 
-            snippet='["mrow", {"tex":["'+input.getDOMNode().value.replace(/\\/g,'\\\\')+'"]},' + snippet + ']';
-    
-            console.log(snippet);
-            tool.json=snippet;
-            if(/<[a-z]/.test(snippet)){
-                console.log(snippet);
-                snippet=[''];
-                tool.json=null;
-                return;
+            //First look for beginning tag.
+            if (!mml.match(/^\s*<[a-z]*/)) {alert('no tag ' + mml);}
+            var tag = mml.replace(/^\s*<([a-z]*).*/, '$1');
+
+            //Find attributes of element.
+            mml = mml.replace(/^\s*<[a-z]*/, '');
+            output += '["' + tag + '", {';
+            while (mml.trim().search('>') > 1) {
+                 output  += mml.replace(/^ *([a-z]*) *= *"([^"]*)".*/, '"$1": "$2"');
+                 mml = mml.replace(/^ *([a-z]*) *= *"([^"]*)"/, '');
+                 if (mml.trim().search('>') > 1) {
+                     output += ', ';
+                 }
             }
-            snippet=[Y.JSON.parse(snippet)];
-        }
-        MathJax.Hub.Queue(['toMathML',tool,findSnippet]);
+            if (mml.trim().match('^/>')) {
+                output += '}]';
+                return mml.trim().replace('/>', '');
+            }
+            output += '}, ';
+            mml = mml.replace(/^ *>/, '');
+
+            //If element contains string quote string.
+            if (mml.replace(new RegExp('^ *([^<]*).*'), '$1')) {
+                output += '"' +mml.replace(/<.*/,'') + '"';
+                mml = mml.replace(/^ *[^<]*/, '');
+                if (mml.trim().search('<!--') === 0) {
+                    mml = mml.replace(/<!--[^>]*-->/, '');
+                }
+            //Otherwise parse the children.
+            } else {
+                output += '[';
+                while(mml.trim().search('</' + tag + '>') !== 0) {
+                    mml = parse(mml);
+                    if (mml.trim().search('</' + tag + '>') !== 0) {
+                        output += ', ';
+                    }
+                }
+                output += ']';
+            }
+            output += ']';
+            return mml.replace('</' + tag + '>', '');
+        };
+        MathJax.Hub.Queue(['toMathML', tool, parse]);
 
         MathJax.Hub.Queue(function(){
-            drag.set('data',tool.json);
+            console.log(output);
+            tool.json = Y.JSON.stringify(["mrow", {"tex": [tex]}, Y.JSON.parse(output)[2]]);
+            drag.set('data', tool.json);
             addMath(tool.json);
         });
     });
