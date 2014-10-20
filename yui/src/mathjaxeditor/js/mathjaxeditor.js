@@ -36,11 +36,13 @@ NS.MathJaxEditor=function(id){
         var math=[];
         var se=new NS.mSlots();
         se.slots.push(math);
+        var shim;
         this.workspace=Y.one(id).append('<div id="canvas" class="'+CSS.WORKSPACE+'"/>');
         var toolbar= Y.one(id).appendChild(Y.Node.create('<form></form>'));
         var preview = Y.one(id).appendChild(Y.Node.create('<div class="'+CSS.PANEL+'"/>'));
         preview.delegate('click',function(e){
-            canvas.get('node').one('#'+this.getAttribute('id')).handleClick(e);
+            //canvas.get('node').one('#'+this.getAttribute('id')).handleClick(e);
+            shim.one('#'+this.getAttribute('id')).handleClick(e);
         },'div');
         var canvas=new Y.DD.Drop({
             node: this.workspace.one('#canvas')});
@@ -117,24 +119,54 @@ NS.MathJaxEditor=function(id){
         preview.setHTML('<iframe src="'+NS.help+'" style="width: '
             + preview.getStyle('width') + '" class="'+CSS.HELPBOX+'"/>');
     });
+
+
+/* Create drop shim above workspace
+ * @function makeDrops
+ *
+ */
+        function makeDrops() {
+            //shim = canvas.get('node'); return;
+            if(shim) {
+                shim.remove();
+            }
+            shim = Y.Node.create('<span style="position: absolute; opacity: .2"></span>');
+            shim.setHTML(se.preview('tex').replace(/div/g, 'span').replace(/<\/*br>/g, 'br'));
+            Y.one(id).appendChild(shim);
+            shim.all('span').each(function (s) {
+                if (!canvas.get('node').one('#'+s.getAttribute('id'))) {return;}
+                var rect = canvas.get('node').one('#'+s.getAttribute('id')).getDOMNode().getBoundingClientRect();
+                s.setAttribute('width',rect.width);
+                s.setAttribute('height',rect.height);
+                s.setXY([rect.left, rect.top]);
+                s.setStyle('backgroundColor', 'blue');
+                s.setStyle('overflow', 'hidden');
+                //var drop = new Y.DD.Drop({node: s});
+                //drop.on('drop:hit',function(e){
+                     //alert(s.getAttribute('id'));
+                //});
+
+            });
+        }
+            
 /* Add drag and drop functionality
  * @function makeDraggable
  */
         function makeDraggable () {
+            makeDrops();
             preview.setHTML('<div class="'+CSS.PREVIEW+'">'+se.preview('tex')+'</div>');
             if(se.getSelected()&&preview.one('#'+se.getSelected())) {
-                //canvas.get('node').one('#'+se.getSelected()).addClass(CSS.SELECTED);
+                canvas.get('node').one('#'+se.getSelected()).addClass(CSS.SELECTED);
                 canvas.get('node').one('#'+se.getSelected()).setAttribute('mathcolor', 'green');
                 preview.one('#'+se.getSelected()).addClass(CSS.SELECTED);
             }
                 
             se.forEach(function(m){
-                var node=canvas.get('node').one('#'+m[1].id);
-                if(!node){return;}
+                var node = shim.one('#'+m[1].id);
+                if (!node) {return;}
                 node.setAttribute('title', preview.one('#'+m[1].id).getHTML().replace(/<div *[^>]*>|<\/div>|<br>/g,''));
                 node.handleClick = function(e) {
-                    //var selectedNode = canvas.get('node').one(SELECTORS.SELECTED);
-                    var selectedNode = canvas.get('node').one('#' + se.getSelected());
+                    var selectedNode = shim.one('#' + se.getSelected());
                     if(!selectedNode){
                         e.stopPropagation();
                         se.select(this.getAttribute('id'));
@@ -179,6 +211,7 @@ NS.MathJaxEditor=function(id){
                             canvas.get('node').one(SELECTORS.SELECTED).removeClass(CSS.SELECTED);
                         }
                         this.get('node').addClass(CSS.DRAGGEDNODE);
+                        this.get('node').setAttribute('mathcolor','red');
                         var id = Y.guid();
                         this.get('dragNode').set('innerHTML','<math>' + toMathML([Y.JSON.parse(se.getItemByID(m[1].id))]) + '</math>' );
                         this.get('dragNode').addClass(CSS.DRAGNODE);
@@ -186,6 +219,7 @@ NS.MathJaxEditor=function(id){
                     });
                     drag.on('drag:end', function(){
                         this.get('node').removeClass(CSS.DRAGGEDNODE);
+                        this.get('node').removeAttribute('mathcolor','red');
                     });
                 }
 
@@ -206,7 +240,7 @@ NS.MathJaxEditor=function(id){
                     canvas.get('node').all(SELECTORS.HIGHLIGHT).each(function(n){
                          n.removeClass(CSS.HIGHLIGHT);
                     });
-                    //this.get('node').addClass(CSS.HIGHLIGHT);
+                    this.get('node').addClass(CSS.HIGHLIGHT);
                     this.get('node').setAttribute('mathcolor','yellow');
                 });
                 drop.on('drop:exit',function(e){
@@ -334,6 +368,9 @@ NS.MathJaxEditor=function(id){
             se = se.undo();
             math = se.slots[0];
             render();
+        };
+        this.makeDrops = function() {
+            makeDrops();
         };
         render();
 };

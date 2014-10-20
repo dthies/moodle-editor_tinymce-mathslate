@@ -40,6 +40,7 @@ NS.Editor=function(editorID,config){
     }
     //Set MathJax to us HTML-CSS rendering on all browsers
     //MathJax.Hub.setRenderer('HTML-CSS');
+    MathJax.Hub.setRenderer('NativeMML');
     var toolboxID=Y.guid();
     var workID=Y.guid();
     this.node.addClass(CSS.EDITOR);

@@ -95,7 +95,7 @@ NS.mSlots= function(){
                     }
                     else if(a==='[]') {
                         var newID='MJX-' + Y.guid();
-                        slots.push([['mi', {id: newID, "class": 'blank', tex: ['']}, '\u25FB']]);
+                        slots.push([['mo', {id: newID, "class": 'blank', tex: ['']}, '\u25FB']]);
                         snippet[2][snippet[2].indexOf(a)]=['mrow',{},slots[slots.length-1]];
                     }
                 });
@@ -203,7 +203,7 @@ NS.mSlots= function(){
         var buffer=this;
         this.slots.forEach(function(s){
             if(s.length===0)  {
-                s.push(['mi',{id: 'MJX-'+Y.guid(), "class": 'blank', tex: ['']},'\u25FB']);
+                s.push(['mo',{id: 'MJX-'+Y.guid(), "class": 'blank', tex: ['']},'\u25FB']);
             }
             else {
                 s.forEach(function(m){
@@ -266,19 +266,21 @@ NS.mSlots= function(){
                if(s[1] && s[1].id) {
                    str=str+'<div id="'+s[1].id+'">';
                }
-               if (s[1]&&s[1][format]){
-                  var i=0;
-                  while (s[1][format][i]) {
-                     str=str+s[1][format][i++];
-                     if (s[2]&&typeof s[1][format][i]==='number') {
-                            str=str+generateMarkup(s[2][s[1][format][i]]);
-                     }
-                     i++;
-                  }
+               if (s[1]&&format&&s[1][format]){
+                   var i=0;
+                   while (s[1][format][i]) {
+                       str=str+s[1][format][i++];
+                       if (s[2]&&typeof s[1][format][i]==='number') {
+                           str=str+generateMarkup(s[2][s[1][format][i]]);
+                       }
+                       i++;
+                   }
                }
                else if (s[2]) {
-                   if(typeof s[2] === 'string') {
-                      str=str+s[2];
+                   if (typeof s[2] === 'string') {
+                       if (format) {
+                           str=str+s[2];
+                       }
                    }
                    else {
                        s[2].forEach(function(t){
@@ -287,7 +289,8 @@ NS.mSlots= function(){
                    }
                }
                if(s[1] && s[1]['class']&&s[1]['class']==='blank') {
-                   str=str+'<div><br> </div>';
+                   //str=str+'<div id="' + s[1].id + '"><br> </div>';
+                   str=str+'<br>';
                }
                if(s[1] && s[1].id) {
                    str=str+'</div>';
