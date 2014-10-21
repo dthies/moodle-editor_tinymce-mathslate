@@ -18,6 +18,7 @@ YUI.add('moodle-tinymce_mathslate-mathjaxeditor', function (Y, NAME) {
  */
 M.tinymce_mathslate = M.tinymce_mathslate|| {};
 NS = M && M.tinymce_mathslate || {};
+var dragenabled = null;
 var CSS = {
     SELECTED: 'mathslate-selected',
     WORKSPACE: 'mathslate-workspace',
@@ -158,7 +159,7 @@ NS.MathJaxEditor=function(id){
             if(shim) {
                 shim.remove();
             }
-            if (canvas.get('node').one('.math')) {
+            if (canvas.get('node').one('.math') || !dragenabled) {
                 ddnodes = canvas.get('node');
             } else {
                 makeDrops();
@@ -209,6 +210,9 @@ NS.MathJaxEditor=function(id){
                     this.handleClick(e);
                 });
                 var selectedNode = ddnodes.one('#' + se.getSelected());
+                if (!dragenabled) {
+                    return;
+                }
                 if((!m[1]||!m[1]['class']||m[1]['class']!=='blank') &&
                         !(selectedNode && preview.one('#' + se.getSelected()).one('#'+m[1].id))){
                     var drag = new Y.DD.Drag({node: node}).plug(Y.Plugin.DDProxy, {
