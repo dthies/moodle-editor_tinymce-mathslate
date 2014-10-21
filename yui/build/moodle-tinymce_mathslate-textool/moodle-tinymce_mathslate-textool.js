@@ -56,9 +56,11 @@ NS.TeXTool=function(editorID,addMath){
         if (!jax) {return;}
         var output = '';
         MathJax.Hub.Queue(['Text',jax,this.getDOMNode().value]);
-        MathJax.Hub.Queue(["Typeset",MathJax.Hub,tool.generateID()]);
 
         var parse = function (mml) {
+            if (/<mtext mathcolor="red">/.test(mml)||/<merror/.test(mml)) {
+                return;
+            }
             mml = mml.replace(/$\s+/mg, ' ');
 
             //First look for beginning tag.
@@ -107,6 +109,9 @@ NS.TeXTool=function(editorID,addMath){
 
         MathJax.Hub.Queue(function(){
             console.log(output);
+            if (output === '') {
+                return;
+            }
             tool.json = Y.JSON.stringify(["mrow", {"tex": [tex]}, Y.JSON.parse(output)[2]]);
             drag.set('data', tool.json);
             addMath(tool.json);

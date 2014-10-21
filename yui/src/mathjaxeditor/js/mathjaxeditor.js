@@ -206,20 +206,16 @@ NS.MathJaxEditor=function(id){
                 node.on('click',function(e) {
                     this.handleClick(e);
                 });
-                node.on('dblclick',function(e){
-                    e.stopPropagation();
-                    se.removeSnippet(node.getAttribute('id'));
-                    render();
-                });
-                var selectedNode = canvas.get('node').one(SELECTORS.SELECTED);
+                var selectedNode = ddnodes.one('#' + se.getSelected());
                 if((!m[1]||!m[1]['class']||m[1]['class']!=='blank') &&
-                        !(selectedNode && selectedNode.one('#'+node.getAttribute('id')))){
+                        !(selectedNode && preview.one('#' + se.getSelected()).one('#'+m[1].id))){
                     var drag = new Y.DD.Drag({node: node}).plug(Y.Plugin.DDProxy, {
                         resizeFrame: false,
                         moveOnEnd: false
                     });
                     drag.on('drag:start', function(){
                         if(canvas.get('node').one('#'+se.getSelected())){
+                            preview.one('#'+se.getSelected()).removeClass(CSS.SELECTED);
                             canvas.get('node').one('#'+se.getSelected()).removeClass(CSS.SELECTED);
                             canvas.get('node').one('#'+se.getSelected()).removeAttribute('mathcolor');
                             canvas.get('node').one('#'+se.getSelected()).removeAttribute('stroke');
@@ -245,7 +241,6 @@ NS.MathJaxEditor=function(id){
                     if(e.drag.get('data')) {
                         se.insertSnippet(m[1].id,se.createItem(e.drag.get('data')));
                     }
-                    //else if(dragTarget!==m[1].id&&se.isItem(dragTarget)&&!canvas.get('node').one('#'+dragTarget).one('#'+m[1].id)) {
                     else if(dragTarget!==m[1].id&&se.isItem(dragTarget)&&!preview.one('#'+dragTarget).one('#'+m[1].id)) {
                         se.insertSnippet(e.drop.get('node').get('id'), se.removeSnippet(dragTarget));
                     }
