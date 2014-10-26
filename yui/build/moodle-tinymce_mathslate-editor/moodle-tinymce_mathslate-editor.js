@@ -42,7 +42,7 @@ NS.Editor=function(editorID,config){
     }
     //Set MathJax to us HTML-CSS rendering on all browsers
     //MathJax.Hub.setRenderer('HTML-CSS');
-    MathJax.Hub.setRenderer('NativeMML');
+    //MathJax.Hub.setRenderer('NativeMML');
     var toolboxID=Y.guid();
     var workID=Y.guid();
     this.node.addClass(CSS.EDITOR);
@@ -52,6 +52,7 @@ NS.Editor=function(editorID,config){
             + 'Version 1.0</div><script type="math/tex">\\quad</script><math> <mo> </mo></math></div>'
             + '<div id="' +workID +'" ></div>');
 
+    var mje=new NS.MathJaxEditor('#'+workID);
     var tbox={tools: [],
         fillToolBox: function(tools){
         function Tool(snippet) {
@@ -108,7 +109,8 @@ NS.Editor=function(editorID,config){
                     var q=Y.Node.create('<p></p>');
                     tab.tools.forEach(function(snippet){
                         var t = new Tool(snippet);
-                        MathJax.HTML.addElement(q.getDOMNode(),'span',{},t.HTMLsnippet);
+                        //MathJax.HTML.addElement(q.getDOMNode(),'span',{},t.HTMLsnippet);
+                        q.append('<span>' + mje.toMathML(t.HTMLsnippet)+'</span>');
                         if(snippet[0]&&snippet[0]!=='br'){
                             q.append('&thinsp; &thinsp;');}
                         });
@@ -117,7 +119,6 @@ NS.Editor=function(editorID,config){
                 var tabview = new Y.TabView(
                     tabs
                 );
-                var mje=new NS.MathJaxEditor('#'+workID);
 
                 me.output = function(f){return mje.output(f);};
 

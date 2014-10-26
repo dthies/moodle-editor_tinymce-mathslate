@@ -18,7 +18,7 @@ YUI.add('moodle-tinymce_mathslate-mathjaxeditor', function (Y, NAME) {
  */
 M.tinymce_mathslate = M.tinymce_mathslate|| {};
 NS = M && M.tinymce_mathslate || {};
-var dragenabled = null;
+var dragenabled = true;
 var CSS = {
     SELECTED: 'mathslate-selected',
     WORKSPACE: 'mathslate-workspace',
@@ -124,10 +124,10 @@ NS.MathJaxEditor=function(id){
     });
 
 
-/* Create drop shim above workspace
- * @function makeDrops
- *
- */
+        /* Create drop shim above workspace
+         * @function makeDrops
+         *
+         */
         function makeDrops() {
             shim = Y.Node.create('<span style="position: absolute; opacity: 0"></span>');
             shim.setHTML(se.preview().replace(/div/g, 'span').replace(/<\/*br>/g, ''));
@@ -141,9 +141,6 @@ NS.MathJaxEditor=function(id){
                 shim.all('span').each(function (s) {
                     if (!canvas.get('node').one('#'+s.getAttribute('id'))) {return;}
                     var rect = canvas.get('node').one('#'+s.getAttribute('id')).getDOMNode().getBoundingClientRect();
-                s.setStyle('backgroundColor', 'blue');
-                s.setStyle('margin-left', '-10px');
-                s.setStyle('padding', '-5px');
                     s.setStyle('margin', '0px');
                     s.setStyle('position', 'absolute');
                     s.setStyle('zIndex', '+1');
@@ -152,9 +149,9 @@ NS.MathJaxEditor=function(id){
             });
         }
             
-/* Add drag and drop functionality
- * @function makeDraggable
- */
+        /* Add drag and drop functionality
+         * @function makeDraggable
+         */
         function makeDraggable () {
             if(shim) {
                 shim.remove();
@@ -315,6 +312,7 @@ NS.MathJaxEditor=function(id){
             }
         }
         this.render = render;
+        this.toMathML = toMathML;
 /* Method for add adding an object to the workspace
  * @method addMath
  * @param string json
