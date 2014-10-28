@@ -18,7 +18,7 @@
  * TinyMCE MathSlate plugin version details.
  *
  * @package   tinymce_mathslate
- * @copyright 2013 Daniel Thies
+ * @copyright 2013-4 Daniel Thies
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,5 +30,5 @@ $plugin->version   = 2014081000;
 $plugin->requires  = 2012050100;
 // Full name of the plugin (used for diagnostics).
 $plugin->component = 'tinymce_mathslate';
-$plugin->maturity = MATURITY_STABLE;
-$plugin->release = '1.0';
+$plugin->maturity = MATURITY_ALPHA;
+$plugin->release = '1.1dev';

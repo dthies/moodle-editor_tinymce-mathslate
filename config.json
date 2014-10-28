@@ -258,7 +258,7 @@
                   ["mrow",{},[
                     ["mo",{},"|"]]],
                     "[]"]]]]]],
-["mtable", {"tex":["\\begin{array}{rr}&3\\\\+&4\\\\\\hline&7\\end{array}"], "columnalign": "right right", "rowspacing": "1pt", "columnspacing": "1em", "rowlines": "none solid"}, [["mtr", {}, [["mtd", {}], ["mtd", {}, [["mn", {}, "3"]]]]], ["mtr", {}, [["mtd", {}, [["mo", {}, "+"]]], ["mtd", {}, [["mn", {}, "4"]]]]], ["mtr", {}, [["mtd", {}], ["mtd", {}, [["mn", {}, "7"]]]]]]]
+            ["mtable", {"columnalign": "right right", "rowspacing": "1pt", "columnspacing": "1em", "rowlines": "none solid"}, [["mtr", {}, [["mtd", {}], ["mtd", {"tex":["\\begin{array}{rr}&", 0] }, [ "[]"]]]], ["mtr", { }, [["mtd", { "tex":["\\\\", 0]}, [["mo", { }, "+"]]], ["mtd", { "tex":["&", 0]}, [ "[]" ]]]], ["mtr", {}, [["mtd", {}], ["mtd", { "tex": ["\\\\\\hline&", 0, "\\end{array}"] }, [ "[]" ]]]]]]
         ]
     }
 ]

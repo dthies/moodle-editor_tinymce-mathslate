@@ -53,9 +53,9 @@ NS.Editor=function(editorID,config){
             + '<div id="' +workID +'" ></div>');
 
     var mje=new NS.MathJaxEditor('#'+workID);
-    var tbox={tools: [],
-        fillToolBox: function(tools){
-        function Tool(snippet) {
+    var tbox={
+        tools: [],
+        Tool: function(snippet) {
             function findBlank(snippet) {
                 if (Array.isArray(snippet[2])) {
                     snippet[2].forEach(function(a){
@@ -72,8 +72,8 @@ NS.Editor=function(editorID,config){
             this.id=Y.guid();
 
             function title(s){
-                if(typeof s==='string'){return s;}
-                if(s[1]==='undefined'){return '';}
+                if(typeof s === 'string') {return s;}
+                if(typeof s[1] === 'undefined') {return '';}
                 var o='';
                 if(typeof s[1].tex!=='undefined'){
                     s[1].tex.forEach(function(t){
@@ -92,8 +92,9 @@ NS.Editor=function(editorID,config){
 
             findBlank(snippet);
             tbox.tools.push(this);
-        }
-        var tabs={children: []};
+        },
+        fillToolBox: function(tools){
+            var tabs={children: []};
             MathJax.Hub.Register.StartupHook('TeX Jax Config', function() {
                 MathJax.Ajax.Require("[MathJax]/extensions/toMathML.js");
                 tabs.children.push({
@@ -108,12 +109,13 @@ NS.Editor=function(editorID,config){
                 tools.forEach(function(tab){
                     var q=Y.Node.create('<p></p>');
                     tab.tools.forEach(function(snippet){
-                        var t = new Tool(snippet);
-                        //MathJax.HTML.addElement(q.getDOMNode(),'span',{},t.HTMLsnippet);
-                        q.append('<span>' + mje.toMathML(t.HTMLsnippet)+'</span>');
-                        if(snippet[0]&&snippet[0]!=='br'){
-                            q.append('&thinsp; &thinsp;');}
-                        });
+                        if (snippet[0] && snippet[0] === 'br') {
+                            q.append('<br />');
+                            return;
+                        }
+                        var t = new tbox.Tool(snippet);
+                        q.append('<span> ' + mje.toMathML(t.HTMLsnippet)+' </span>');
+                    });
                     tabs.children.push({label: tab.label, content: q.getHTML()});
                 });
                 var tabview = new Y.TabView(
@@ -158,16 +160,14 @@ NS.Editor=function(editorID,config){
                 MathJax.Hub.Queue(["Typeset",MathJax.Hub,toolboxID]);
                 MathJax.Hub.Queue(makeToolsDraggable);
             });
-        //});
-
-    },
+        },
         getToolByID: function(id){
-        var t;
-        this.tools.forEach(function(tool){
-            if(tool.id){ if(tool.id===id) {t=tool;}}
-        });
-        return t;
-    }
+            var t;
+            this.tools.forEach(function(tool){
+                if(tool.id){ if(tool.id===id) {t=tool;}}
+            });
+            return t;
+        }
     };
 
 
