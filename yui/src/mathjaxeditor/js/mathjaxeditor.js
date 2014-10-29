@@ -225,10 +225,16 @@ NS.MathJaxEditor=function(id){
                         }
                         this.get('node').addClass(CSS.DRAGGEDNODE);
                         this.get('node').setAttribute('mathcolor','red');
-                        var id = Y.guid();
-                        this.get('dragNode').set('innerHTML','<math>' + toMathML([Y.JSON.parse(se.getItemByID(m[1].id))]) + '</math>' );
+                        //var id = Y.guid();
+                        //this.get('dragNode').set('innerHTML','<math>' + toMathML([Y.JSON.parse(se.getItemByID(m[1].id))]) + '</math>' );
+                        if (ddnodes === shim) {
+                            this.get('dragNode').set('innerHTML',
+                                this.get('node').get('children').pop().getHTML());
+                        } else {
+                            this.get('dragNode').set('innerHTML', this.get('node').getHTML());
+                        }
                         this.get('dragNode').addClass(CSS.DRAGNODE);
-                        MathJax.Hub.Queue(['Typeset',MathJax.Hub,id]);
+                        //MathJax.Hub.Queue(['Typeset',MathJax.Hub,id]);
                     });
                     drag.on('drag:end', function(){
                         this.get('node').removeClass(CSS.DRAGGEDNODE);
