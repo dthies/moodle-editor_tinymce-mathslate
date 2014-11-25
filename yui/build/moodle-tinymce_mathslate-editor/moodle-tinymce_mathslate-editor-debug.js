@@ -47,12 +47,12 @@ NS.Editor=function(editorID,config){
     var workID=Y.guid();
     this.node.addClass(CSS.EDITOR);
     //Place math editor on page
-    this.node.setHTML('<div id="' +toolboxID +'" class="'+CSS.TOOLBOX+'">'
+    this.node.setHTML('<div id="' +toolboxID +'" class="' + CSS.TOOLBOX + '">'
             + '<div style="background-color: white; color: green; height: 300px; line-height: 75px; font-size: 18px; text-align:center"><br />Mathslate Mathematics Editor<br />'
             + 'Version 1.1dev</div><script type="math/tex">\\quad</script><math> <mo> </mo></math></div>'
             + '<div id="' +workID +'" ></div>');
 
-    var mje=new NS.MathJaxEditor('#'+workID);
+    var mje=new NS.MathJaxEditor('#' + workID);
     var tbox={
         tools: [],
         Tool: function(snippet) {
@@ -99,7 +99,7 @@ NS.Editor=function(editorID,config){
                 MathJax.Ajax.Require("[MathJax]/extensions/toMathML.js");
                 tabs.children.push({
                     label: "<span title=\"TeX\"><math><mi>T</mi><mspace width=\"-.14em\"/>"
-                        +"<mpadded height=\"-.5ex\" depth=\"+.5ex\" voffset=\"-.5ex\">"
+                        +"<mpadded height=\"-.5ex\" depth=\" + .5ex\" voffset=\"-.5ex\">"
                         +"<mrow class=\"MJX-TeXAtom-ORD\"><mi>E</mi></mrow></mpadded>"
                         +"<mspace width=\"-.115em\" /> <mi>X</mi> </math></span>",
                     content: "<span id='latex-input'></span>"
@@ -130,8 +130,8 @@ NS.Editor=function(editorID,config){
                     }
                 });
 
-                if (Y.one('#'+toolboxID)) {
-                    Y.one('#'+toolboxID).setHTML('');
+                if (Y.one('#' + toolboxID)) {
+                    Y.one('#' + toolboxID).setHTML('');
                     tabview.render('#' + toolboxID);
                     if (Y.one('#latex-input')) {
                         new NS.TeXTool('#latex-input',function(json){mje.addMath(json);});
@@ -160,10 +160,10 @@ NS.Editor=function(editorID,config){
          * @function registerTools
          */
         registerTool: function(tool) {
-            Y.one('#'+tool.id).on('click', function(){
+            Y.one('#' + tool.id).on('click', function(){
                 mje.addMath(tool.json);
             });
-            var d = new Y.DD.Drag({node: '#'+tool.id});
+            var d = new Y.DD.Drag({node: '#' + tool.id});
             d.set('data', tool.json);
             d.on('drag:start', function() {
                 this.get('dragNode').addClass(CSS.DRAGNODE);
