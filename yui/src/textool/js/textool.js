@@ -21,9 +21,9 @@ var NS = M && M.tinymce_mathslate || {};
  * @param string editorID
  * @param string config
  */
-NS.TeXTool=function(editorID, addMath){
-    var input=Y.Node.create('<input type="text">');
-    var tool=Y.Node.create('<span>\\[ \\]</span>');
+NS.TeXTool = function(editorID, addMath){
+    var input = Y.Node.create('<input type = "text">');
+    var tool = Y.Node.create('<span>\\[ \\]</span>');
     if(addMath){
         tool.on('click', function(){
             addMath(tool.json);
@@ -32,7 +32,7 @@ NS.TeXTool=function(editorID, addMath){
     Y.one(editorID).appendChild(input);
     Y.one(editorID).appendChild(tool);
     input.focus();
-    var drag=new Y.DD.Drag({node: tool});
+    var drag = new Y.DD.Drag({node: tool});
     drag.on('drag:end', function() {
         this.get('node').setStyle('top' , '0');
         this.get('node').setStyle('left' , '0');
@@ -56,7 +56,7 @@ NS.TeXTool=function(editorID, addMath){
         MathJax.Hub.Queue(['Text', jax, this.getDOMNode().value]);
 
         var parse = function (mml) {
-            if (/<mtext mathcolor="red">/.test(mml)||/<merror/.test(mml)) {
+            if (/<mtext mathcolor = "red">/.test(mml)||/<merror/.test(mml)) {
                 return;
             }
             mml = mml.replace(/$\s+/mg, ' ');

@@ -33,21 +33,21 @@ var SELECTORS = {
 };
        
 //Constructor for equation workspace
-NS.MathJaxEditor=function(id){
-        var math=[];
-        var se=new NS.mSlots();
+NS.MathJaxEditor = function(id){
+        var math = [];
+        var se = new NS.mSlots();
         se.slots.push(math);
         var shim, ddnodes;
-        this.workspace=Y.one(id).append('<div id="canvas" class="' + CSS.WORKSPACE + '"/>');
-        var toolbar= Y.one(id).appendChild(Y.Node.create('<form></form>'));
+        this.workspace = Y.one(id).append('<div id="canvas" class="' + CSS.WORKSPACE + '"/>');
+        var toolbar = Y.one(id).appendChild(Y.Node.create('<form></form>'));
         var preview = Y.one(id).appendChild(Y.Node.create('<div class="' + CSS.PANEL + '"/>'));
         preview.delegate('click', function(e){
             //canvas.get('node').one('#' + this.getAttribute('id')).handleClick(e);
             ddnodes.one('#' + this.getAttribute('id')).handleClick(e);
         }, 'div');
-        var canvas=new Y.DD.Drop({
+        var canvas = new Y.DD.Drop({
             node: this.workspace.one('#canvas')});
-        this.canvas=canvas;
+        this.canvas = canvas;
         this.canvas.get('node').on('click', function(){
             se.select();
             render();
@@ -55,35 +55,35 @@ NS.MathJaxEditor=function(id){
 
     //Place buttons for internal editor functions
 /*
-    var undo=Y.Node.create('<button type="button" class="'
-           +CSS.UNDO + '">' +  '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
+    var undo = Y.Node.create('<button type="button" class="'
+           +CSS.UNDO + '">' + '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
            + M.util.image_url('undo', 'editor_tinymce') + '" title="' + M.util.get_string('undo', 'tinymce_mathslate') + '"/></button>');
-    var redo=Y.Node.create('<button type="button" class="'
-           +CSS.REDO + '">' +  '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
+    var redo = Y.Node.create('<button type="button" class="'
+           +CSS.REDO + '">' + '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
            + M.util.image_url('redo', 'editor_tinymce') + '" title="' + M.util.get_string('redo', 'tinymce_mathslate') + '"/></button>');
-    var clear=Y.Node.create('<button type="button" class="'
-           +CSS.CLEAR + '">' +  '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
+    var clear = Y.Node.create('<button type="button" class="'
+           +CSS.CLEAR + '">' + '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
            + M.util.image_url('delete', 'editor_tinymce') + '" title="' + M.util.get_string('clear', 'tinymce_mathslate') + '"/></button>');
-    var help=Y.Node.create('<button type="button" class="'
-           +CSS.HELP + '">' +  '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
+    var help = Y.Node.create('<button type="button" class="'
+           +CSS.HELP + '">' + '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
            + M.util.image_url('help', 'core') + '" title="' + M.util.get_string('help', 'tinymce_mathslate') + '"/></button>');
 */
 
-    var undo=Y.Node.create('<button type="button" class="' + CSS.UNDO + '"'
+    var undo = Y.Node.create('<button type="button" class="' + CSS.UNDO + '"'
            + '" title="' + M.util.get_string('undo', 'tinymce_mathslate') + '"/>'
            +'<math><mo>&#x25C1;</mo></math>'
            +'</button>');
 
-    var redo=Y.Node.create('<button type="button" class="' + CSS.REDO + '"'
+    var redo = Y.Node.create('<button type="button" class="' + CSS.REDO + '"'
            + '" title="' + M.util.get_string('redo', 'tinymce_mathslate') + '"/>'
            +'<math><mo>&#x25B7;</mo></math>'
            +'</button>');
-    var clear=Y.Node.create('<button type="button" class="' + CSS.CLEAR + '"'
+    var clear = Y.Node.create('<button type="button" class="' + CSS.CLEAR + '"'
            + '" title="' + M.util.get_string('clear', 'tinymce_mathslate') + '"/>'
            +'<math><mi>&#x2718;</mi></math>'
            +'</button>');
 
-    var help=Y.Node.create('<button type="button" class="'
+    var help = Y.Node.create('<button type="button" class="'
            +CSS.HELP + '" title="'
            + M.util.get_string('help', 'tinymce_mathslate') + '">'
            +'<math><mi>&#xE47C;</mi></math>'
@@ -94,12 +94,12 @@ NS.MathJaxEditor=function(id){
     toolbar.appendChild(help);
 
         redo.on('click', function(){
-            se=se.redo();
+            se = se.redo();
             math = se.slots[0];
             render();
         });
         undo.on('click', function(){
-            se=se.undo();
+            se = se.undo();
             math = se.slots[0];
             render();
         });
@@ -107,10 +107,10 @@ NS.MathJaxEditor=function(id){
             if(Y.one(SELECTORS.SELECTED)){
                 se.removeSnippet(Y.one(SELECTORS.SELECTED).getAttribute('id'));
             } else {
-                math=[];
-                se.next=new NS.mSlots();
-                se.next.previous=se;
-                se=se.next;
+                math = [];
+                se.next = new NS.mSlots();
+                se.next.previous = se;
+                se = se.next;
                 se.slots.push(math);
             }
             render();
@@ -208,7 +208,7 @@ NS.MathJaxEditor=function(id){
                 if (!dragenabled) {
                     return;
                 }
-                if((!m[1]||!m[1]['class']||m[1]['class'] !== 'blank') &&
+                if((!m[1] || !m[1]['class'] || m[1]['class'] !== 'blank') &&
                         !(selectedNode && preview.one('#' + se.getSelected()).one('#' + m[1].id))){
                     var drag = new Y.DD.Drag({node: node}).plug(Y.Plugin.DDProxy, {
                         resizeFrame: false,
@@ -236,11 +236,11 @@ NS.MathJaxEditor=function(id){
 
                 var drop = new Y.DD.Drop({node: node});
                 drop.on('drop:hit', function(e){
-                    var dragTarget=e.drag.get('node').get('id');
+                    var dragTarget = e.drag.get('node').get('id');
                     if(e.drag.get('data')) {
                         se.insertSnippet(m[1].id, se.createItem(e.drag.get('data')));
                     }
-                    else if(dragTarget !== m[1].id&&se.isItem(dragTarget)&&!preview.one('#' + dragTarget).one('#' + m[1].id)) {
+                    else if(dragTarget !== m[1].id&&se.isItem(dragTarget) && !preview.one('#' + dragTarget).one('#' + m[1].id)) {
                         se.insertSnippet(e.drop.get('node').get('id'), se.removeSnippet(dragTarget));
                     }
                     render();
@@ -313,7 +313,7 @@ NS.MathJaxEditor=function(id){
  * @method addMath
  * @param string json
  */
-        this.addMath=function(json){
+        this.addMath = function(json){
             if(!json){
                 return;
             }
@@ -331,10 +331,10 @@ NS.MathJaxEditor=function(id){
             if(Y.one(SELECTORS.SELECTED)){
                 se.removeSnippet(Y.one(SELECTORS.SELECTED).getAttribute('id'));
             } else {
-                math=[];
-                se.next=new NS.mSlots();
-                se.next.previous=se;
-                se=se.next;
+                math = [];
+                se.next = new NS.mSlots();
+                se.next.previous = se;
+                se = se.next;
                 se.slots.push(math);
             }
             render();

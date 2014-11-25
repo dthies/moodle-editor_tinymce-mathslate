@@ -75,7 +75,7 @@ NS.Editor=function(editorID, config){
                 if(typeof s === 'string') {return s;}
                 if(typeof s[1] === 'undefined') {return '';}
                 var o='';
-                if(typeof s[1].tex!=='undefined'){
+                if(typeof s[1].tex !== 'undefined'){
                     s[1].tex.forEach(function(t){
                          if(typeof t==='string'){o += t;}
                          else {o += title(s[2][t]);}
