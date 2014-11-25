@@ -75,14 +75,14 @@ NS.Editor=function(editorID, config){
                 var o='';
                 if(typeof s[1].tex!=='undefined'){
                     s[1].tex.forEach(function(t){
-                         if(typeof t==='string'){o+=t;}
-                         else {o+=title(s[2][t]);}
+                         if(typeof t==='string'){o += t;}
+                         else {o += title(s[2][t]);}
                     });
                     return o;
                 }
                 if(typeof s[2]==='string'){return s[2];}
                 if(typeof s[2]==='undefined'){return '';}
-                s[2].forEach(function(t){o+=title(t);});
+                s[2].forEach(function(t){o += title(t);});
                 return o;
             }
             this.json=JSON.stringify(snippet);
