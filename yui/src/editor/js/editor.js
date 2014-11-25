@@ -91,7 +91,7 @@ NS.Editor=function(editorID,config){
             findBlank(snippet);
             tbox.tools.push(this);
         },
-        fillToolBox: function(tools){
+        fillToolBox: function(tools, toolboxID){
             var tabs={children: []};
             MathJax.Hub.Register.StartupHook('TeX Jax Config', function() {
                 MathJax.Ajax.Require("[MathJax]/extensions/toMathML.js");
@@ -112,7 +112,7 @@ NS.Editor=function(editorID,config){
                             return;
                         }
                         var t = new tbox.Tool(snippet);
-                        q.append('<span> ' + mje.toMathML(t.HTMLsnippet)+' </span>');
+                        q.append('<span> ' + mje.toMathML(t.HTMLsnippet) + ' </span>');
                     });
                     tabs.children.push({label: tab.label, content: q.getHTML()});
                 });
@@ -130,54 +130,60 @@ NS.Editor=function(editorID,config){
 
                 if (Y.one('#'+toolboxID)) {
                     Y.one('#'+toolboxID).setHTML('');
-                    tabview.render('#'+toolboxID);
+                    tabview.render('#' + toolboxID);
                     if (Y.one('#latex-input')) {
                         new NS.TeXTool('#latex-input',function(json){mje.addMath(json);});
                     }
                 }
-                /* function passed to MathJax to initiate dragging after math is formated
-                 * @function makeToolsDraggable
-                 */
-                function makeToolsDraggable(){
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub, toolboxID]);
+                MathJax.Hub.Queue(function () {
                     tbox.tools.forEach(function(tool) {
-                        Y.one('#'+tool.id).on('click',function(){
-                            mje.addMath(tool.json);
-                        });
-                        var d=new Y.DD.Drag({node: '#'+tool.id});
-                        d.set('data',tool.json);
-                        d.on('drag:start', function() {
-                            this.get('dragNode').addClass(CSS.DRAGNODE);
-                        });
-                        d.on('drag:end', function() {
-                            this.get('node').setStyle('top' , '0');
-                            this.get('node').setStyle('left' , '0');
-                            this.get('node').removeClass(CSS.DRAGNODE);
-                        });
+                        tbox.registerTool(tool);
                     });
-                }
-                MathJax.Hub.Queue(["Typeset",MathJax.Hub,toolboxID]);
-                MathJax.Hub.Queue(makeToolsDraggable);
+                });
             });
         },
         getToolByID: function(id){
             var t;
             this.tools.forEach(function(tool){
-                if(tool.id){ if(tool.id===id) {t=tool;}}
+                if(tool.id) {
+                    if(tool.id === id) {
+                        t=tool;
+                    }
+                }
             });
             return t;
+        },
+        /* Enable drag functionality after math is formated
+         * @function registerTools
+         */
+        registerTool: function(tool) {
+            Y.one('#'+tool.id).on('click', function(){
+                mje.addMath(tool.json);
+            });
+            var d = new Y.DD.Drag({node: '#'+tool.id});
+            d.set('data', tool.json);
+            d.on('drag:start', function() {
+                this.get('dragNode').addClass(CSS.DRAGNODE);
+            });
+            d.on('drag:end', function() {
+                this.get('node').setStyle('top' , '0');
+                this.get('node').setStyle('left' , '0');
+                this.get('node').removeClass(CSS.DRAGNODE);
+            });
         }
     };
 
 
-    MathJax.Hub.Queue(['Typeset', MathJax.Hub,toolboxID]);
+    MathJax.Hub.Queue(['Typeset', MathJax.Hub, toolboxID]);
 
     //Fetch configuration string for tools and initialyze
     Y.on('io:success',function(id,o){
         if(tbox.tools.length===0) {
-            MathJax.Hub.Queue(['fillToolBox',tbox,Y.JSON.parse(o.response)]);
+            MathJax.Hub.Queue(['fillToolBox', tbox, Y.JSON.parse(o.response), toolboxID]);
         }
     });
-    if(config===undefined) {
+    if(config === undefined) {
         Y.io(NS.config);
     } else {
         Y.io(config);
