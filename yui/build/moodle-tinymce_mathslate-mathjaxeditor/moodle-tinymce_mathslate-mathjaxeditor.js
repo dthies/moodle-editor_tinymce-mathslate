@@ -16,7 +16,7 @@ YUI.add('moodle-tinymce_mathslate-mathjaxeditor', function (Y, NAME) {
  * @copyright  2013-2014 Daniel Thies  <dthies@ccal.edu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-M.tinymce_mathslate = M.tinymce_mathslate|| {};
+M.tinymce_mathslate = M.tinymce_mathslate || {};
 NS = M && M.tinymce_mathslate || {};
 var dragenabled = true;
 var CSS = {
@@ -163,7 +163,7 @@ NS.MathJaxEditor = function(id) {
                 ddnodes = shim;
             }
             preview.setHTML('<div class="' + CSS.PREVIEW + '">' + se.preview('tex') + '</div>');
-            if (se.getSelected()&&preview.one('#' + se.getSelected())) {
+            if (se.getSelected() && preview.one('#' + se.getSelected())) {
                 canvas.get('node').one('#' + se.getSelected()).addClass(CSS.SELECTED);
                 canvas.get('node').one('#' + se.getSelected()).setAttribute('mathcolor', 'green');
                 canvas.get('node').one('#' + se.getSelected()).setAttribute('stroke', 'green');
@@ -239,7 +239,7 @@ NS.MathJaxEditor = function(id) {
                     if (e.drag.get('data')) {
                         se.insertSnippet(m[1].id, se.createItem(e.drag.get('data')));
                     }
-                    else if (dragTarget !== m[1].id&&se.isItem(dragTarget) && !preview.one('#' + dragTarget).one('#' + m[1].id)) {
+                    else if (dragTarget !== m[1].id && se.isItem(dragTarget) && !preview.one('#' + dragTarget).one('#' + m[1].id)) {
                         se.insertSnippet(e.drop.get('node').get('id'), se.removeSnippet(dragTarget));
                     }
                     render();

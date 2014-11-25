@@ -14,7 +14,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-M.tinymce_mathslate = M.tinymce_mathslate|| {};
+M.tinymce_mathslate = M.tinymce_mathslate || {};
 var NS = M && M.tinymce_mathslate || {};
 /* Constructor function for an editor of a page.
  * @method Editor
@@ -56,7 +56,7 @@ NS.TeXTool = function(editorID, addMath) {
         MathJax.Hub.Queue(['Text', jax, this.getDOMNode().value]);
 
         var parse = function (mml) {
-            if (/<mtext mathcolor="red">/.test(mml)||/<merror/.test(mml)) {
+            if (/<mtext mathcolor="red">/.test(mml) || /<merror/.test(mml)) {
                 return;
             }
             mml = mml.replace(/$\s+/mg, ' ');

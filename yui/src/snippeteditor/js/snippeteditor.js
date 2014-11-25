@@ -14,7 +14,7 @@
  * @copyright  2013 Daniel Thies  <dthies@ccal.edu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-M.tinymce_mathslate = M.tinymce_mathslate|| {};
+M.tinymce_mathslate = M.tinymce_mathslate || {};
 var NS = M && M.tinymce_mathslate || {};
 /* Constructor function for Snippet editor
  * @function NS.mSlots
@@ -52,7 +52,7 @@ NS.mSlots = function() {
             if (s[0]) {
                 s.pop();
             }
-            ci[i].forEach(function(item) { 
+            ci[i].forEach(function(item) {
                 s.push(item);
             });
             slots.push(s);
@@ -63,7 +63,7 @@ NS.mSlots = function() {
  */
     this.redo = function() {
         if (!stack[stackPointer + 1]) {
-            return this.next||this;
+            return this.next || this;
         }
         stackPointer++;
         restoreState();
@@ -214,7 +214,7 @@ NS.mSlots = function() {
                     if (!m[1]) {
                         return;
                     }
-                    if (m[1]['class']&&m[1]['class'] === 'blank'&&s.length>1) {
+                    if (m[1]['class'] && m[1]['class'] === 'blank' && s.length>1) {
                         buffer.removeSnippet(m[1].id);
                     }
                     if (m[1].id) {
@@ -239,7 +239,7 @@ NS.mSlots = function() {
                   var i = 0;
                   while (s[1][format][i]) {
                      str = str + s[1][format][i++];
-                     if (s[2]&&typeof s[1][format][i] === 'number') {
+                     if (s[2] && typeof s[1][format][i] === 'number') {
                             str = str + generateMarkup(s[2][s[1][format][i]]);
                      }
                      i++;
@@ -276,11 +276,11 @@ NS.mSlots = function() {
                if (s[1] && s[1].id) {
                    str = str + '<div id="' + s[1].id + '">';
                }
-               if (s[1]&&format&&s[1][format]) {
+               if (s[1] && format && s[1][format]) {
                    var i = 0;
                    while (s[1][format][i]) {
                        str = str + s[1][format][i++];
-                       if (s[2]&&typeof s[1][format][i] === 'number') {
+                       if (s[2] && typeof s[1][format][i] === 'number') {
                            str = str + generateMarkup(s[2][s[1][format][i]]);
                        }
                        i++;
@@ -298,7 +298,7 @@ NS.mSlots = function() {
                        });
                    }
                }
-               if (s[1] && s[1]['class']&&s[1]['class'] === 'blank') {
+               if (s[1] && s[1]['class'] && s[1]['class'] === 'blank') {
                    str = str + '<br>';
                }
                if (s[1] && s[1].id) {
