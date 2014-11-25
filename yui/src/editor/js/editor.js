@@ -45,10 +45,10 @@ NS.Editor = function(editorID, config) {
     var workID = Y.guid();
     this.node.addClass(CSS.EDITOR);
     //Place math editor on page
-    this.node.setHTML('<div id="' +toolboxID +'" class="' + CSS.TOOLBOX + '">'
+    this.node.setHTML('<div id="' + toolboxID + '" class="' + CSS.TOOLBOX + '">'
             + '<div style="background-color: white; color: green; height: 300px; line-height: 75px; font-size: 18px; text-align:center"><br />Mathslate Mathematics Editor<br />'
             + 'Version 1.1dev</div><script type="math/tex">\\quad</script><math> <mo> </mo></math></div>'
-            + '<div id="' +workID +'" ></div>');
+            + '<div id="' + workID + '" ></div>');
 
     var mje = new NS.MathJaxEditor('#' + workID);
     var tbox = {
@@ -111,9 +111,9 @@ NS.Editor = function(editorID, config) {
                 MathJax.Ajax.Require("[MathJax]/extensions/toMathML.js");
                 tabs.children.push({
                     label: "<span title=\"TeX\"><math><mi>T</mi><mspace width=\"-.14em\"/>"
-                        +"<mpadded height=\"-.5ex\" depth=\" + .5ex\" voffset=\"-.5ex\">"
-                        +"<mrow class=\"MJX-TeXAtom-ORD\"><mi>E</mi></mrow></mpadded>"
-                        +"<mspace width=\"-.115em\" /> <mi>X</mi> </math></span>",
+                        + "<mpadded height=\"-.5ex\" depth=\" + .5ex\" voffset=\"-.5ex\">"
+                        + "<mrow class=\"MJX-TeXAtom-ORD\"><mi>E</mi></mrow></mpadded>"
+                        + "<mspace width=\"-.115em\" /> <mi>X</mi> </math></span>",
                     content: "<span id='latex-input'></span>"
                 });
             });

@@ -70,7 +70,7 @@ var NS = M.tinymce_mathslate;
         var me = new M.tinymce_mathslate.Editor('#' + editorID, M.tinymce_mathslate.config);
 
         var cancel = Y.one('#' + editorID).appendChild(Y.Node.create('<button title="' + M.util.get_string('cancel_desc', 'tinymce_mathslate') + '">'
-            +M.util.get_string('cancel', 'tinymce_mathslate') + '</button>'));
+            + M.util.get_string('cancel', 'tinymce_mathslate') + '</button>'));
         cancel.on('click', function() {
             tinyMCEPopup.close();
         });
@@ -79,14 +79,14 @@ var NS = M.tinymce_mathslate;
         }
 
         var displayTex = Y.one('#' + editorID).appendChild(Y.Node.create('<button title="'
-            +M.util.get_string('display_desc', 'tinymce_mathslate') + '">'
-            +M.util.get_string('display', 'tinymce_mathslate') + '</button>'));
+            + M.util.get_string('display_desc', 'tinymce_mathslate') + '">'
+            + M.util.get_string('display', 'tinymce_mathslate') + '</button>'));
         var inlineTex = Y.one('#' + editorID).appendChild(Y.Node.create('<button title="' + M.util.get_string('inline_desc', 'tinymce_mathslate') + '">'
             + M.util.get_string('inline', 'tinymce_mathslate') + '</button>'));
 
 /* This code shows a button to saves work as JSON that can be incorporated in config.json.
         var saveJSON = Y.one('#' + editorID).appendChild(Y.Node.create('<button title="' + 'JSON' + '">'
-            +'JSON' + '</button>'));
+            + 'JSON' + '</button>'));
         saveJSON.on('click', function() {
             tinyMCEPopup.editor.execCommand('mceInsertContent', false, me.output('JSON'));
             tinyMCEPopup.close();

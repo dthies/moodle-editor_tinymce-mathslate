@@ -56,37 +56,37 @@ NS.MathJaxEditor = function(id) {
     //Place buttons for internal editor functions
 /*
     var undo = Y.Node.create('<button type="button" class="'
-           +CSS.UNDO + '">' + '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
+           + CSS.UNDO + '">' + '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
            + M.util.image_url('undo', 'editor_tinymce') + '" title="' + M.util.get_string('undo', 'tinymce_mathslate') + '"/></button>');
     var redo = Y.Node.create('<button type="button" class="'
-           +CSS.REDO + '">' + '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
+           + CSS.REDO + '">' + '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
            + M.util.image_url('redo', 'editor_tinymce') + '" title="' + M.util.get_string('redo', 'tinymce_mathslate') + '"/></button>');
     var clear = Y.Node.create('<button type="button" class="'
-           +CSS.CLEAR + '">' + '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
+           + CSS.CLEAR + '">' + '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
            + M.util.image_url('delete', 'editor_tinymce') + '" title="' + M.util.get_string('clear', 'tinymce_mathslate') + '"/></button>');
     var help = Y.Node.create('<button type="button" class="'
-           +CSS.HELP + '">' + '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
+           + CSS.HELP + '">' + '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
            + M.util.image_url('help', 'core') + '" title="' + M.util.get_string('help', 'tinymce_mathslate') + '"/></button>');
 */
 
     var undo = Y.Node.create('<button type="button" class="' + CSS.UNDO + '"'
            + '" title="' + M.util.get_string('undo', 'tinymce_mathslate') + '"/>'
-           +'<math><mo>&#x25C1;</mo></math>'
-           +'</button>');
+           + '<math><mo>&#x25C1;</mo></math>'
+           + '</button>');
 
     var redo = Y.Node.create('<button type="button" class="' + CSS.REDO + '"'
            + '" title="' + M.util.get_string('redo', 'tinymce_mathslate') + '"/>'
-           +'<math><mo>&#x25B7;</mo></math>'
-           +'</button>');
+           + '<math><mo>&#x25B7;</mo></math>'
+           + '</button>');
     var clear = Y.Node.create('<button type="button" class="' + CSS.CLEAR + '"'
            + '" title="' + M.util.get_string('clear', 'tinymce_mathslate') + '"/>'
-           +'<math><mi>&#x2718;</mi></math>'
-           +'</button>');
+           + '<math><mi>&#x2718;</mi></math>'
+           + '</button>');
 
     var help = Y.Node.create('<button type="button" class="'
-           +CSS.HELP + '" title="'
+           + CSS.HELP + '" title="'
            + M.util.get_string('help', 'tinymce_mathslate') + '">'
-           +'<math><mi>&#xE47C;</mi></math>'
+           + '<math><mi>&#xE47C;</mi></math>'
            + '</button>');
     toolbar.appendChild(clear);
     toolbar.appendChild(undo);
@@ -285,7 +285,7 @@ NS.MathJaxEditor = function(id) {
                 if (m[2]) {
                     str += toMathML(m[2]);
                 }
-                str += '</' + m[0] +'>';
+                str += '</' + m[0] + '>';
             });
             return str;
         }
