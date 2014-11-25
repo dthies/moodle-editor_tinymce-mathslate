@@ -264,7 +264,7 @@ NS.mSlots = function(){
                    return s;
                }
                if(s[1] && s[1].id) {
-                   str = str + '<div id = "' + s[1].id + '">';
+                   str = str + '<div id="' + s[1].id + '">';
                }
                if (s[1]&&format&&s[1][format]){
                    var i = 0;
