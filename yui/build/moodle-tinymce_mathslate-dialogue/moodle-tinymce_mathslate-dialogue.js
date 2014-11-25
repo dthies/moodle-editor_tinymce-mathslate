@@ -67,11 +67,11 @@ var NS=M.tinymce_mathslate;
         var dialogue = Y.one('#'+params.elementid);
         
         var editorID=dialogue.one('.mathslate-container').generateID();
-        var me=new M.tinymce_mathslate.Editor('#'+editorID,M.tinymce_mathslate.config);
+        var me=new M.tinymce_mathslate.Editor('#'+editorID, M.tinymce_mathslate.config);
 
-        var cancel=Y.one('#'+editorID).appendChild(Y.Node.create('<button title="'+M.util.get_string('cancel_desc','tinymce_mathslate')+'">'
-            +M.util.get_string('cancel','tinymce_mathslate')+'</button>'));
-        cancel.on('click',function(){
+        var cancel=Y.one('#'+editorID).appendChild(Y.Node.create('<button title="'+M.util.get_string('cancel_desc', 'tinymce_mathslate')+'">'
+            +M.util.get_string('cancel', 'tinymce_mathslate')+'</button>'));
+        cancel.on('click', function(){
             tinyMCEPopup.close();
         });
         if(typeof MathJax === 'undefined'){
@@ -79,29 +79,29 @@ var NS=M.tinymce_mathslate;
         }
 
         var displayTex=Y.one('#'+editorID).appendChild(Y.Node.create('<button title="'
-            +M.util.get_string('display_desc','tinymce_mathslate')+'">'
-            +M.util.get_string('display','tinymce_mathslate')+'</button>'));
-        var inlineTex=Y.one('#'+editorID).appendChild(Y.Node.create('<button title="'+M.util.get_string('inline_desc','tinymce_mathslate')+'">'
-            +M.util.get_string('inline','tinymce_mathslate')+'</button>'));
+            +M.util.get_string('display_desc', 'tinymce_mathslate')+'">'
+            +M.util.get_string('display', 'tinymce_mathslate')+'</button>'));
+        var inlineTex=Y.one('#'+editorID).appendChild(Y.Node.create('<button title="'+M.util.get_string('inline_desc', 'tinymce_mathslate')+'">'
+            +M.util.get_string('inline', 'tinymce_mathslate')+'</button>'));
 
 /* This code shows a button to saves work as JSON that can be incorporated in config.json.
         var saveJSON=Y.one('#'+editorID).appendChild(Y.Node.create('<button title="'+'JSON'+'">'
             +'JSON'+'</button>'));
-        saveJSON.on('click',function(){
+        saveJSON.on('click', function(){
             tinyMCEPopup.editor.execCommand('mceInsertContent', false, me.output('JSON'));
             tinyMCEPopup.close();
             });
 */
-        displayTex.on('click',function(){
+        displayTex.on('click', function(){
             tinyMCEPopup.editor.execCommand('mceInsertContent', false,  '\\['+me.output('tex')+'\\]');
             tinyMCEPopup.close();
             });
-        inlineTex.on('click',function(){
+        inlineTex.on('click', function(){
             tinyMCEPopup.editor.execCommand('mceInsertContent', false,  '\\('+me.output('tex')+'\\)');
             tinyMCEPopup.close();
             });
             
-        MathJax.Hub.Queue(['Typeset',MathJax.Hub,me.node.generateID()]);
+        MathJax.Hub.Queue(['Typeset', MathJax.Hub, me.node.generateID()]);
 
         M.tinymce_mathslate.dialogue = dialogue;
         

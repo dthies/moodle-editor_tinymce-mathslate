@@ -41,14 +41,14 @@ NS.MathJaxEditor=function(id){
         this.workspace=Y.one(id).append('<div id="canvas" class="' + CSS.WORKSPACE + '"/>');
         var toolbar= Y.one(id).appendChild(Y.Node.create('<form></form>'));
         var preview = Y.one(id).appendChild(Y.Node.create('<div class="' + CSS.PANEL + '"/>'));
-        preview.delegate('click',function(e){
+        preview.delegate('click', function(e){
             //canvas.get('node').one('#' + this.getAttribute('id')).handleClick(e);
             ddnodes.one('#' + this.getAttribute('id')).handleClick(e);
-        },'div');
+        }, 'div');
         var canvas=new Y.DD.Drop({
             node: this.workspace.one('#canvas')});
         this.canvas=canvas;
-        this.canvas.get('node').on('click',function(){
+        this.canvas.get('node').on('click', function(){
             se.select();
             render();
         });
@@ -57,35 +57,35 @@ NS.MathJaxEditor=function(id){
 /*
     var undo=Y.Node.create('<button type="button" class="'
            +CSS.UNDO + '">' +  '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
-           + M.util.image_url('undo', 'editor_tinymce') + '" title="' + M.util.get_string('undo','tinymce_mathslate') + '"/></button>');
+           + M.util.image_url('undo', 'editor_tinymce') + '" title="' + M.util.get_string('undo', 'tinymce_mathslate') + '"/></button>');
     var redo=Y.Node.create('<button type="button" class="'
            +CSS.REDO + '">' +  '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
-           + M.util.image_url('redo', 'editor_tinymce') + '" title="' + M.util.get_string('redo','tinymce_mathslate') + '"/></button>');
+           + M.util.image_url('redo', 'editor_tinymce') + '" title="' + M.util.get_string('redo', 'tinymce_mathslate') + '"/></button>');
     var clear=Y.Node.create('<button type="button" class="'
            +CSS.CLEAR + '">' +  '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
-           + M.util.image_url('delete', 'editor_tinymce') + '" title="' + M.util.get_string('clear','tinymce_mathslate') + '"/></button>');
+           + M.util.image_url('delete', 'editor_tinymce') + '" title="' + M.util.get_string('clear', 'tinymce_mathslate') + '"/></button>');
     var help=Y.Node.create('<button type="button" class="'
            +CSS.HELP + '">' +  '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
-           + M.util.image_url('help', 'core') + '" title="' + M.util.get_string('help','tinymce_mathslate') + '"/></button>');
+           + M.util.image_url('help', 'core') + '" title="' + M.util.get_string('help', 'tinymce_mathslate') + '"/></button>');
 */
 
     var undo=Y.Node.create('<button type="button" class="' + CSS.UNDO + '"'
-           + '" title="' + M.util.get_string('undo','tinymce_mathslate') + '"/>'
+           + '" title="' + M.util.get_string('undo', 'tinymce_mathslate') + '"/>'
            +'<math><mo>&#x25C1;</mo></math>'
            +'</button>');
 
     var redo=Y.Node.create('<button type="button" class="' + CSS.REDO + '"'
-           + '" title="' + M.util.get_string('redo','tinymce_mathslate') + '"/>'
+           + '" title="' + M.util.get_string('redo', 'tinymce_mathslate') + '"/>'
            +'<math><mo>&#x25B7;</mo></math>'
            +'</button>');
     var clear=Y.Node.create('<button type="button" class="' + CSS.CLEAR + '"'
-           + '" title="' + M.util.get_string('clear','tinymce_mathslate') + '"/>'
+           + '" title="' + M.util.get_string('clear', 'tinymce_mathslate') + '"/>'
            +'<math><mi>&#x2718;</mi></math>'
            +'</button>');
 
     var help=Y.Node.create('<button type="button" class="'
            +CSS.HELP + '" title="'
-           + M.util.get_string('help','tinymce_mathslate') + '">'
+           + M.util.get_string('help', 'tinymce_mathslate') + '">'
            +'<math><mi>&#xE47C;</mi></math>'
            + '</button>');
     toolbar.appendChild(clear);
@@ -93,17 +93,17 @@ NS.MathJaxEditor=function(id){
     toolbar.appendChild(redo);
     toolbar.appendChild(help);
 
-        redo.on('click',function(){
+        redo.on('click', function(){
             se=se.redo();
             math = se.slots[0];
             render();
         });
-        undo.on('click',function(){
+        undo.on('click', function(){
             se=se.undo();
             math = se.slots[0];
             render();
         });
-        clear.on('click',function(){
+        clear.on('click', function(){
             if(Y.one(SELECTORS.SELECTED)){
                 se.removeSnippet(Y.one(SELECTORS.SELECTED).getAttribute('id'));
             } else {
@@ -172,7 +172,7 @@ NS.MathJaxEditor=function(id){
             se.forEach(function(m){
                 var node = ddnodes.one('#' + m[1].id);
                 if (!node) {return;}
-                node.setAttribute('title', preview.one('#' + m[1].id).getHTML().replace(/<div *[^>]*>|<\/div>|<br>/g,''));
+                node.setAttribute('title', preview.one('#' + m[1].id).getHTML().replace(/<div *[^>]*>|<\/div>|<br>/g, ''));
                 node.handleClick = function(e) {
                     var selectedNode = ddnodes.one('#' + se.getSelected());
                     if(!selectedNode){
@@ -201,7 +201,7 @@ NS.MathJaxEditor=function(id){
                     se.select();
                     render();
                 };
-                node.on('click',function(e) {
+                node.on('click', function(e) {
                     this.handleClick(e);
                 });
                 var selectedNode = ddnodes.one('#' + se.getSelected());
@@ -224,28 +224,28 @@ NS.MathJaxEditor=function(id){
                             se.select();
                         }
                         this.get('node').addClass(CSS.DRAGGEDNODE);
-                        this.get('node').setAttribute('mathcolor','red');
+                        this.get('node').setAttribute('mathcolor', 'red');
                         this.get('dragNode').set('innerHTML', this.get('node').getHTML());
                         this.get('dragNode').addClass(CSS.DRAGNODE);
                     });
                     drag.on('drag:end', function(){
                         this.get('node').removeClass(CSS.DRAGGEDNODE);
-                        this.get('node').removeAttribute('mathcolor','red');
+                        this.get('node').removeAttribute('mathcolor', 'red');
                     });
                 }
 
                 var drop = new Y.DD.Drop({node: node});
-                drop.on('drop:hit',function(e){
+                drop.on('drop:hit', function(e){
                     var dragTarget=e.drag.get('node').get('id');
                     if(e.drag.get('data')) {
-                        se.insertSnippet(m[1].id,se.createItem(e.drag.get('data')));
+                        se.insertSnippet(m[1].id, se.createItem(e.drag.get('data')));
                     }
                     else if(dragTarget !== m[1].id&&se.isItem(dragTarget)&&!preview.one('#' + dragTarget).one('#' + m[1].id)) {
                         se.insertSnippet(e.drop.get('node').get('id'), se.removeSnippet(dragTarget));
                     }
                     render();
                 });
-                drop.on('drop:enter',function(e){
+                drop.on('drop:enter', function(e){
                     e.stopPropagation();
                     canvas.get('node').all(SELECTORS.HIGHLIGHT).each(function(n){
                          n.removeClass(CSS.HIGHLIGHT);
@@ -255,7 +255,7 @@ NS.MathJaxEditor=function(id){
                     canvas.get('node').one('#' + m[1].id).setAttribute('stroke', 'yellow');
                     canvas.get('node').one('#' + m[1].id).setAttribute('fill', 'yellow');
                 });
-                drop.on('drop:exit',function(e){
+                drop.on('drop:exit', function(e){
                     e.stopPropagation();
                     this.get('node').removeClass(CSS.HIGHLIGHT);
                     canvas.get('node').one('#' + m[1].id).removeClass(CSS.HIGHLIGHT);
@@ -302,8 +302,8 @@ NS.MathJaxEditor=function(id){
                 });
             } else {
                 canvas.get('node').setHTML('');
-                MathJax.Hub.Queue(['addElement',MathJax.HTML,canvas.get('node').getDOMNode(),'math',{display: "block"},math]);
-                MathJax.Hub.Queue(["Typeset",MathJax.Hub, 'canvas']);
+                MathJax.Hub.Queue(['addElement', MathJax.HTML, canvas.get('node').getDOMNode(), 'math', {display: "block"}, math]);
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub, 'canvas']);
                 MathJax.Hub.Queue(makeDraggable);
             }
         }
@@ -318,7 +318,7 @@ NS.MathJaxEditor=function(id){
                 return;
             }
             if(Y.one(SELECTORS.SELECTED)){
-                se.insertSnippet(Y.one(SELECTORS.SELECTED).getAttribute('id'),se.createItem(json));
+                se.insertSnippet(Y.one(SELECTORS.SELECTED).getAttribute('id'), se.createItem(json));
             } else {
                 se.append(se.createItem(json));
             }
@@ -347,7 +347,7 @@ NS.MathJaxEditor=function(id){
             function cleanSnippet(s) {
                 if (typeof s !== "object") { return s; }
                 var t = s.slice(0);
-                t.forEach(function(m,index) {
+                t.forEach(function(m, index) {
                     if (typeof m !== "object") { return; }
                     if (m[1] && m[1]['class']) {
                         t[index] = '[]';

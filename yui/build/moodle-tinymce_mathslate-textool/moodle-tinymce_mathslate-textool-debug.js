@@ -23,11 +23,11 @@ var NS = M && M.tinymce_mathslate || {};
  * @param string editorID
  * @param string config
  */
-NS.TeXTool=function(editorID,addMath){
+NS.TeXTool=function(editorID, addMath){
     var input=Y.Node.create('<input type="text">');
     var tool=Y.Node.create('<span>\\[ \\]</span>');
     if(addMath){
-        tool.on('click',function(){
+        tool.on('click', function(){
             addMath(tool.json);
         });
     }
@@ -46,16 +46,16 @@ NS.TeXTool=function(editorID,addMath){
             mml = jax.root.toMathML("");
         } catch(err) {
             if (!err.restart) {throw err;} // an actual error
-            return MathJax.Callback.After([toMathML,jax,callback],err.restart);
+            return MathJax.Callback.After([toMathML, jax, callback], err.restart);
         }
         MathJax.Callback(callback)(mml);
     };
-    input.on ('change',function(){
+    input.on ('change', function(){
         var jax = MathJax.Hub.getAllJax(tool.generateID())[0];
         var tex = this.getDOMNode().value;
         if (!jax) {return;}
         var output = '';
-        MathJax.Hub.Queue(['Text',jax,this.getDOMNode().value]);
+        MathJax.Hub.Queue(['Text', jax, this.getDOMNode().value]);
 
         var parse = function (mml) {
             if (/<mtext mathcolor="red">/.test(mml)||/<merror/.test(mml)) {
@@ -86,7 +86,7 @@ NS.TeXTool=function(editorID,addMath){
 
             //If element contains string quote string.
             if (mml.replace(new RegExp('^ *([^<]*).*'), '$1')) {
-                output += '"' +mml.replace(/<.*/,'') + '"';
+                output += '"' +mml.replace(/<.*/, '') + '"';
                 mml = mml.replace(/^ *[^<]*/, '');
                 if (mml.trim().search('<!--') === 0) {
                     mml = mml.replace(/<!--[^>]*-->/, '');

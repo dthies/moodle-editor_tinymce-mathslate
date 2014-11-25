@@ -33,10 +33,10 @@ var CSS = {
  * @param string editorID
  * @param string config
  */
-NS.Editor=function(editorID,config){
+NS.Editor=function(editorID, config){
     var me=this;
     this.node=Y.one(editorID);
-    this.node.setHTML(M.util.get_string('nomathjax','tinymce_mathslate'));
+    this.node.setHTML(M.util.get_string('nomathjax', 'tinymce_mathslate'));
     if(typeof MathJax === 'undefined'){
         return;
     }
@@ -64,7 +64,7 @@ NS.Editor=function(editorID,config){
                         }
                         else if(a==='[]') {
                         newID=Y.guid();
-                        snippet[2][snippet[2].indexOf(a)]=['mn',{},'[]'];
+                        snippet[2][snippet[2].indexOf(a)]=['mn', {}, '[]'];
                         }
                     });
                 }
@@ -124,7 +124,7 @@ NS.Editor=function(editorID,config){
 
                 me.output = function(f){return mje.output(f);};
 
-                mje.canvas.on('drop:hit',function(e){
+                mje.canvas.on('drop:hit', function(e){
                     if(e.drag.get('data')) {
                         mje.addMath(e.drag.get('data'));
                     }
@@ -134,7 +134,7 @@ NS.Editor=function(editorID,config){
                     Y.one('#' + toolboxID).setHTML('');
                     tabview.render('#' + toolboxID);
                     if (Y.one('#latex-input')) {
-                        new NS.TeXTool('#latex-input',function(json){mje.addMath(json);});
+                        new NS.TeXTool('#latex-input', function(json){mje.addMath(json);});
                     }
                 }
                 MathJax.Hub.Queue(["Typeset", MathJax.Hub, toolboxID]);
@@ -180,7 +180,7 @@ NS.Editor=function(editorID,config){
     MathJax.Hub.Queue(['Typeset', MathJax.Hub, toolboxID]);
 
     //Fetch configuration string for tools and initialyze
-    Y.on('io:success',function(id,o){
+    Y.on('io:success', function(id, o){
         if(tbox.tools.length===0) {
             MathJax.Hub.Queue(['fillToolBox', tbox, Y.JSON.parse(o.response), toolboxID]);
         }
