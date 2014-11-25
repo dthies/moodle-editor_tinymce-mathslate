@@ -24,7 +24,7 @@ YUI.add('moodle-tinymce_mathslate-dialogue', function (Y, NAME) {
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 M.tinymce_mathslate = M.tinymce_mathslate || {};
-var NS=M.tinymce_mathslate;
+var NS = M.tinymce_mathslate;
     /**
      * The window used to hold the editor.
      *
@@ -61,15 +61,15 @@ var NS=M.tinymce_mathslate;
      */
 
     NS.init = function(params) {
-        M.tinymce_mathslate=M.tinymce_mathslate||{};
-        M.tinymce_mathslate.config=params.config||M.tinymce_mathslate.config;
-        M.tinymce_mathslate.help=params.help||M.tinymce_mathslate.help;
+        M.tinymce_mathslate = M.tinymce_mathslate || {};
+        M.tinymce_mathslate.config = params.config || M.tinymce_mathslate.config;
+        M.tinymce_mathslate.help = params.help || M.tinymce_mathslate.help;
         var dialogue = Y.one('#' + params.elementid);
         
-        var editorID=dialogue.one('.mathslate-container').generateID();
-        var me=new M.tinymce_mathslate.Editor('#' + editorID, M.tinymce_mathslate.config);
+        var editorID = dialogue.one('.mathslate-container').generateID();
+        var me = new M.tinymce_mathslate.Editor('#' + editorID, M.tinymce_mathslate.config);
 
-        var cancel=Y.one('#' + editorID).appendChild(Y.Node.create('<button title="' + M.util.get_string('cancel_desc', 'tinymce_mathslate') + '">'
+        var cancel = Y.one('#' + editorID).appendChild(Y.Node.create('<button title="' + M.util.get_string('cancel_desc', 'tinymce_mathslate') + '">'
             +M.util.get_string('cancel', 'tinymce_mathslate') + '</button>'));
         cancel.on('click', function(){
             tinyMCEPopup.close();
@@ -78,14 +78,14 @@ var NS=M.tinymce_mathslate;
             return;
         }
 
-        var displayTex=Y.one('#' + editorID).appendChild(Y.Node.create('<button title="'
+        var displayTex = Y.one('#' + editorID).appendChild(Y.Node.create('<button title="'
             +M.util.get_string('display_desc', 'tinymce_mathslate') + '">'
             +M.util.get_string('display', 'tinymce_mathslate') + '</button>'));
-        var inlineTex=Y.one('#' + editorID).appendChild(Y.Node.create('<button title="' + M.util.get_string('inline_desc', 'tinymce_mathslate') + '">'
+        var inlineTex = Y.one('#' + editorID).appendChild(Y.Node.create('<button title="' + M.util.get_string('inline_desc', 'tinymce_mathslate') + '">'
             + M.util.get_string('inline', 'tinymce_mathslate') + '</button>'));
 
 /* This code shows a button to saves work as JSON that can be incorporated in config.json.
-        var saveJSON=Y.one('#' + editorID).appendChild(Y.Node.create('<button title="' + 'JSON' + '">'
+        var saveJSON = Y.one('#' + editorID).appendChild(Y.Node.create('<button title="' + 'JSON' + '">'
             +'JSON' + '</button>'));
         saveJSON.on('click', function(){
             tinyMCEPopup.editor.execCommand('mceInsertContent', false, me.output('JSON'));
