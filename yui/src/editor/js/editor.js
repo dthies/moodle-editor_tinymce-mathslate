@@ -31,9 +31,9 @@ var CSS = {
  * @param string editorID
  * @param string config
  */
-NS.Editor=function(editorID, config){
-    var me=this;
-    this.node=Y.one(editorID);
+NS.Editor = function(editorID, config){
+    var me = this;
+    this.node = Y.one(editorID);
     this.node.setHTML(M.util.get_string('nomathjax', 'tinymce_mathslate'));
     if(typeof MathJax === 'undefined'){
         return;
@@ -41,8 +41,8 @@ NS.Editor=function(editorID, config){
     //Set MathJax to us HTML-CSS rendering on all browsers
     //MathJax.Hub.setRenderer('HTML-CSS');
     //MathJax.Hub.setRenderer('NativeMML');
-    var toolboxID=Y.guid();
-    var workID=Y.guid();
+    var toolboxID = Y.guid();
+    var workID = Y.guid();
     this.node.addClass(CSS.EDITOR);
     //Place math editor on page
     this.node.setHTML('<div id="' +toolboxID +'" class="' + CSS.TOOLBOX + '">'
@@ -50,8 +50,8 @@ NS.Editor=function(editorID, config){
             + 'Version 1.1dev</div><script type="math/tex">\\quad</script><math> <mo> </mo></math></div>'
             + '<div id="' +workID +'" ></div>');
 
-    var mje=new NS.MathJaxEditor('#' + workID);
-    var tbox={
+    var mje = new NS.MathJaxEditor('#' + workID);
+    var tbox = {
         tools: [],
         Tool: function(snippet) {
             function findBlank(snippet) {
@@ -60,39 +60,39 @@ NS.Editor=function(editorID, config){
                     if (Array.isArray(a)) {
                             findBlank(a);
                         }
-                        else if(a==='[]') {
-                        newID=Y.guid();
-                        snippet[2][snippet[2].indexOf(a)]=['mn', {}, '[]'];
+                        else if(a === '[]') {
+                        newID = Y.guid();
+                        snippet[2][snippet[2].indexOf(a)] = ['mn', {}, '[]'];
                         }
                     });
                 }
             }
-            this.id=Y.guid();
+            this.id = Y.guid();
 
             function title(s){
                 if(typeof s === 'string') {return s;}
                 if(typeof s[1] === 'undefined') {return '';}
-                var o='';
+                var o = '';
                 if(typeof s[1].tex !== 'undefined'){
                     s[1].tex.forEach(function(t){
-                         if(typeof t==='string'){o += t;}
+                         if(typeof t === 'string'){o += t;}
                          else {o += title(s[2][t]);}
                     });
                     return o;
                 }
-                if(typeof s[2]==='string'){return s[2];}
-                if(typeof s[2]==='undefined'){return '';}
+                if(typeof s[2] === 'string'){return s[2];}
+                if(typeof s[2] === 'undefined'){return '';}
                 s[2].forEach(function(t){o += title(t);});
                 return o;
             }
-            this.json=JSON.stringify(snippet);
-            this.HTMLsnippet=[['span', {id: this.id, title: title(snippet)}, [['math', {}, [snippet]]]]];
+            this.json = JSON.stringify(snippet);
+            this.HTMLsnippet = [['span', {id: this.id, title: title(snippet)}, [['math', {}, [snippet]]]]];
 
             findBlank(snippet);
             tbox.tools.push(this);
         },
         fillToolBox: function(tools, toolboxID){
-            var tabs={children: []};
+            var tabs = {children: []};
             MathJax.Hub.Register.StartupHook('TeX Jax Config', function() {
                 MathJax.Ajax.Require("[MathJax]/extensions/toMathML.js");
                 tabs.children.push({
@@ -105,7 +105,7 @@ NS.Editor=function(editorID, config){
             });
             MathJax.Hub.Register.StartupHook('End', function() {
                 tools.forEach(function(tab){
-                    var q=Y.Node.create('<p></p>');
+                    var q = Y.Node.create('<p></p>');
                     tab.tools.forEach(function(snippet){
                         if (snippet[0] && snippet[0] === 'br') {
                             q.append('<br />');
@@ -148,7 +148,7 @@ NS.Editor=function(editorID, config){
             this.tools.forEach(function(tool){
                 if(tool.id) {
                     if(tool.id === id) {
-                        t=tool;
+                        t = tool;
                     }
                 }
             });
@@ -179,7 +179,7 @@ NS.Editor=function(editorID, config){
 
     //Fetch configuration string for tools and initialyze
     Y.on('io:success', function(id, o){
-        if(tbox.tools.length===0) {
+        if(tbox.tools.length === 0) {
             MathJax.Hub.Queue(['fillToolBox', tbox, Y.JSON.parse(o.response), toolboxID]);
         }
     });
