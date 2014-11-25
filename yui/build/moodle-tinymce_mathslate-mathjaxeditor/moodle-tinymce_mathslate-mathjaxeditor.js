@@ -35,7 +35,7 @@ var SELECTORS = {
 };
        
 //Constructor for equation workspace
-NS.MathJaxEditor = function(id){
+NS.MathJaxEditor = function(id) {
         var math = [];
         var se = new NS.mSlots();
         se.slots.push(math);
@@ -43,14 +43,14 @@ NS.MathJaxEditor = function(id){
         this.workspace = Y.one(id).append('<div id="canvas" class="' + CSS.WORKSPACE + '"/>');
         var toolbar = Y.one(id).appendChild(Y.Node.create('<form></form>'));
         var preview = Y.one(id).appendChild(Y.Node.create('<div class="' + CSS.PANEL + '"/>'));
-        preview.delegate('click', function(e){
+        preview.delegate('click', function(e) {
             //canvas.get('node').one('#' + this.getAttribute('id')).handleClick(e);
             ddnodes.one('#' + this.getAttribute('id')).handleClick(e);
         }, 'div');
         var canvas = new Y.DD.Drop({
             node: this.workspace.one('#canvas')});
         this.canvas = canvas;
-        this.canvas.get('node').on('click', function(){
+        this.canvas.get('node').on('click', function() {
             se.select();
             render();
         });
@@ -95,18 +95,18 @@ NS.MathJaxEditor = function(id){
     toolbar.appendChild(redo);
     toolbar.appendChild(help);
 
-        redo.on('click', function(){
+        redo.on('click', function() {
             se = se.redo();
             math = se.slots[0];
             render();
         });
-        undo.on('click', function(){
+        undo.on('click', function() {
             se = se.undo();
             math = se.slots[0];
             render();
         });
-        clear.on('click', function(){
-            if(Y.one(SELECTORS.SELECTED)){
+        clear.on('click', function() {
+            if (Y.one(SELECTORS.SELECTED)) {
                 se.removeSnippet(Y.one(SELECTORS.SELECTED).getAttribute('id'));
             } else {
                 math = [];
@@ -118,7 +118,7 @@ NS.MathJaxEditor = function(id){
             render();
         });
  
-    help.on('click', function(){
+    help.on('click', function() {
         preview.setHTML('<iframe src="' + NS.help + '" style="width: '
             + preview.getStyle('width') + '" class="' + CSS.HELPBOX + '"/>');
     });
@@ -153,7 +153,7 @@ NS.MathJaxEditor = function(id){
          * @function makeDraggable
          */
         function makeDraggable () {
-            if(shim) {
+            if (shim) {
                 shim.remove();
             }
             if (canvas.get('node').one('.math') || !dragenabled) {
@@ -163,7 +163,7 @@ NS.MathJaxEditor = function(id){
                 ddnodes = shim;
             }
             preview.setHTML('<div class="' + CSS.PREVIEW + '">' + se.preview('tex') + '</div>');
-            if(se.getSelected()&&preview.one('#' + se.getSelected())) {
+            if (se.getSelected()&&preview.one('#' + se.getSelected())) {
                 canvas.get('node').one('#' + se.getSelected()).addClass(CSS.SELECTED);
                 canvas.get('node').one('#' + se.getSelected()).setAttribute('mathcolor', 'green');
                 canvas.get('node').one('#' + se.getSelected()).setAttribute('stroke', 'green');
@@ -171,19 +171,19 @@ NS.MathJaxEditor = function(id){
                 preview.one('#' + se.getSelected()).addClass(CSS.SELECTED);
             }
                 
-            se.forEach(function(m){
+            se.forEach(function(m) {
                 var node = ddnodes.one('#' + m[1].id);
                 if (!node) {return;}
                 node.setAttribute('title', preview.one('#' + m[1].id).getHTML().replace(/<div *[^>]*>|<\/div>|<br>/g, ''));
                 node.handleClick = function(e) {
                     var selectedNode = ddnodes.one('#' + se.getSelected());
-                    if(!selectedNode){
+                    if (!selectedNode) {
                         e.stopPropagation();
                         se.select(this.getAttribute('id'));
                         render();
                         return;
                     }
-                    if(selectedNode === node){
+                    if (selectedNode === node) {
                         node.removeClass(CSS.SELECTED);
                         preview.one('#' + node.getAttribute('id')).removeClass(CSS.SELECTED);
                         canvas.get('node').one('#' + se.getSelected()).removeAttribute('mathcolor');
@@ -192,12 +192,9 @@ NS.MathJaxEditor = function(id){
                         se.select();
                         return;
                     }
-                    if(selectedNode.one('#' + this.getAttribute('id'))){
+                    if (selectedNode.one('#' + this.getAttribute('id'))) {
                         return;
                     }
-                    //if(node.one('#' + selectedNode.getAttribute('id'))){
-                    //    return;
-                    //}
                     e.stopPropagation();
                     se.insertSnippet(node.getAttribute('id'), se.removeSnippet(selectedNode.getAttribute('id')));
                     se.select();
@@ -210,14 +207,14 @@ NS.MathJaxEditor = function(id){
                 if (!dragenabled) {
                     return;
                 }
-                if((!m[1] || !m[1]['class'] || m[1]['class'] !== 'blank') &&
-                        !(selectedNode && preview.one('#' + se.getSelected()).one('#' + m[1].id))){
+                if ((!m[1] || !m[1]['class'] || m[1]['class'] !== 'blank') &&
+                        !(selectedNode && preview.one('#' + se.getSelected()).one('#' + m[1].id))) {
                     var drag = new Y.DD.Drag({node: node}).plug(Y.Plugin.DDProxy, {
                         resizeFrame: false,
                         moveOnEnd: false
                     });
-                    drag.on('drag:start', function(){
-                        if(canvas.get('node').one('#' + se.getSelected())){
+                    drag.on('drag:start', function() {
+                        if (canvas.get('node').one('#' + se.getSelected())) {
                             preview.one('#' + se.getSelected()).removeClass(CSS.SELECTED);
                             canvas.get('node').one('#' + se.getSelected()).removeClass(CSS.SELECTED);
                             canvas.get('node').one('#' + se.getSelected()).removeAttribute('mathcolor');
@@ -230,26 +227,26 @@ NS.MathJaxEditor = function(id){
                         this.get('dragNode').set('innerHTML', this.get('node').getHTML());
                         this.get('dragNode').addClass(CSS.DRAGNODE);
                     });
-                    drag.on('drag:end', function(){
+                    drag.on('drag:end', function() {
                         this.get('node').removeClass(CSS.DRAGGEDNODE);
                         this.get('node').removeAttribute('mathcolor', 'red');
                     });
                 }
 
                 var drop = new Y.DD.Drop({node: node});
-                drop.on('drop:hit', function(e){
+                drop.on('drop:hit', function(e) {
                     var dragTarget = e.drag.get('node').get('id');
-                    if(e.drag.get('data')) {
+                    if (e.drag.get('data')) {
                         se.insertSnippet(m[1].id, se.createItem(e.drag.get('data')));
                     }
-                    else if(dragTarget !== m[1].id&&se.isItem(dragTarget) && !preview.one('#' + dragTarget).one('#' + m[1].id)) {
+                    else if (dragTarget !== m[1].id&&se.isItem(dragTarget) && !preview.one('#' + dragTarget).one('#' + m[1].id)) {
                         se.insertSnippet(e.drop.get('node').get('id'), se.removeSnippet(dragTarget));
                     }
                     render();
                 });
-                drop.on('drop:enter', function(e){
+                drop.on('drop:enter', function(e) {
                     e.stopPropagation();
-                    canvas.get('node').all(SELECTORS.HIGHLIGHT).each(function(n){
+                    canvas.get('node').all(SELECTORS.HIGHLIGHT).each(function(n) {
                          n.removeClass(CSS.HIGHLIGHT);
                     });
                     canvas.get('node').one('#' + m[1].id).addClass(CSS.HIGHLIGHT);
@@ -257,7 +254,7 @@ NS.MathJaxEditor = function(id){
                     canvas.get('node').one('#' + m[1].id).setAttribute('stroke', 'yellow');
                     canvas.get('node').one('#' + m[1].id).setAttribute('fill', 'yellow');
                 });
-                drop.on('drop:exit', function(e){
+                drop.on('drop:exit', function(e) {
                     e.stopPropagation();
                     this.get('node').removeClass(CSS.HIGHLIGHT);
                     canvas.get('node').one('#' + m[1].id).removeClass(CSS.HIGHLIGHT);
@@ -315,11 +312,11 @@ NS.MathJaxEditor = function(id){
  * @method addMath
  * @param string json
  */
-        this.addMath = function(json){
-            if(!json){
+        this.addMath = function(json) {
+            if (!json) {
                 return;
             }
-            if(Y.one(SELECTORS.SELECTED)){
+            if (Y.one(SELECTORS.SELECTED)) {
                 se.insertSnippet(Y.one(SELECTORS.SELECTED).getAttribute('id'), se.createItem(json));
             } else {
                 se.append(se.createItem(json));
@@ -329,8 +326,8 @@ NS.MathJaxEditor = function(id){
 /* Unselect the selected node if any
  * @method clear
  */
-        this.clear = function(){
-            if(Y.one(SELECTORS.SELECTED)){
+        this.clear = function() {
+            if (Y.one(SELECTORS.SELECTED)) {
                 se.removeSnippet(Y.one(SELECTORS.SELECTED).getAttribute('id'));
             } else {
                 math = [];
@@ -345,7 +342,7 @@ NS.MathJaxEditor = function(id){
          * @method output
          * @param string format
          */
-        this.output = function(format){
+        this.output = function(format) {
             function cleanSnippet(s) {
                 if (typeof s !== "object") { return s; }
                 var t = s.slice(0);
@@ -364,26 +361,26 @@ NS.MathJaxEditor = function(id){
                 });
                 return t;
             }
-            if(format === 'MathML') {
+            if (format === 'MathML') {
                 return canvas.get('node').one('script').getHTML();
             }
-            if(format === 'HTML') {
+            if (format === 'HTML') {
                 return canvas.get('node').one('span').getHTML();
             }
-            if(format === 'JSON') {
+            if (format === 'JSON') {
                 return Y.JSON.stringify(cleanSnippet(math));
             }
             return se.output(format);
         };
-        this.getHTML = function(){
+        this.getHTML = function() {
             return canvas.get('node').one('span').getHTML();
         };
-        this.redo = function(){
+        this.redo = function() {
             se = se.redo();
             math = se.slots[0];
             render();
         };
-        this.undo = function(){
+        this.undo = function() {
             se = se.undo();
             math = se.slots[0];
             render();

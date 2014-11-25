@@ -23,11 +23,11 @@ var NS = M && M.tinymce_mathslate || {};
  * @param string editorID
  * @param string config
  */
-NS.TeXTool = function(editorID, addMath){
+NS.TeXTool = function(editorID, addMath) {
     var input = Y.Node.create('<input type="text">');
     var tool = Y.Node.create('<span>\\[ \\]</span>');
-    if(addMath){
-        tool.on('click', function(){
+    if (addMath) {
+        tool.on('click', function() {
             addMath(tool.json);
         });
     }
@@ -50,7 +50,7 @@ NS.TeXTool = function(editorID, addMath){
         }
         MathJax.Callback(callback)(mml);
     };
-    input.on ('change', function(){
+    input.on ('change', function() {
         var jax = MathJax.Hub.getAllJax(tool.generateID())[0];
         var tex = this.getDOMNode().value;
         if (!jax) {return;}
@@ -107,7 +107,7 @@ NS.TeXTool = function(editorID, addMath){
         };
         MathJax.Hub.Queue(['toMathML', tool, parse]);
 
-        MathJax.Hub.Queue(function(){
+        MathJax.Hub.Queue(function() {
             console.log(output);
             if (output === '') {
                 return;
