@@ -225,6 +225,7 @@ NS.MathJaxEditor = function(id) {
                         this.get('node').addClass(CSS.DRAGGEDNODE);
                         this.get('node').setAttribute('mathcolor', 'red');
                         this.get('dragNode').set('innerHTML', this.get('node').getHTML());
+                        ddnodes.one('#' + m[1].id).setAttribute('mathcolor', 'red');
                         this.get('dragNode').addClass(CSS.DRAGNODE);
                     });
                     drag.on('drag:end', function() {
