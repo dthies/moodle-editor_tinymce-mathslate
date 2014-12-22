@@ -225,11 +225,13 @@ NS.MathJaxEditor = function(id) {
                     this.get('node').setAttribute('mathcolor', 'red');
                     this.get('dragNode').set('innerHTML', this.get('node').getHTML());
                     ddnodes.one('#' + m[1].id).setAttribute('mathcolor', 'red');
+                    ddnodes.one('#' + m[1].id).setAttribute('stroke', 'red');
                     this.get('dragNode').addClass(CSS.DRAGNODE);
                 });
                 drag.on('drag:end', function() {
                     this.get('node').removeClass(CSS.DRAGGEDNODE);
-                    this.get('node').removeAttribute('mathcolor', 'red');
+                    this.get('node').removeAttribute('mathcolor');
+                    this.get('node').removeAttribute('stroke');
                 });
             }
 
@@ -246,9 +248,17 @@ NS.MathJaxEditor = function(id) {
             });
             drop.on('drop:enter', function(e) {
                 e.stopPropagation();
-                canvas.get('node').all(SELECTORS.HIGHLIGHT).each(function(n) {
+                ddnodes.all(SELECTORS.HIGHLIGHT).each(function(n) {
                      n.removeClass(CSS.HIGHLIGHT);
+                     var id = n.getAttribute('id');
+                     if (canvas.get('node').one('#' + id)) {
+                         canvas.get('node').one('#' + id).removeClass(CSS.HIGHLIGHT);
+                         canvas.get('node').one('#' + id).removeAttribute('mathcolor');
+                         canvas.get('node').one('#' + id).removeAttribute('stroke');
+                         canvas.get('node').one('#' + id).removeAttribute('fill');
+                     }
                 });
+                ddnodes.one('#' + m[1].id).addClass(CSS.HIGHLIGHT);
                 canvas.get('node').one('#' + m[1].id).addClass(CSS.HIGHLIGHT);
                 canvas.get('node').one('#' + m[1].id).setAttribute('mathcolor', 'yellow');
                 canvas.get('node').one('#' + m[1].id).setAttribute('stroke', 'yellow');

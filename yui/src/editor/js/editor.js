@@ -105,6 +105,10 @@ NS.Editor = function(editorID, config) {
             findBlank(snippet);
             tbox.tools.push(this);
         },
+        /* Initialyze the available tools
+         * @function fillToolBox
+         * @array tools tool array
+         */
         fillToolBox: function(tools, toolboxID) {
             var tabs = {children: []};
             MathJax.Hub.Register.StartupHook('TeX Jax Config', function() {
@@ -157,6 +161,10 @@ NS.Editor = function(editorID, config) {
                 });
             });
         },
+        /* Return a tool array for a give id
+         * @function getToolByID
+         * @string id
+         */
         getToolByID: function(id) {
             var t;
             this.tools.forEach(function(tool) {
@@ -169,7 +177,8 @@ NS.Editor = function(editorID, config) {
             return t;
         },
         /* Enable drag functionality after math is formated
-         * @function registerTools
+         * @function registerTool
+         * @array tool Array of objects representing the tools appearance in MathML
          */
         registerTool: function(tool) {
             Y.one('#' + tool.id).on('click', function() {
