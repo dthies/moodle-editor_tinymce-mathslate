@@ -1,9 +1,34 @@
+.mathslate-tinymce .mathslate-workspace .mathslate-highlight .MathJax_SVG svg > g,
+.mathslate-tinymce .mathslate-workspace .mathslate-highlight .MathJax_SVG_Display svg > g {
+    fill: yellow;
+    stroke: yellow;
+}
+
+.mathslate-tinymce .mathslate-workspace .mathslate-selected .MathJax_SVG svg > g,
+.mathslate-tinymce .mathslate-workspace .mathslate-selected .MathJax_SVG_Display svg > g {
+    fill: green;
+    stroke: green;
+}
+
+.mathslate-tinymce .mathslate-workspace .MathJax_SVG svg > g,
+.mathslate-tinymce .mathslate-workspace .MathJax_SVG_Display svg > g {
+    fill: #EEE;
+    stroke: #EEE;
+}
+
+.mathslate-tinymce .mathslate-toolbox .MathJax_SVG svg > g,
+.mathslate-tinymce .mathslate-toolbox .MathJax_SVG_Display svg > g {
+    fill: #888;
+    stroke: #888;
+}
+
 .mathslate-tinymce .mathslate-highlight {
     color: yellow
 }
 
 .mathslate-tinymce .mathslate-workspace .mathslate-selected {
-    color: green
+    color: green;
+    mathcolor: green
 }
 
 .mathslate-tinymce .mathslate-workspace-dragged {
