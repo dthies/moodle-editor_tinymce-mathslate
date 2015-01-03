@@ -117,7 +117,7 @@ NS.Editor = function(editorID, config) {
                 MathJax.Ajax.Require("[MathJax]/extensions/toMathML.js");
                 tabs.children.push({
                     label: "<span title=\"TeX\"><math><mi>T</mi><mspace width=\"-.14em\"/>"
-                        + "<mpadded height=\"-.5ex\" depth=\" + .5ex\" voffset=\"-.5ex\">"
+                        + "<mpadded height=\"-.5ex\" depth=\"+.5ex\" voffset=\"-.5ex\">"
                         + "<mrow class=\"MJX-TeXAtom-ORD\"><mi>E</mi></mrow></mpadded>"
                         + "<mspace width=\"-.115em\" /> <mi>X</mi> </math></span>",
                     content: "<span id='latex-input'></span>"
