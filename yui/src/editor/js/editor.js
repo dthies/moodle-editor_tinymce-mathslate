@@ -112,7 +112,7 @@ NS.Editor = function(editorID, config) {
         fillToolBox: function(tools, toolboxID) {
             var tabs = {children: []};
             var tabview;
-            MathJax.Hub.Register.StartupHook('TeX Jax ConfigXX', function() {
+            MathJax.Hub.Register.StartupHook('TeX Jax Config', function() {
                 MathJax.Ajax.Require("[MathJax]/extensions/toMathML.js");
                 tabs.children.push({
                     label: "<span title=\"TeX\"><math><mi>T</mi><mspace width=\"-.14em\"/>"
