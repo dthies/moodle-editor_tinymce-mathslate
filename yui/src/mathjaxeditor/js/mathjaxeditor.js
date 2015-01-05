@@ -126,22 +126,26 @@ NS.MathJaxEditor = function(id) {
          *
          */
     function makeDrops() {
-        shim = Y.Node.create('<span style="position: absolute; opacity: 0"></span>');
+        shim = Y.Node.create('<span style="opacity: 0"></span>');
         shim.setHTML(se.preview().replace(/div/g, 'span').replace(/<\/*br>/g, ''));
         Y.one(id).appendChild(shim);
         shim.all('span').each(function (s) {
-            if (!canvas.get('node').one('#' + s.getAttribute('id'))) { return;}
-            s.appendChild('<math dislplay="inline">' + toMathML([Y.JSON.parse(se.getItemByID(s.getAttribute('id')))]) + '</math>');
+            if (!canvas.get('node').one('#' + s.getAttribute('id'))) {
+                return;
+            }
+            s.appendChild('<math display="inline">' + toMathML([Y.JSON.parse(se.getItemByID(s.getAttribute('id')))]) + '</math>');
+            s.setAttribute('style', 'position: absolute; top: 0; left: 0; margin: 0px');
         });
         MathJax.Hub.Queue(['Typeset', MathJax.Hub, shim.getDOMNode()]);
         MathJax.Hub.Queue(function () {
             shim.all('span').each(function (s) {
-                if (!canvas.get('node').one('#' + s.getAttribute('id'))) {return;}
+                if (!canvas.get('node').one('#' + s.getAttribute('id'))) {
+                    return;
+                }
                 var rect = canvas.get('node').one('#' + s.getAttribute('id')).getDOMNode().getBoundingClientRect();
-                s.setStyle('margin', '0px');
-                s.setStyle('position', 'absolute');
-                s.setStyle('zIndex', '+1');
-                s.setXY([rect.left, rect.top]);
+                var srect = s.getDOMNode().getBoundingClientRect();
+                s.setStyle('top', rect.top - srect.top);
+                s.setStyle('left', rect.left - srect.left);
             });
         });
     }
