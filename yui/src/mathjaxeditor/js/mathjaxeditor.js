@@ -134,7 +134,7 @@ NS.MathJaxEditor = function(id) {
                 return;
             }
             s.appendChild('<math display="inline">' + toMathML([Y.JSON.parse(se.getItemByID(s.getAttribute('id')))]) + '</math>');
-            s.setAttribute('style', 'position: absolute; top: 0; margin: 0px');
+            s.setAttribute('style', 'position: absolute; top: 0; left: 0; margin: 0px');
         });
         MathJax.Hub.Queue(['Typeset', MathJax.Hub, shim.getDOMNode()]);
         MathJax.Hub.Queue(function () {
