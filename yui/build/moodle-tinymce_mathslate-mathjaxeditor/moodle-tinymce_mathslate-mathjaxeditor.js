@@ -135,9 +135,9 @@ NS.MathJaxEditor = function(id) {
             if (!canvas.get('node').one('#' + s.getAttribute('id'))) {
                 return;
             }
-            s.appendChild('<math display="inline">' +
+            s.appendChild('<span style="position: relative; z-index: -1"><math display="inline">' +
                 toMathML([Y.JSON.parse(se.getItemByID(s.getAttribute('id')))]).replace(/id="[^"]*"/,'') +
-                '</math>');
+                '</math></span>');
             s.setAttribute('style', 'position: absolute; top: 0; left: 0; margin: 0px');
         });
         MathJax.Hub.Queue(['Typeset', MathJax.Hub, shim.getDOMNode()]);
@@ -189,6 +189,11 @@ NS.MathJaxEditor = function(id) {
                     return;
                 }
                 if (selectedNode === node) {
+                    if (preview.one('#' + node.getAttribute('id')).test('.' + CSS.PREVIEW + ' >')) {
+                        se.select();
+                        render();
+                        return;
+                    }
                     node.removeClass(CSS.SELECTED);
                     preview.one('#' + node.getAttribute('id')).removeClass(CSS.SELECTED);
                     canvas.get('node').one('#' + se.getSelected()).removeAttribute('mathcolor');
