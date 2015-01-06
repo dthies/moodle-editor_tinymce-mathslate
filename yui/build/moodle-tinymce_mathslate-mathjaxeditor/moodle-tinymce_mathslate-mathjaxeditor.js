@@ -135,7 +135,9 @@ NS.MathJaxEditor = function(id) {
             if (!canvas.get('node').one('#' + s.getAttribute('id'))) {
                 return;
             }
-            s.appendChild('<math display="inline">' + toMathML([Y.JSON.parse(se.getItemByID(s.getAttribute('id')))]) + '</math>');
+            s.appendChild('<math display="inline">' +
+                toMathML([Y.JSON.parse(se.getItemByID(s.getAttribute('id')))]).replace(/id="[^"]*"/,'') +
+                '</math>');
             s.setAttribute('style', 'position: absolute; top: 0; left: 0; margin: 0px');
         });
         MathJax.Hub.Queue(['Typeset', MathJax.Hub, shim.getDOMNode()]);
