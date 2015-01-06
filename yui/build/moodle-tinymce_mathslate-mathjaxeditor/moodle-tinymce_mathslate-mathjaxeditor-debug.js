@@ -135,22 +135,18 @@ NS.MathJaxEditor = function(id) {
             if (!canvas.get('node').one('#' + s.getAttribute('id'))) {
                 return;
             }
-            s.appendChild('<span style="position: relative; z-index: -1"><math display="inline">' +
-                toMathML([Y.JSON.parse(se.getItemByID(s.getAttribute('id')))]).replace(/id="[^"]*"/,'') +
-                '</math></span>');
             s.setAttribute('style', 'position: absolute; top: 0; left: 0; margin: 0px');
         });
-        MathJax.Hub.Queue(['Typeset', MathJax.Hub, shim.getDOMNode()]);
-        MathJax.Hub.Queue(function () {
-            shim.all('span').each(function (s) {
-                if (!canvas.get('node').one('#' + s.getAttribute('id'))) {
-                    return;
-                }
-                var rect = canvas.get('node').one('#' + s.getAttribute('id')).getDOMNode().getBoundingClientRect();
-                var srect = s.getDOMNode().getBoundingClientRect();
-                s.setStyle('top', rect.top - srect.top);
-                s.setStyle('left', rect.left - srect.left);
-            });
+        shim.all('span').each(function (s) {
+            if (!canvas.get('node').one('#' + s.getAttribute('id'))) {
+                return;
+            }
+            var rect = canvas.get('node').one('#' + s.getAttribute('id')).getDOMNode().getBoundingClientRect();
+            var srect = s.getDOMNode().getBoundingClientRect();
+            s.setStyle('top', rect.top - srect.top);
+            s.setStyle('left', rect.left - srect.left);
+            s.setStyle('width', rect.width);
+            s.setStyle('height', rect.height);
         });
     }
         
