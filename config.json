@@ -213,18 +213,19 @@
                   ["mtd",{"tex":["&",0]},[ "[]"]]]]
                 ]]]],
             ["mrow",{"tex":["\\sqrt { ",0," }"]},[["msqrt",{},["[]"]]]],
-            ["mrow",{},[["mroot",{"tex":["\\sqrt[",1,"]{ ",0," }"]},[ "[]","[]"]]]]
+            ["mrow",{},[["mroot",{"tex":["\\sqrt[",1,"]{ ",0," }"]},[ "[]","[]"]]]],
+            ["mtable", {"columnalign": "right right", "rowspacing": "1pt", "columnspacing": "1em", "rowlines": "none solid"}, [["mtr", {}, [["mtd", {}], ["mtd", {"tex":["\\begin{array}{rr}&", 0] }, [ "[]"]]]], ["mtr", { }, [["mtd", { "tex":["\\\\", 0]}, [["mo", { }, "+"]]], ["mtd", { "tex":["&", 0]}, [ "[]" ]]]], ["mtr", {}, [["mtd", {}], ["mtd", { "tex": ["\\\\\\hline&", 0, "\\end{array}"] }, [ "[]" ]]]]]]
         ]
     },
     {"label":"<span title='Calculus'><math><mo>&#x222B;</mo><mi>&#x2207;</mi><mi>f</mi></math></span>",
         "tools":[
             ["mfrac",{"tex":["\\frac{",0,"}{",1,"}"]},[
-                 ["mrow",{},[["mi",{},["d"]], "[]" ]],
-                 ["mrow",{},[["mi",{},["d"]], "[]" ]]
+                 ["mrow",{},[["mi",{},"d"], "[]" ]],
+                 ["mrow",{},[["mi",{},"d"], "[]" ]]
             ]],
             ["mfrac",{"tex":["\\frac{",0,"}{",1,"}"]},[
-                 ["mrow",{"tex":["\\partial",1]},[["mi",{},["\u2202"]], "[]" ]],
-                 ["mrow",{"tex":["\\partial",1]},[["mi",{},["\u2202"]], "[]" ]]
+                 ["mrow",{"tex":["\\partial",1]},[["mi",{},"\u2202"], "[]" ]],
+                 ["mrow",{"tex":["\\partial",1]},[["mi",{},"\u2202"], "[]" ]]
             ]],
             ["mi",{"tex":["\\nabla "],"mathvariant": "normal"},"\u2207"],
             ["munderover",{"tex":["\\sum_{",1,"}^{",2,"} "]},[["mo",{},"&sum;"],"[]","[]"]],
@@ -257,8 +258,7 @@
                 ["msub",{"tex":["|_{",1,"}"]},[
                   ["mrow",{},[
                     ["mo",{},"|"]]],
-                    "[]"]]]]]],
-            ["mtable", {"columnalign": "right right", "rowspacing": "1pt", "columnspacing": "1em", "rowlines": "none solid"}, [["mtr", {}, [["mtd", {}], ["mtd", {"tex":["\\begin{array}{rr}&", 0] }, [ "[]"]]]], ["mtr", { }, [["mtd", { "tex":["\\\\", 0]}, [["mo", { }, "+"]]], ["mtd", { "tex":["&", 0]}, [ "[]" ]]]], ["mtr", {}, [["mtd", {}], ["mtd", { "tex": ["\\\\\\hline&", 0, "\\end{array}"] }, [ "[]" ]]]]]]
+                    "[]"]]]]]]
         ]
     }
 ]
