@@ -103,6 +103,24 @@ NS.TabEditor = function(editorID, toolboxID, config) {
 
             Y.one('#json-data').getDOMNode().value =  output;
         };
+        this.addLabel = function(title, label) {
+            var index = Y.one('#' + toolboxID).one('ul').get('children').indexOf(Y.one('#' + toolboxID).one('.yui3-tab-selected'));
+            tabview.add(
+                {
+                    childType: "Tab",
+                    label: "<span title='" + title + "'>" + label + "</span>",
+                    content: "<span id='latex-input'></span>"
+                },
+                index
+            );
+            this.tabs.splice(index, 0, {
+                label: "<span title='" + title + "'>" + label + "</span>",
+                content: "",
+                tools: []
+            });
+            this.outputJSON();
+            this.registerTab(Y.one('#' + toolboxID).one('ul').get('children').item(index));
+        };
         this.removeTab = function(index) {
             tabview.remove(index);
         };
@@ -231,24 +249,7 @@ NS.TabEditor = function(editorID, toolboxID, config) {
         this.outputJSON();
     }, this);
     Y.one('#label-add').on('click', function() {
-        var title = "title";
-        var label = "label";
-        var index = Y.one('#' + toolboxID).one('ul').get('children').indexOf(Y.one('#' + toolboxID).one('.yui3-tab-selected'));
-        tabview.add(
-            {
-                childType: "Tab",
-                label: "<span title='" + title + "'>" + label + "</span>",
-                content: "<span id='latex-input'></span>"
-            },
-            index
-        );
-        this.tabs.splice(index, 0, {
-            label: "<span title='" + title + "'>" + label + "</span>",
-            content: "",
-            tools: []
-        });
-        this.outputJSON();
-        this.registerTab(Y.one('#' + toolboxID).one('ul').get('children').item(index));
+        this.addLabel("title", "label");
     }, this );
 
     Y.one('#mathslate-tab-label').on('click', function() {
@@ -289,17 +290,6 @@ NS.TabEditor = function(editorID, toolboxID, config) {
             this.outputJSON();
         });
     }, this);
-
-    Y.one('#' + toolboxID).delegate('drop:hit', function(e) {
-        alert(e.target);
-        var tool = this.getToolByID(e.target.getAttribute('id'));
-        if (tool) {
-            var dragTool = this.tbox.getToolByID(e.drag.get('node').get('id'));
-            var dragNode = Y.one('#' + e.drag.get('node').get('id')).get('parentNode').get('parentNode');
-            this.get('node').get('parentNode').get('parentNode').get('parentNode').insertBefore(dragNode, this.get('node').get('parentNode').get('parentNode'));
-            tool.parent.splice(tool.parent.indexOf(tool), 0, dragTool.remove);
-        }
-    }, 'span > span', this);
 
 };
 
