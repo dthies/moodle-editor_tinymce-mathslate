@@ -194,7 +194,7 @@ NS.TabEditor = function(editorID, toolboxID, config) {
     var request;
     Y.on('io:success', function(id, o) {
         if (id === request.id) {
-            Y.one('#json-data').setAttribute('value', o.response);
+            Y.one('#json-data').getDOMNode().value =  o.response;
             MathJax.Hub.Queue(['fillToolBox', this, Y.JSON.parse(o.response), toolboxID]);
             MathJax.Hub.Queue(Y.bind(this.registerTools, this));
         }
