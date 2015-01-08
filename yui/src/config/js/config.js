@@ -92,6 +92,10 @@ NS.TabEditor = function(editorID, toolboxID, config) {
                     return;
                 }
                 var id = Y.one('#' + toolboxID).one('.yui3-tabview-content').get('children').item(0).get('children').item(tools.indexOf(tab)).one('a').getAttribute('id');
+                if (!id) {
+                    tabmembers.push('\n            ' + '["br", {}],');
+                    return;
+                }
                 Y.one('#' + toolboxID).one('.yui3-tabview-content').get('children').item(1).one('[aria-labelledby="' + id + '"]').all('.yui3-dd-drop').each(function(t) {
                     tabmembers.push('\n            ' + tbox.getToolByID(t.getAttribute('id')).json);
                 });
