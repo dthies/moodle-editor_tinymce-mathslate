@@ -246,8 +246,14 @@ NS.TabEditor = function(editorID, toolboxID, config) {
             var index = Y.one('#' + toolboxID).one('ul').get('children').indexOf(Y.one('#' + toolboxID).one('.yui3-tab-selected'));
             t.parent = this.tabs[index].tools;
             //MathJax.HTML.addElement(q.getDOMNode(), 'span', {}, [' ', ['span', {}, t.HTMLsnippet], ' '] );
-            q.append('<span> ' + mje.toMathML(t.HTMLsnippet) + ' </span>');
-            MathJax.Hub.Queue(['Typeset', MathJax.Hub, q.getDOMNode()]);
+            console.log(q.get('children').pop()); 
+            var node = Y.Node.create('<span> ' + mje.toMathML(t.HTMLsnippet) + ' </span>');
+            if (q.get('children').pop() && q.get('children').pop().previous() && q.get('children').pop().test('br')) {
+                q.insertBefore(node, q.get('children').pop().previous());
+            } else {
+                q.append(node);
+            }
+            MathJax.Hub.Queue(['Typeset', MathJax.Hub, node.getDOMNode()]);
             MathJax.Hub.Queue(['registerTool', tbox, t]);
             MathJax.Hub.Queue(['outputJSON', this]);
     };
