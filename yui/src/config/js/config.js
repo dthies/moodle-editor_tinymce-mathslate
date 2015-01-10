@@ -56,6 +56,9 @@ NS.TabEditor = function(editorID, toolboxID, config) {
     MathJax.Hub.Queue(['Typeset', MathJax.Hub, toolboxID]);
 
     this.fillToolBox = function(tools, id) {
+        tools.forEach(function(tab) {
+           tab.tools.push(['br', {}]);
+        });
         var tabview = me.tbox.fillToolBox(tools, id);
         this.tabs = tools;
         Y.one('#' + id).all('.yui3-tab-panel span').each(function(el) {
@@ -92,12 +95,14 @@ NS.TabEditor = function(editorID, toolboxID, config) {
                     return;
                 }
                 var id = Y.one('#' + toolboxID).one('.yui3-tabview-content').get('children').item(0).get('children').item(tools.indexOf(tab)).one('a').getAttribute('id');
-                if (!id) {
-                    tabmembers.push('\n            ' + '["br", {}],');
-                    return;
-                }
-                Y.one('#' + toolboxID).one('.yui3-tabview-content').get('children').item(1).one('[aria-labelledby="' + id + '"]').all('.yui3-dd-drop').each(function(t) {
-                    tabmembers.push('\n            ' + tbox.getToolByID(t.getAttribute('id')).json);
+                Y.one('#' + toolboxID).one('.yui3-tabview-content').get('children').item(1).one('[aria-labelledby="' + id + '"]').get('children').each(function(c) {
+                    var t = c.one('.yui3-dd-drop');
+                    if (t) {
+                        tabmembers.push('\n            ' + tbox.getToolByID(t.getAttribute('id')).json);
+                    }
+                    if (c.test('br') && c.next() && !(c.next().next() && c.next().next().test('br'))) {
+                        tabmembers.push('\n            ["br", {}]');
+                    }
                 });
                 tabcontent.push('\n    {"label": "' + tab.label + '",\n        "tools": [' + tabmembers.join(',') + ']\n    }');
             });
@@ -199,21 +204,22 @@ NS.TabEditor = function(editorID, toolboxID, config) {
             br.ancestor().insertBefore(span, br);
             var d = new Y.DD.Drag({node: span.one('span')});
             d.on('drag:drophit', function(e) {
-                if (e.drop.get('node') && 
+                if (e.drop.get('node') &&
                     e.drop.get('node').getAttribute('id') &&
                     tbox.getToolByID(e.drop.get('node').getAttribute('id'))
                 ) {
                     var node = e.drop.get('node').ancestor();
                     node.ancestor().insertBefore(span, node);
                     node.ancestor().insertBefore(br, node);
+                    this.outputJSON();
                 }
-            });
+            }, this);
             d.on('drag:end', function() {
                 this.get('node').setStyle('top' , '0');
                 this.get('node').setStyle('left' , '0');
             });
 
-        });
+        }, this);
     };
     //Fetch configuration string for tools and initialyze
     var request;
