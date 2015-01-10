@@ -1,3 +1,8 @@
+.mathslate-break {
+    font-size: 75%;
+    color: blue
+}
+
 .mathslate-tinymce .mathslate-workspace .mathslate-highlight .MathJax_SVG svg > g,
 .mathslate-tinymce .mathslate-workspace .mathslate-highlight .MathJax_SVG_Display svg > g {
     fill: yellow;

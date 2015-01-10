@@ -174,6 +174,9 @@ NS.TabEditor = function(editorID, toolboxID, config) {
                 }
             });
             dragTool = tbox.getToolByID(e.drag.get('node').get('id'));
+            if (!dragTool) {
+                return;
+            }
             this.get('node').get('parentNode').get('parentNode').insertBefore(dragNode, this.get('node').get('parentNode'));
             tool.parent.splice(tool.parent.indexOf(tool.snippet), 0, dragTool.remove);
             context.outputJSON();
@@ -193,6 +196,26 @@ NS.TabEditor = function(editorID, toolboxID, config) {
         Y.one('#'+toolboxID).all('li').each(function(li) {
             this.registerTab(li);
         }, this);
+        Y.one('#' + toolboxID).all('br').each(function(br) {
+            var span = Y.Node.create('<span><span class="mathslate-break">&lt;br&gt;</span></span>');
+            br.ancestor().insertBefore(span, br);
+            var d = new Y.DD.Drag({node: span.one('span')});
+            d.on('drag:drophit', function(e) {
+                if (e.drop.get('node') && 
+                    e.drop.get('node').getAttribute('id') &&
+                    tbox.getToolByID(e.drop.get('node').getAttribute('id'))
+                ) {
+                    var node = e.drop.get('node').ancestor();
+                    node.ancestor().insertBefore(span, node);
+                    node.ancestor().insertBefore(br, node);
+                }
+            });
+            d.on('drag:end', function() {
+                this.get('node').setStyle('top' , '0');
+                this.get('node').setStyle('left' , '0');
+            });
+
+        });
     };
     //Fetch configuration string for tools and initialyze
     var request;
@@ -300,6 +323,7 @@ NS.TabEditor = function(editorID, toolboxID, config) {
 
 }, '@VERSION@', {
     "requires": [
+        "dd-plugin",
         "dd-drag",
         "dd-proxy",
         "dd-drop",
