@@ -24,6 +24,9 @@ YUI.add('moodle-tinymce_mathslate-dialogue', function (Y, NAME) {
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 M.tinymce_mathslate = M.tinymce_mathslate || {};
+var CSS = {
+   EDITOR: 'mathslate-tinymce'
+};
 var NS = M.tinymce_mathslate;
     /**
      * The window used to hold the editor.
@@ -67,6 +70,7 @@ var NS = M.tinymce_mathslate;
         var dialogue = Y.one('#' + params.elementid);
         
         var editorID = dialogue.one('.mathslate-container').generateID();
+        Y.one('#' + editorID).addClass(CSS.EDITOR);
         var me = new M.tinymce_mathslate.Editor('#' + editorID, M.tinymce_mathslate.config);
 
         var cancel = Y.one('#' + editorID).appendChild(Y.Node.create('<button title="' + M.util.get_string('cancel_desc', 'tinymce_mathslate') + '">'

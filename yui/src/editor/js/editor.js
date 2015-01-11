@@ -18,7 +18,6 @@
 if (M) {M.tinymce_mathslate = M.tinymce_mathslate || {};}
 var NS = M && M.tinymce_mathslate || {};
 var CSS = {
-   EDITOR: 'mathslate-tinymce',
    TOOLBOX: 'mathslate-toolbox',
    DRAGNODE: 'mathslate-toolbox-drag',
    UNDO: 'mathslate-undo-button',
