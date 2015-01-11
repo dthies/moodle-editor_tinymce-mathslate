@@ -237,9 +237,10 @@ NS.TabEditor = function(editorID, toolboxID, config) {
     }
 
     this.addTool = function(json) {
-        var snippet = Y.JSON.parse(snippet);
+        json = '["mrow", {}, ' + json + ']';
+        var snippet = Y.JSON.parse(json);
         var q = Y.one('#' + toolboxID).one('.yui3-tab-panel-selected');
-            var t = new tbox.Tool(["mrow", {}, snippet]);
+            var t = new tbox.Tool(snippet);
             t.json = json;
             t.snippet = snippet;
             t.remove = function () {
@@ -247,6 +248,7 @@ NS.TabEditor = function(editorID, toolboxID, config) {
             };
             var index = Y.one('#' + toolboxID).one('ul').get('children').indexOf(Y.one('#' + toolboxID).one('.yui3-tab-selected'));
             t.parent = this.tabs[index].tools;
+            t.parent.push(snippet);
             var node = Y.Node.create('<span> ' + mje.toMathML(t.HTMLsnippet) + ' </span>');
             if (q.get('children').pop() && q.get('children').pop().previous() && q.get('children').pop().test('br')) {
                 q.insertBefore(node, q.get('children').pop().previous());
@@ -254,6 +256,7 @@ NS.TabEditor = function(editorID, toolboxID, config) {
                 q.append(node);
             }
             MathJax.Hub.Queue(['Typeset', MathJax.Hub, node.getDOMNode()]);
+            MathJax.Hub.Queue(['registerTool', tbox, t]);
             MathJax.Hub.Queue(['registerTool', this, t]);
             MathJax.Hub.Queue(['outputJSON', this]);
     };
