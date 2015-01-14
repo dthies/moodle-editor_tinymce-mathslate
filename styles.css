@@ -27,6 +27,18 @@
     stroke: #888;
 }
 
+.mathslate-tinymce .mathslate-toolbox .yui3-tab-label .MathJax_SVG svg > g,
+.mathslate-tinymce .mathslate-toolbox .yui3-tab-label .MathJax_SVG_Display svg > g {
+    fill: #222;
+    stroke: #222;
+}
+
+.mathslate-tinymce .mathslate-toolbox .yui3-tab-selected .yui3-tab-label .MathJax_SVG svg > g,
+.mathslate-tinymce .mathslate-toolbox .yui3-tab-selected .yui3-tab-label .MathJax_SVG_Display svg > g {
+    fill: #FFF;
+    stroke: #FFF;
+}
+
 .mathslate-tinymce .mathslate-highlight {
     color: yellow
 }

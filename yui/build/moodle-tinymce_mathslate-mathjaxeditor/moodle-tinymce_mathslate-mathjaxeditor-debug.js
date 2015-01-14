@@ -36,24 +36,24 @@ var SELECTORS = {
        
 //Constructor for equation workspace
 NS.MathJaxEditor = function(id) {
-        var math = [];
-        var se = new NS.mSlots();
-        se.slots.push(math);
-        var shim, ddnodes;
-        this.workspace = Y.one(id).append('<div id="canvas" class="' + CSS.WORKSPACE + '"/>');
-        var toolbar = Y.one(id).appendChild(Y.Node.create('<form></form>'));
-        var preview = Y.one(id).appendChild(Y.Node.create('<div class="' + CSS.PANEL + '"/>'));
-        preview.delegate('click', function(e) {
-            //canvas.get('node').one('#' + this.getAttribute('id')).handleClick(e);
-            ddnodes.one('#' + this.getAttribute('id')).handleClick(e);
-        }, 'div');
-        var canvas = new Y.DD.Drop({
-            node: this.workspace.one('#canvas')});
-        this.canvas = canvas;
-        this.canvas.get('node').on('click', function() {
-            se.select();
-            render();
-        });
+    var math = [];
+    var se = new NS.mSlots();
+    se.slots.push(math);
+    var shim, ddnodes;
+    this.workspace = Y.one(id).append('<div id="canvas" class="' + CSS.WORKSPACE + '"/>');
+    var toolbar = Y.one(id).appendChild(Y.Node.create('<form></form>'));
+    var preview = Y.one(id).appendChild(Y.Node.create('<div class="' + CSS.PANEL + '"/>'));
+    preview.delegate('click', function(e) {
+        //canvas.get('node').one('#' + this.getAttribute('id')).handleClick(e);
+        ddnodes.one('#' + this.getAttribute('id')).handleClick(e);
+    }, 'div');
+    var canvas = new Y.DD.Drop({
+        node: this.workspace.one('#canvas')});
+    this.canvas = canvas;
+    this.canvas.get('node').on('click', function() {
+        se.select();
+        render();
+    });
 
     //Place buttons for internal editor functions
 /*
@@ -135,7 +135,7 @@ NS.MathJaxEditor = function(id) {
             if (!canvas.get('node').one('#' + s.getAttribute('id'))) {
                 return;
             }
-            s.appendChild('<span style="position: relative; z-index: -1"><math display="inline">' +
+            s.appendChild('<span style="position: relative"><math display="inline">' +
                 toMathML([Y.JSON.parse(se.getItemByID(s.getAttribute('id')))]).replace(/id="[^"]*"/,'') +
                 '</math></span>');
             s.setAttribute('style', 'position: absolute; top: 0; left: 0; margin: 0px');
@@ -234,7 +234,11 @@ NS.MathJaxEditor = function(id) {
                     }
                     this.get('node').addClass(CSS.DRAGGEDNODE);
                     this.get('node').setAttribute('mathcolor', 'red');
-                    this.get('dragNode').set('innerHTML', this.get('node').getHTML());
+                    if (ddnodes === shim) {
+                        this.get('dragNode').set('innerHTML', this.get('node').get('children').pop().getHTML());
+                    } else {
+                        this.get('dragNode').set('innerHTML', this.get('node').getHTML());
+                    }
                     ddnodes.one('#' + m[1].id).setAttribute('mathcolor', 'red');
                     ddnodes.one('#' + m[1].id).setAttribute('stroke', 'red');
                     this.get('dragNode').addClass(CSS.DRAGNODE);
