@@ -133,7 +133,7 @@ NS.MathJaxEditor = function(id) {
             if (!canvas.get('node').one('#' + s.getAttribute('id'))) {
                 return;
             }
-            s.appendChild('<span style="position: relative; z-index: -1"><math display="inline">' +
+            s.appendChild('<span style="position: relative"><math display="inline">' +
                 toMathML([Y.JSON.parse(se.getItemByID(s.getAttribute('id')))]).replace(/id="[^"]*"/,'') +
                 '</math></span>');
             s.setAttribute('style', 'position: absolute; top: 0; left: 0; margin: 0px');
