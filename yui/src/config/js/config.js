@@ -89,6 +89,7 @@ NS.TabEditor = function(editorID, toolboxID, config) {
         this.outputJSON = function() {
             var output = '[';
             var tabcontent = [];
+            this.registerBreaks();
             this.tabs.forEach(function(tab) {
                 var tabmembers = [];
                 if (!Y.one('#' + toolboxID).one('.yui3-tabview-content').get('children').item(0).get('children').item(tools.indexOf(tab))) {
@@ -199,6 +200,23 @@ NS.TabEditor = function(editorID, toolboxID, config) {
         Y.one('#'+toolboxID).all('li').each(function(li) {
             this.registerTab(li);
         }, this);
+        this.registerBreaks();
+    };
+    /* Clean linebreaks and make them draggable in tool box
+     * @method registerBreaks
+     */
+    this.registerBreaks = function() {
+        Y.one('#' + toolboxID).all('.mathslate-break').each(function(n) {
+            n.ancestor().remove();
+        });
+        Y.one('#' + toolboxID).all('.yui3-tab-panel-selected').each(function(n) {
+            n.append('<br />');
+        });
+        Y.one('#' + toolboxID).all('br').each(function(br) {
+            if (!br.previous() || br.previous().test('br')) {
+                br.remove();
+            }
+        });
         Y.one('#' + toolboxID).all('br').each(function(br) {
             var span = Y.Node.create('<span><span class="mathslate-break">&lt;br&gt;</span></span>');
             br.ancestor().insertBefore(span, br);
