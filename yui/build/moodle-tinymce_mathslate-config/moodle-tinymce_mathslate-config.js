@@ -62,6 +62,8 @@ NS.TabEditor = function(editorID, toolboxID, config) {
            tab.tools.push(['br', {}]);
         });
         var tabview = me.tbox.fillToolBox(tools, id);
+        // Remove tab for TeX tool.
+        tabview.remove(0);
         this.tabs = tools;
         Y.one('#' + id).all('.yui3-tab-panel span').each(function(el) {
             var tool = me.tbox.getToolByID(el.getAttribute('id'));
