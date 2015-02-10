@@ -38,9 +38,9 @@ NS.Editor = function(editorID, config) {
     if (typeof MathJax === 'undefined') {
         return;
     }
-    //Set MathJax to us HTML-CSS rendering on all browsers
-    //MathJax.Hub.setRenderer('HTML-CSS');
-    //MathJax.Hub.setRenderer('NativeMML');
+    // Disable CHTML preview in MathJax 2.5+
+    MathJax.Hub.processSectionDelay = 0;
+
     var toolboxID = Y.guid();
     var workID = Y.guid();
     this.node.addClass(CSS.EDITOR);
