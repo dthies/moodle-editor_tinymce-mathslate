@@ -17,8 +17,9 @@ YUI.add('moodle-tinymce_mathslate-mathjaxeditor', function (Y, NAME) {
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 M.tinymce_mathslate = M.tinymce_mathslate || {};
-NS = M && M.tinymce_mathslate || {};
-var dragenabled = true;
+var NS = M && M.tinymce_mathslate || {};
+var MathJax = window.MathJax,
+    dragenabled = true;
 var CSS = {
     SELECTED: 'mathslate-selected',
     WORKSPACE: 'mathslate-workspace',
@@ -59,16 +60,20 @@ NS.MathJaxEditor = function(id) {
 /*
     var undo = Y.Node.create('<button type="button" class="'
            + CSS.UNDO + '">' + '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
-           + M.util.image_url('undo', 'editor_tinymce') + '" title="' + M.util.get_string('undo', 'tinymce_mathslate') + '"/></button>');
+           + M.util.image_url('undo', 'editor_tinymce')
+           + '" title="' + M.util.get_string('undo', 'tinymce_mathslate') + '"/></button>');
     var redo = Y.Node.create('<button type="button" class="'
            + CSS.REDO + '">' + '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
-           + M.util.image_url('redo', 'editor_tinymce') + '" title="' + M.util.get_string('redo', 'tinymce_mathslate') + '"/></button>');
+           + M.util.image_url('redo', 'editor_tinymce') + '" title="'
+           + M.util.get_string('redo', 'tinymce_mathslate') + '"/></button>');
     var clear = Y.Node.create('<button type="button" class="'
            + CSS.CLEAR + '">' + '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
-           + M.util.image_url('delete', 'editor_tinymce') + '" title="' + M.util.get_string('clear', 'tinymce_mathslate') + '"/></button>');
+           + M.util.image_url('delete', 'editor_tinymce') + '" title="'
+           + M.util.get_string('clear', 'tinymce_mathslate') + '"/></button>');
     var help = Y.Node.create('<button type="button" class="'
            + CSS.HELP + '">' + '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
-           + M.util.image_url('help', 'core') + '" title="' + M.util.get_string('help', 'tinymce_mathslate') + '"/></button>');
+           + M.util.image_url('help', 'core') + '" title="'
+           + M.util.get_string('help', 'tinymce_mathslate') + '"/></button>');
 */
 
     var undo = Y.Node.create('<button type="button" class="' + CSS.UNDO + '"'
@@ -223,6 +228,7 @@ NS.MathJaxEditor = function(id) {
                     resizeFrame: false,
                     moveOnEnd: false
                 });
+
                 drag.on('drag:start', function() {
                     if (canvas.get('node').one('#' + se.getSelected())) {
                         preview.one('#' + se.getSelected()).removeClass(CSS.SELECTED);

@@ -41,21 +41,21 @@ NS.TeXTool = function(editorID, addMath) {
     });
     tool.toMathML = function(callback) {
         var mml;
-        var jax = MathJax.Hub.getAllJax(this.generateID())[0];
+        var jax = window.MathJax.Hub.getAllJax(this.generateID())[0];
         try {
             mml = jax.root.toMathML("");
         } catch(err) {
             if (!err.restart) {throw err;} // an actual error
-            return MathJax.Callback.After([toMathML, jax, callback], err.restart);
+            return window.MathJax.Callback.After(['toMathML', this, jax, callback], err.restart);
         }
-        MathJax.Callback(callback)(mml);
+        window.MathJax.Callback(callback)(mml);
     };
     input.on ('change', function() {
-        var jax = MathJax.Hub.getAllJax(tool.generateID())[0];
+        var jax = window.MathJax.Hub.getAllJax(tool.generateID())[0];
         var tex = this.getDOMNode().value;
         if (!jax) {return;}
         var output = '';
-        MathJax.Hub.Queue(['Text', jax, this.getDOMNode().value]);
+        window.MathJax.Hub.Queue(['Text', jax, this.getDOMNode().value]);
 
         var parse = function (mml) {
             if (/<mtext mathcolor="red">/.test(mml) || /<merror/.test(mml)) {
@@ -64,7 +64,6 @@ NS.TeXTool = function(editorID, addMath) {
             mml = mml.replace(/$\s+/mg, ' ');
 
             //First look for beginning tag.
-            if (!mml.match(/^\s*<[a-z]*/)) {alert('no tag ' + mml);}
             var tag = mml.replace(/^\s*<([a-z]*).*/, '$1');
 
             //Find attributes of element.
@@ -105,10 +104,9 @@ NS.TeXTool = function(editorID, addMath) {
             output += ']';
             return mml.replace('</' + tag + '>', '');
         };
-        MathJax.Hub.Queue(['toMathML', tool, parse]);
+        window.MathJax.Hub.Queue(['toMathML', tool, parse]);
 
-        MathJax.Hub.Queue(function() {
-            console.log(output);
+        window.MathJax.Hub.Queue(function() {
             if (output === '') {
                 return;
             }

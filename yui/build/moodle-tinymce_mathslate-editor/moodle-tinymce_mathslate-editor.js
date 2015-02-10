@@ -19,6 +19,7 @@ YUI.add('moodle-tinymce_mathslate-editor', function (Y, NAME) {
 
 if (M) {M.tinymce_mathslate = M.tinymce_mathslate || {};}
 var NS = M && M.tinymce_mathslate || {};
+var MathJax = window.MathJax;
 var CSS = {
    TOOLBOX: 'mathslate-toolbox',
    DRAGNODE: 'mathslate-toolbox-drag',
@@ -39,15 +40,16 @@ NS.Editor = function(editorID, config) {
     if (typeof MathJax === 'undefined') {
         return;
     }
-    //Set MathJax to us HTML-CSS rendering on all browsers
-    //MathJax.Hub.setRenderer('HTML-CSS');
-    //MathJax.Hub.setRenderer('NativeMML');
+    // Disable CHTML preview in MathJax 2.5+
+    MathJax.Hub.processSectionDelay = 0;
+
     var toolboxID = Y.guid();
     var workID = Y.guid();
     this.node.addClass(CSS.EDITOR);
     //Place math editor on page
     this.node.setHTML('<div id="' + toolboxID + '" class="' + CSS.TOOLBOX + '">'
-            + '<div style="background-color: white; color: green; height: 300px; line-height: 75px; font-size: 18px; text-align:center"><br />Mathslate Mathematics Editor<br />'
+            + '<div style="background-color: white; color: green; height: 300px; line-height: 75px; '
+            + 'font-size: 18px; text-align:center"><br />Mathslate Mathematics Editor<br />'
             + 'Version 1.1 Beta</div><script type="math/tex">\\quad</script><math> <mo> </mo></math></div>'
             + '<div id="' + workID + '" ></div>');
 
@@ -62,7 +64,6 @@ NS.Editor = function(editorID, config) {
                             findBlank(a);
                         }
                         else if (a === '[]') {
-                        newID = Y.guid();
                         snippet[2][snippet[2].indexOf(a)] = ['mn', {}, '[]'];
                         }
                     });
