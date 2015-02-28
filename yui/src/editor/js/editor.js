@@ -31,7 +31,8 @@ var CSS = {
  * @param string editorID
  * @param string config
  */
-NS.Editor = function(editorID, config) {
+NS.Editor = function(editorID, config, params) {
+    params = params || {texInput: true};
     var me = this;
     this.node = Y.one(editorID);
     this.node.setHTML(M.util.get_string('nomathjax', 'tinymce_mathslate'));
@@ -114,6 +115,9 @@ NS.Editor = function(editorID, config) {
             var tabs = {children: []};
             var tabview;
             MathJax.Hub.Register.StartupHook('TeX Jax Config', function() {
+                if (!params.texInput) {
+                    return;
+                }
                 MathJax.Ajax.Require("[MathJax]/extensions/toMathML.js");
                 tabs.children.push({
                     label: "<span title=\"TeX\"><math><mi>T</mi><mspace width=\"-.14em\"/>"
