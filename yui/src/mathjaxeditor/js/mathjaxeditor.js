@@ -131,14 +131,14 @@ NS.MathJaxEditor = function(id) {
          *
          */
     function makeDrops() {
-        shim = Y.Node.create('<span style="opacity: 0"></span>');
+        shim = Y.Node.create('<span></span>');
         shim.setHTML(se.preview().replace(/div/g, 'span').replace(/<\/*br>/g, ''));
         Y.one(id).appendChild(shim);
         shim.all('span').each(function (s) {
             if (!canvas.get('node').one('#' + s.getAttribute('id'))) {
                 return;
             }
-            s.appendChild('<span style="position: relative"><math display="inline">' +
+            s.appendChild('<span style="position: relative; opacity: 0"><math display="inline">' +
                 toMathML([Y.JSON.parse(se.getItemByID(s.getAttribute('id')))]).replace(/id="[^"]*"/,'') +
                 '</math></span>');
             s.setAttribute('style', 'position: absolute; top: 0; left: 0; margin: 0px; z-index: +1');
@@ -164,12 +164,8 @@ NS.MathJaxEditor = function(id) {
         if (shim) {
             shim.remove();
         }
-        if (canvas.get('node').one('.math') || !dragenabled) {
-            ddnodes = canvas.get('node');
-        } else {
-            makeDrops();
-            ddnodes = shim;
-        }
+        makeDrops();
+        ddnodes = shim;
         preview.setHTML('<div class="' + CSS.PREVIEW + '">' + se.preview('tex') + '</div>');
         if (se.getSelected() && preview.one('#' + se.getSelected())) {
             canvas.get('node').one('#' + se.getSelected()).addClass(CSS.SELECTED);
@@ -222,8 +218,7 @@ NS.MathJaxEditor = function(id) {
             }
             if ((!m[1] || !m[1]['class'] || m[1]['class'] !== 'blank') &&
                     !(selectedNode && preview.one('#' + se.getSelected()).one('#' + m[1].id))) {
-                var drag = new Y.DD.Drag({node: node}).plug(Y.Plugin.DDProxy, {
-                    resizeFrame: false,
+                var drag = new Y.DD.Drag({node: node,
                     moveOnEnd: false
                 });
 
@@ -238,19 +233,21 @@ NS.MathJaxEditor = function(id) {
                     }
                     this.get('node').addClass(CSS.DRAGGEDNODE);
                     this.get('node').setAttribute('mathcolor', 'red');
-                    if (ddnodes === shim) {
-                        this.get('dragNode').set('innerHTML', this.get('node').get('children').pop().getHTML());
-                    } else {
-                        this.get('dragNode').set('innerHTML', this.get('node').getHTML());
-                    }
                     ddnodes.one('#' + m[1].id).setAttribute('mathcolor', 'red');
                     ddnodes.one('#' + m[1].id).setAttribute('stroke', 'red');
                     this.get('dragNode').addClass(CSS.DRAGNODE);
+                    this.get('dragNode').all('> span')
+                        .pop()
+                        .setStyle('opacity', '1');
                 });
                 drag.on('drag:end', function() {
                     this.get('node').removeClass(CSS.DRAGGEDNODE);
                     this.get('node').removeAttribute('mathcolor');
                     this.get('node').removeAttribute('stroke');
+                    this.get('dragNode').all('> span')
+                        .pop()
+                        .setStyle('opacity', '0');
+                    this.get('dragNode').setStyles({top: 0, left: 0});
                 });
             }
 
