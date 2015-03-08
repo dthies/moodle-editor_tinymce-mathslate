@@ -44,6 +44,7 @@ NS.Editor = function(editorID, config) {
     MathJax.Hub.processSectionDelay = 0;
 
     var toolboxID = Y.guid();
+    var latexToolID = Y.guid();
     var workID = Y.guid();
     this.node.addClass(CSS.EDITOR);
     //Place math editor on page
@@ -121,7 +122,7 @@ NS.Editor = function(editorID, config) {
                         + "<mpadded height=\"-.5ex\" depth=\"+.5ex\" voffset=\"-.5ex\">"
                         + "<mrow class=\"MJX-TeXAtom-ORD\"><mi>E</mi></mrow></mpadded>"
                         + "<mspace width=\"-.115em\" /> <mi>X</mi> </math></span>",
-                    content: "<span id='latex-input'></span>"
+                    content: "<span id='" + latexToolID + "'></span>"
                 });
             });
             MathJax.Hub.Register.StartupHook('End', function() {
@@ -146,8 +147,8 @@ NS.Editor = function(editorID, config) {
                 if (Y.one('#' + toolboxID)) {
                     Y.one('#' + toolboxID).setHTML('');
                     tabview.render('#' + toolboxID);
-                    if (Y.one('#latex-input')) {
-                        new NS.TeXTool('#latex-input', function(json) {mje.addMath(json);});
+                    if (Y.one('#' + latexToolID)) {
+                        new NS.TeXTool('#' + latexToolID, function(json) {mje.addMath(json);});
                     }
                 }
                 MathJax.Hub.Queue(["Typeset", MathJax.Hub, toolboxID]);
