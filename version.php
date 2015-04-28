@@ -18,17 +18,17 @@
  * TinyMCE MathSlate plugin version details.
  *
  * @package   tinymce_mathslate
- * @copyright 2013 Daniel Thies
+ * @copyright 2013 onward Daniel Thies
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 // The current plugin version (Date: YYYYMMDDXX).
-$plugin->version   = 2014081000;
+$plugin->version   = 2015041700;
 // Required Moodle version.
 $plugin->requires  = 2013040500;
 // Full name of the plugin (used for diagnostics).
 $plugin->component = 'tinymce_mathslate';
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release = '1.0';
+$plugin->release = '1.1';

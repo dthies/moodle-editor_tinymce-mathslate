@@ -1,0 +1,40 @@
+Version 1.1
+
+This release adds to the original 1.0 version some technical improvements.
+
+    1. The editor now supports MathJax Output modes NativeMML and SVG
+    in addittion to HTML-CSS.  It will use the current output jax to
+    display all mathematics.
+
+    2. The TeX tool now has a more robust XML parser so that it should be
+    able to convert any TeX expression supported by the MathJax
+    configuration to work within the editor.
+
+    3. JSON to MathML conversions has be improved to provide more complete
+    MathML configuration of editor.
+
+    4. The default configuration has been updated slightly to utilize
+    some of the improvements.
+
+    5. Some improvements have been made in the API to make it more easily 
+    used in other plugins.
+
+tinymce_mathslate
+=================
+
+Mathslate is a graphical tool for constructing mathematics within
+Moodle. This plugin adds the tool to TinyMCE version 3. Other plugins
+are required for Atto or TinyMCE4. Install this directory as a
+subdirectory of the Moodle directory lib/editor/tinymce/plugins with
+the name mathslate. Then visit the administrators notification page to
+install the plugin to the database and adjust the settings.
+
+This plugin requires MathJax to run. If MathJax is configured on the
+Moodle site either within theme or using MathJaxloader, Mathslate is
+able to use it. If the TeX notation filter is used instead of MathJax,
+then the url to load MathJax must be set in the admin setting so that
+Mathslate can load MathJax on demand. For more information about MathJax
+see mathjax.org.
+
+All original files are copyright Daniel Thies 2013-4 dthies@ccal.edu
+and are licensed under the included GPL 3.
