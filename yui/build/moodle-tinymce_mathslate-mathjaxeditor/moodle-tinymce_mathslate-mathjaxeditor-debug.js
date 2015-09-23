@@ -54,7 +54,7 @@ NS.MathJaxEditor = function(id) {
     this.canvas.get('node').on('click', function() {
         se.select();
         this.render();
-    });
+    }, this);
 
     //Place buttons for internal editor functions
 /*
@@ -103,13 +103,13 @@ NS.MathJaxEditor = function(id) {
     redo.on('click', function() {
         se = se.redo();
         math = se.slots[0];
-        render();
-    });
+        this.render();
+    }, this);
     undo.on('click', function() {
         se = se.undo();
         math = se.slots[0];
-        render();
-    });
+        this.render();
+    }, this);
     clear.on('click', function() {
         if (Y.one(id + ' ' + SELECTORS.SELECTED)) {
             se.removeSnippet(Y.one(id + ' ' + SELECTORS.SELECTED).getAttribute('id'));
@@ -120,8 +120,8 @@ NS.MathJaxEditor = function(id) {
             se = se.next;
             se.slots.push(math);
         }
-        render();
-    });
+        this.render();
+    }, this);
  
     help.on('click', function() {
         preview.setHTML('<iframe src="' + NS.help + '" style="width: '
