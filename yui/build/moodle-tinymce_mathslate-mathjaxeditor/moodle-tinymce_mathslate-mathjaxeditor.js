@@ -53,7 +53,7 @@ NS.MathJaxEditor = function(id) {
     this.canvas = canvas;
     this.canvas.get('node').on('click', function() {
         se.select();
-        render();
+        this.render();
     });
 
     //Place buttons for internal editor functions
@@ -349,7 +349,7 @@ NS.MathJaxEditor = function(id) {
         } else {
             se.append(se.createItem(json));
         }
-        render();
+        this.render();
     };
     /* Unselect the selected node if any
      * @method clear
@@ -364,7 +364,7 @@ NS.MathJaxEditor = function(id) {
             se = se.next;
             se.slots.push(math);
         }
-        render();
+        this.render();
     };
     /* Return output in various formats
      * @method output
@@ -389,16 +389,12 @@ NS.MathJaxEditor = function(id) {
             });
             return t;
         }
-        if (format === 'MathML') {
-            return canvas.get('node').one('script').getHTML();
+        switch(format) {
+            case 'MathML': return canvas.get('node').one('script').getHTML();
+            case 'HTML': return canvas.get('node').one('span').getHTML();
+            case 'JSON': return Y.JSON.stringify(cleanSnippet(math));
+            default: return se.output(format);
         }
-        if (format === 'HTML') {
-            return canvas.get('node').one('span').getHTML();
-        }
-        if (format === 'JSON') {
-            return Y.JSON.stringify(cleanSnippet(math));
-        }
-        return se.output(format);
     };
     this.getHTML = function() {
         return canvas.get('node').one('span').getHTML();
@@ -406,17 +402,17 @@ NS.MathJaxEditor = function(id) {
     this.redo = function() {
         se = se.redo();
         math = se.slots[0];
-        render();
+        this.render();
     };
     this.undo = function() {
         se = se.undo();
         math = se.slots[0];
-        render();
+        this.render();
     };
     this.makeDrops = function() {
         makeDrops();
     };
-    render();
+    this.render();
 };
 
 
