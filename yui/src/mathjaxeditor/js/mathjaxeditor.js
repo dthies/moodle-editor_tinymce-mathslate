@@ -160,11 +160,12 @@ NS.MathJaxEditor = function(id) {
     /* Add drag and drop functionality
      * @function makeDraggable
      */
-    function makeDraggable () {
+    this.makeDraggable = function() {
+        var context = this;
         if (shim) {
             shim.remove();
         }
-        makeDrops();
+        this.makeDrops();
         ddnodes = shim;
         preview.setHTML('<div class="' + CSS.PREVIEW + '">' + se.preview('tex') + '</div>');
         if (se.getSelected() && preview.one('#' + se.getSelected())) {
@@ -184,7 +185,7 @@ NS.MathJaxEditor = function(id) {
                 if (!selectedNode) {
                     e.stopPropagation();
                     se.select(this.getAttribute('id'));
-                    render();
+                    context.render();
                     return;
                 }
                 if (selectedNode === node) {
@@ -207,7 +208,7 @@ NS.MathJaxEditor = function(id) {
                 e.stopPropagation();
                 se.insertSnippet(node.getAttribute('id'), se.removeSnippet(selectedNode.getAttribute('id')));
                 se.select();
-                render();
+                context.render();
             };
             node.on('click', function(e) {
                 this.handleClick(e);
@@ -260,7 +261,7 @@ NS.MathJaxEditor = function(id) {
                 else if (dragTarget !== m[1].id && se.isItem(dragTarget) && !preview.one('#' + dragTarget).one('#' + m[1].id)) {
                     se.insertSnippet(e.drop.get('node').get('id'), se.removeSnippet(dragTarget));
                 }
-                render();
+                context.render();
             });
             drop.on('drop:enter', function(e) {
                 e.stopPropagation();
@@ -290,7 +291,7 @@ NS.MathJaxEditor = function(id) {
             });
             
         });
-    }
+    };
     /* Return snippet as MathML string
      * @method toMathML
      * @param object element
@@ -317,23 +318,25 @@ NS.MathJaxEditor = function(id) {
         });
         return str;
     }
-    function render() {
+    this.render = function() {
+        var context = this;
         se.rekey();
         var jax = MathJax.Hub.getAllJax(canvas.get('node').getDOMNode())[0];
         if (jax) {
             MathJax.Hub.Queue(function() {
                 MathJax.Hub.Queue(["Text", jax, '<math>' + toMathML(math) + '</math>']);
-                MathJax.Hub.Queue(makeDraggable);
+                MathJax.Hub.Queue(function() {context.makeDraggable();});
             });
         } else {
             canvas.get('node').setHTML('');
             MathJax.Hub.Queue(['addElement', MathJax.HTML, canvas.get('node').getDOMNode(), 'math', {display: "block"}, math]);
             MathJax.Hub.Queue(["Typeset", MathJax.Hub, canvas.get('node').getDOMNode()]);
-            MathJax.Hub.Queue(makeDraggable);
+            MathJax.Hub.Queue(function() {context.makeDraggable();});
         }
     }
-    this.render = render;
+
     this.toMathML = toMathML;
+
     /* Method for add adding an object to the workspace
      * @method addMath
      * @param string json
