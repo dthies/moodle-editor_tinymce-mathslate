@@ -11,7 +11,7 @@
  * Text editor mathslate plugin.
  *
  * @package    tinymce_mathslate
- * @copyright  2013-2014 Daniel Thies  <dthies@ccal.edu>
+ * @copyright  2013 onwards Daniel Thies  <dthies@ccal.edu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 M.tinymce_mathslate = M.tinymce_mathslate || {};
@@ -139,10 +139,10 @@ NS.MathJaxEditor = function(id) {
                 return;
             }
             s.appendChild('<span style="position: relative; opacity: 0"><math display="inline">' +
-                toMathML([Y.JSON.parse(se.getItemByID(s.getAttribute('id')))]).replace(/id="[^"]*"/,'') +
+                this.toMathML([Y.JSON.parse(se.getItemByID(s.getAttribute('id')))]).replace(/id="[^"]*"/,'') +
                 '</math></span>');
             s.setAttribute('style', 'position: absolute; top: 0; left: 0; margin: 0px; z-index: +1');
-        });
+        }, this);
         shim.all('span').each(function (s) {
             if (!canvas.get('node').one('#' + s.getAttribute('id'))) {
                 return;
@@ -191,7 +191,7 @@ NS.MathJaxEditor = function(id) {
                 if (selectedNode === node) {
                     if (preview.one('#' + node.getAttribute('id')).test('.' + CSS.PREVIEW + ' >')) {
                         se.select();
-                        render();
+                        context.render();
                         return;
                     }
                     node.removeClass(CSS.SELECTED);
@@ -296,7 +296,7 @@ NS.MathJaxEditor = function(id) {
      * @method toMathML
      * @param object element
      */
-    function toMathML(element) {
+    this.toMathML = function(element) {
         if (typeof element !== "object") { return element; }
         var str = '';
         element.forEach(function(m) {
@@ -312,12 +312,12 @@ NS.MathJaxEditor = function(id) {
             }
             str += '>';
             if (m[2]) {
-                str += toMathML(m[2]);
+                str += this.toMathML(m[2]);
             }
             str += '</' + m[0] + '>';
-        });
+        }, this);
         return str;
-    }
+    };
 
     this.render = function() {
         var context = this;
@@ -325,7 +325,7 @@ NS.MathJaxEditor = function(id) {
         var jax = MathJax.Hub.getAllJax(canvas.get('node').getDOMNode())[0];
         if (jax) {
             MathJax.Hub.Queue(function() {
-                MathJax.Hub.Queue(["Text", jax, '<math>' + toMathML(math) + '</math>']);
+                MathJax.Hub.Queue(["Text", jax, '<math>' + context.toMathML(math) + '</math>']);
                 MathJax.Hub.Queue(function() {context.makeDraggable();});
             });
         } else {
@@ -334,9 +334,7 @@ NS.MathJaxEditor = function(id) {
             MathJax.Hub.Queue(["Typeset", MathJax.Hub, canvas.get('node').getDOMNode()]);
             MathJax.Hub.Queue(function() {context.makeDraggable();});
         }
-    }
-
-    this.toMathML = toMathML;
+    };
 
     /* Method for add adding an object to the workspace
      * @method addMath
