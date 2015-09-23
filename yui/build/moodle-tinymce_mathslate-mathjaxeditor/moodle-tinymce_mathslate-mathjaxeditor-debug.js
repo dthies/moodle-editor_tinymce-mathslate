@@ -128,11 +128,11 @@ NS.MathJaxEditor = function(id) {
             + preview.getStyle('width') + '" class="' + CSS.HELPBOX + '"/>');
     });
 
-        /* Create drop shim above workspace
-         * @function makeDrops
-         *
-         */
-    function makeDrops() {
+    /* Create drop shim above workspace
+     * @function makeDrops
+     *
+     */
+    this.makeDrops = function() {
         shim = Y.Node.create('<span></span>');
         shim.setHTML(se.preview().replace(/div/g, 'span').replace(/<\/*br>/g, ''));
         Y.one(id).appendChild(shim);
@@ -157,7 +157,7 @@ NS.MathJaxEditor = function(id) {
             s.setStyle('height', rect.height);
         });
         MathJax.Hub.Queue(['Typeset', MathJax.Hub, shim.getDOMNode()]);
-    }
+    };
         
     /* Add drag and drop functionality
      * @function makeDraggable
@@ -320,6 +320,7 @@ NS.MathJaxEditor = function(id) {
         });
         return str;
     }
+
     this.render = function() {
         var context = this;
         se.rekey();
@@ -411,9 +412,6 @@ NS.MathJaxEditor = function(id) {
         se = se.undo();
         math = se.slots[0];
         this.render();
-    };
-    this.makeDrops = function() {
-        makeDrops();
     };
     this.render();
 };
