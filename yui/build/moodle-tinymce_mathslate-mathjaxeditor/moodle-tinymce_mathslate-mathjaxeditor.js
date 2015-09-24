@@ -326,10 +326,8 @@ NS.MathJaxEditor = function(id) {
         se.rekey();
         var jax = MathJax.Hub.getAllJax(canvas.get('node').getDOMNode())[0];
         if (jax) {
-            MathJax.Hub.Queue(function() {
-                MathJax.Hub.Queue(["Text", jax, '<math>' + context.toMathML(math) + '</math>']);
-                MathJax.Hub.Queue(function() {context.makeDraggable();});
-            });
+            MathJax.Hub.Queue(["Text", jax, '<math>' + context.toMathML(math) + '</math>']);
+            MathJax.Hub.Queue(function() {context.makeDraggable();});
         } else {
             canvas.get('node').setHTML('');
             MathJax.Hub.Queue(['addElement', MathJax.HTML, canvas.get('node').getDOMNode(), 'math', {display: "block"}, math]);
