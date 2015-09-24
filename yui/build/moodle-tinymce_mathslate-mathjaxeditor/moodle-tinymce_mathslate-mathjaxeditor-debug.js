@@ -37,9 +37,9 @@ var SELECTORS = {
        
 //Constructor for equation workspace
 NS.MathJaxEditor = function(id) {
-    var math = [];
+    this.math = [];
     var se = new NS.mSlots();
-    se.slots.push(math);
+    se.slots.push(this.math);
     var shim, ddnodes;
     this.workspace = Y.one(id).append('<div id="canvas" class="' + CSS.WORKSPACE + '"/>');
     var toolbar = Y.one(id).appendChild(Y.Node.create('<form></form>'));
@@ -102,23 +102,23 @@ NS.MathJaxEditor = function(id) {
 
     redo.on('click', function() {
         se = se.redo();
-        math = se.slots[0];
+        this.math = se.slots[0];
         this.render();
     }, this);
     undo.on('click', function() {
         se = se.undo();
-        math = se.slots[0];
+        this.math = se.slots[0];
         this.render();
     }, this);
     clear.on('click', function() {
         if (Y.one(id + ' ' + SELECTORS.SELECTED)) {
             se.removeSnippet(Y.one(id + ' ' + SELECTORS.SELECTED).getAttribute('id'));
         } else {
-            math = [];
+            this.math = [];
             se.next = new NS.mSlots();
             se.next.previous = se;
             se = se.next;
-            se.slots.push(math);
+            se.slots.push(this.math);
         }
         this.render();
     }, this);
@@ -322,18 +322,17 @@ NS.MathJaxEditor = function(id) {
     };
 
     this.render = function() {
-        var context = this;
         se.rekey();
         var jax = MathJax.Hub.getAllJax(canvas.get('node').getDOMNode())[0];
         if (jax) {
-            MathJax.Hub.Queue(["Text", jax, '<math>' + context.toMathML(math) + '</math>']);
-            MathJax.Hub.Queue(function() {context.makeDraggable();});
+            MathJax.Hub.Queue(["Text", jax, '<math>' + this.toMathML(this.math) + '</math>']);
         } else {
             canvas.get('node').setHTML('');
-            MathJax.Hub.Queue(['addElement', MathJax.HTML, canvas.get('node').getDOMNode(), 'math', {display: "block"}, math]);
+            MathJax.Hub.Queue(['addElement', MathJax.HTML, canvas.get('node').getDOMNode(), 'math', {display: "block"}, this.math]);
             MathJax.Hub.Queue(["Typeset", MathJax.Hub, canvas.get('node').getDOMNode()]);
-            MathJax.Hub.Queue(function() {context.makeDraggable();});
         }
+        MathJax.Hub.Queue(['makeDraggable', this]);
+
     };
 
     /* Method for add adding an object to the workspace
@@ -358,11 +357,11 @@ NS.MathJaxEditor = function(id) {
         if (Y.one(id + ' ' + SELECTORS.SELECTED)) {
             se.removeSnippet(Y.one(id + ' ' + SELECTORS.SELECTED).getAttribute('id'));
         } else {
-            math = [];
+            this.math = [];
             se.next = new NS.mSlots();
             se.next.previous = se;
             se = se.next;
-            se.slots.push(math);
+            se.slots.push(this.math);
         }
         this.render();
     };
@@ -392,7 +391,7 @@ NS.MathJaxEditor = function(id) {
         switch(format) {
             case 'MathML': return canvas.get('node').one('script').getHTML();
             case 'HTML': return canvas.get('node').one('span').getHTML();
-            case 'JSON': return Y.JSON.stringify(cleanSnippet(math));
+            case 'JSON': return Y.JSON.stringify(cleanSnippet(this.math));
             default: return se.output(format);
         }
     };
@@ -401,12 +400,12 @@ NS.MathJaxEditor = function(id) {
     };
     this.redo = function() {
         se = se.redo();
-        math = se.slots[0];
+        this.math = se.slots[0];
         this.render();
     };
     this.undo = function() {
         se = se.undo();
-        math = se.slots[0];
+        this.math = se.slots[0];
         this.render();
     };
     this.render();
