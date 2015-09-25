@@ -319,6 +319,9 @@ NS.MathJaxEditor = function(id) {
         return str;
     };
 
+    /* Reset the editor display and reinitialize drag and drop
+     * @method render
+     */
     this.render = function() {
         se.rekey();
         var jax = MathJax.Hub.getAllJax(canvas.get('node').getDOMNode())[0];
@@ -393,14 +396,26 @@ NS.MathJaxEditor = function(id) {
             default: return se.output(format);
         }
     };
+    /* Get HTML representation of the constructed mathematics
+     * @method getHTML
+     * @return String HTML rendering of the editor content
+     */
     this.getHTML = function() {
         return canvas.get('node').one('span').getHTML();
     };
+
+    /* Change back to state undone
+     * @method redo
+     */
     this.redo = function() {
         se = se.redo();
         this.math = se.slots[0];
         this.render();
     };
+
+    /* Restore to last saved state
+     * @method undo
+     */
     this.undo = function() {
         se = se.undo();
         this.math = se.slots[0];
