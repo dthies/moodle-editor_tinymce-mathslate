@@ -190,14 +190,14 @@ NS.MathJaxEditor = function(id) {
                     context.render();
                     return;
                 }
-                if (selectedNode === node) {
-                    if (preview.one('#' + node.getAttribute('id')).test('.' + CSS.PREVIEW + ' >')) {
+                if (selectedNode === this) {
+                    if (preview.one('#' + this.getAttribute('id')).test('.' + CSS.PREVIEW + ' >')) {
                         se.select();
                         context.render();
                         return;
                     }
-                    node.removeClass(CSS.SELECTED);
-                    preview.one('#' + node.getAttribute('id')).removeClass(CSS.SELECTED);
+                    this.removeClass(CSS.SELECTED);
+                    preview.one('#' + this.getAttribute('id')).removeClass(CSS.SELECTED);
                     canvas.get('node').one('#' + se.getSelected()).removeAttribute('mathcolor');
                     canvas.get('node').one('#' + se.getSelected()).removeAttribute('stroke');
                     canvas.get('node').one('#' + se.getSelected()).removeAttribute('fill');
@@ -208,7 +208,7 @@ NS.MathJaxEditor = function(id) {
                     return;
                 }
                 e.stopPropagation();
-                se.insertSnippet(node.getAttribute('id'), se.removeSnippet(selectedNode.getAttribute('id')));
+                se.insertSnippet(this.getAttribute('id'), se.removeSnippet(selectedNode.getAttribute('id')));
                 se.select();
                 context.render();
             };
