@@ -19,8 +19,8 @@ YUI.add('moodle-tinymce_mathslate-dialogue', function (Y, NAME) {
  * Tinymce text editor mathslate plugin.
  *
  * @package    editor-tinymce
- * @subpackage    mathslate
- * @copyright  2013 Daniel Thies  <dthies@ccal.edu>
+ * @subpackage mathslate
+ * @copyright  2013 ownwards Daniel Thies  <dthies@ccal.edu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 M.tinymce_mathslate = M.tinymce_mathslate || {};

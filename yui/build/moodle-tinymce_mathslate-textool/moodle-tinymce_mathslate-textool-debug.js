@@ -12,7 +12,7 @@ YUI.add('moodle-tinymce_mathslate-textool', function (Y, NAME) {
  * Text editor mathslate plugin.
  *
  * @package    tinymce_mathslate
- * @copyright  2013 Daniel Thies  <dthies@ccal.edu>
+ * @copyright  2013 onwards Daniel Thies  <dthies@ccal.edu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

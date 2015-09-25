@@ -45,7 +45,6 @@ NS.MathJaxEditor = function(id) {
     var toolbar = Y.one(id).appendChild(Y.Node.create('<form></form>'));
     var preview = Y.one(id).appendChild(Y.Node.create('<div class="' + CSS.PANEL + '"/>'));
     preview.delegate('click', function(e) {
-        //canvas.get('node').one('#' + this.getAttribute('id')).handleClick(e);
         ddnodes.one('#' + this.getAttribute('id')).handleClick(e);
     }, 'div');
     var canvas = new Y.DD.Drop({
