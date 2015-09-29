@@ -33,7 +33,7 @@ NS.mSlots = function() {
     /* save the state of the editor on the stack at location Stackpointer
      * @function saveState
      */
-    function saveState () {
+    this.saveState = function() {
         stack.splice(stackPointer);
         var cs = slots.slice(0);
         var ci =[];
@@ -41,11 +41,11 @@ NS.mSlots = function() {
             ci.push(s.slice(0));
         });
         stack[stackPointer] = [cs, ci];
-    }
+    };
     /* restore a saved state of the editor from the stack
      * @function restoreState
      */
-    function restoreState() {
+    this.restoreState = function() {
         slots.splice(0);
         if (slots[0]) {
             slots.pop();
@@ -62,7 +62,7 @@ NS.mSlots = function() {
             });
             slots.push(s);
         });
-    }
+    };
     /* Restore previous state after undo
      * @method redo
      */
@@ -71,7 +71,7 @@ NS.mSlots = function() {
             return this.next || this;
         }
         stackPointer++;
-        restoreState();
+        this.restoreState();
         return this;
     };
     /* Restore earlier stored state and decrement pointer
@@ -86,7 +86,7 @@ NS.mSlots = function() {
             slots[0].pop();
             return this;
             }
-        restoreState();
+        this.restoreState();
         return this;
     };
     /* Create an expression from json of a snippet passed
@@ -180,7 +180,7 @@ NS.mSlots = function() {
         });
         stackPointer++;
         this.next = null;
-        saveState();
+        this.saveState();
         return ;
     },
     /* Add new expression to workspace following all others
@@ -191,7 +191,7 @@ NS.mSlots = function() {
         slots[0].push(element);
         stackPointer++;
         this.next = null;
-        saveState();
+        this.saveState();
         return ;
     },
     /* Iterate through all draggable expressions executing callback
