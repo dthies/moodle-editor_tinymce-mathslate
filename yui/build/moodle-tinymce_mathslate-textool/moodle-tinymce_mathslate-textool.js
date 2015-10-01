@@ -25,13 +25,14 @@ var NS = M && M.tinymce_mathslate || {};
  */
 NS.TeXTool = function(editorID, addMath) {
     var input = Y.Node.create('<input type="text">');
+    input = Y.one('#latex-input');
     var tool = Y.Node.create('<span>\\[ \\]</span>');
     if (addMath) {
         tool.on('click', function() {
             addMath(tool.json);
         });
     }
-    Y.one(editorID).appendChild(input);
+    //Y.one(editorID).appendChild(input);
     Y.one(editorID).appendChild(tool);
     input.focus();
     var drag = new Y.DD.Drag({node: tool});

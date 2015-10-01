@@ -52,8 +52,10 @@ NS.Editor = function(editorID, config, params) {
     this.node.setHTML('<div id="' + toolboxID + '" class="' + CSS.TOOLBOX + '">'
             + '<div style="background-color: white; color: green; height: 300px; line-height: 75px; '
             + 'font-size: 18px; text-align:center"><br />Mathslate Mathematics Editor<br />'
-            + 'Version 1.1</div><script type="math/tex">\\quad</script><math> <mo> </mo></math></div>'
+            + 'Version 1.2Alpha</div><script type="math/tex">\\quad</script><math> <mo> </mo></math></div>'
             + '<div id="' + workID + '" ></div>');
+
+     this.node.append('<input id="latex-input" type="text"></input>');
 
     var mje = new NS.MathJaxEditor('#' + workID);
     var tbox = {
@@ -230,6 +232,21 @@ NS.Editor = function(editorID, config, params) {
            mje.addMath(tool.json);
        }
     }, 'span .yui3-dd-draggable');
+
+    Y.one('#latex-input').on('blur', function() {
+       this.focusTeXInput();
+    }, this);
+
+    this.node.on('click', function() {
+       this.focusTeXInput();
+    }, this);
+
+    this.focusTeXInput = function() {
+       var input = Y.one('#latex-input');
+       if (input) {
+           input.focus();
+       }
+    };
 
 };
 
