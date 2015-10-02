@@ -114,6 +114,7 @@ NS.TeXTool = function(editorID, addMath) {
             tool.json = Y.JSON.stringify(["mrow", {"tex": [tex]}, Y.JSON.parse(output)[2]]);
             drag.set('data', tool.json);
             addMath(tool.json);
+            input.select();
         });
     });
 };
