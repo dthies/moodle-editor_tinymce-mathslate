@@ -125,7 +125,7 @@ NS.Editor = function(editorID, config, params) {
                         + "<mrow class=\"MJX-TeXAtom-ORD\"><mi>E</mi></mrow></mpadded>"
                         + "<mspace width=\"-.115em\" /> <mi>X</mi> </math></span>",
                     content: '<span id="' + latexToolID
-                        + '"><input id="latex-input" type="text" style="position: absolute"></input></span>'
+                        + '"><input id="latex-input" type="text"></input></span>'
                 });
             });
             MathJax.Hub.Register.StartupHook('End', function() {
