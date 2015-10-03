@@ -10,7 +10,7 @@
  * Text editor mathslate plugin.
  *
  * @package    tinymce_mathslate
- * @copyright  2013 Daniel Thies  <dthies@ccal.edu>
+ * @copyright  2013 onwards Daniel Thies  <dthies@ccal.edu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -23,13 +23,14 @@ var NS = M && M.tinymce_mathslate || {};
  */
 NS.TeXTool = function(editorID, addMath) {
     var input = Y.Node.create('<input type="text">');
+    input = Y.one('#latex-input');
     var tool = Y.Node.create('<span>\\[ \\]</span>');
     if (addMath) {
         tool.on('click', function() {
             addMath(tool.json);
         });
     }
-    Y.one(editorID).appendChild(input);
+    //Y.one(editorID).appendChild(input);
     Y.one(editorID).appendChild(tool);
     input.focus();
     var drag = new Y.DD.Drag({node: tool});
@@ -111,6 +112,7 @@ NS.TeXTool = function(editorID, addMath) {
             tool.json = Y.JSON.stringify(["mrow", {"tex": [tex]}, Y.JSON.parse(output)[2]]);
             drag.set('data', tool.json);
             addMath(tool.json);
+            input.select();
         });
     });
 };

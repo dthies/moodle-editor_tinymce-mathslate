@@ -13,7 +13,7 @@ YUI.add('moodle-tinymce_mathslate-editor', function (Y, NAME) {
  * Text editor mathslate plugin.
  *
  * @package    tinymce_mathslate
- * @copyright  2013-4 Daniel Thies  <dthies@ccal.edu>
+ * @copyright  2013 onwards Daniel Thies  <dthies@ccal.edu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -49,10 +49,10 @@ NS.Editor = function(editorID, config, params) {
     var workID = Y.guid();
     this.node.addClass(CSS.EDITOR);
     //Place math editor on page
-    this.node.setHTML('<div id="' + toolboxID + '" class="' + CSS.TOOLBOX + '">'
+    this.node.setHTML('<div id="' + toolboxID + '" class="' + CSS.TOOLBOX + '" style="positon: relative">'
             + '<div style="background-color: white; color: green; height: 300px; line-height: 75px; '
             + 'font-size: 18px; text-align:center"><br />Mathslate Mathematics Editor<br />'
-            + 'Version 1.1</div><script type="math/tex">\\quad</script><math> <mo> </mo></math></div>'
+            + 'Version 1.2 Alpha</div><script type="math/tex">\\quad</script><math> <mo> </mo></math></div>'
             + '<div id="' + workID + '" ></div>');
 
     var mje = new NS.MathJaxEditor('#' + workID);
@@ -126,7 +126,8 @@ NS.Editor = function(editorID, config, params) {
                         + "<mpadded height=\"-.5ex\" depth=\"+.5ex\" voffset=\"-.5ex\">"
                         + "<mrow class=\"MJX-TeXAtom-ORD\"><mi>E</mi></mrow></mpadded>"
                         + "<mspace width=\"-.115em\" /> <mi>X</mi> </math></span>",
-                    content: "<span id='" + latexToolID + "'></span>"
+                    content: '<span id="' + latexToolID
+                        + '"><input id="latex-input" type="text" style="position: absolute"></input></span>'
                 });
             });
             MathJax.Hub.Register.StartupHook('End', function() {
@@ -164,7 +165,8 @@ NS.Editor = function(editorID, config, params) {
                     });
                 });
             });
-        return tabview;
+            this.tabview = tabview;
+            return tabview;
         },
         /* Return a tool array for a give id
          * @function getToolByID
@@ -217,12 +219,14 @@ NS.Editor = function(editorID, config, params) {
     } else {
         request = Y.io(config);
     }
+
     this.tbox = tbox;
     this.mje = mje;
     mje.canvas.on('drop:hit', function(e) {
         if (e.drag.get('data')) {
             mje.addMath(e.drag.get('data'));
         }
+
     });
     Y.one('#' + toolboxID).delegate('click', function() {
        var tool = tbox.getToolByID(this.getAttribute('id'));
@@ -231,6 +235,23 @@ NS.Editor = function(editorID, config, params) {
        }
     }, 'span .yui3-dd-draggable');
 
+    /**
+     * @function focusTeXinput Make sure TeX input is ready to receive key
+     */
+    this.focusTeXInput = function(e) {
+       var input = Y.one('#' + latexToolID + ' #latex-input');
+       if (!input) {
+           return;
+       }
+       if (e.type === 'key') {
+           this.tbox.tabview.selectChild(0);
+       }
+       input.focus();
+    };
+
+    Y.one(editorID + ', #' + toolboxID).after('click', this.focusTeXInput, this);
+
+    this.node.on('key', this.focusTeXInput, 'down:', this);
 };
 
 

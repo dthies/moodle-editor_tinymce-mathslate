@@ -11,11 +11,13 @@
  * Text editor mathslate plugin.
  *
  * @package    tinymce_mathslate
- * @copyright  2013 Daniel Thies  <dthies@ccal.edu>
+ * @copyright  2013 onwards Daniel Thies  <dthies@ccal.edu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 M.tinymce_mathslate = M.tinymce_mathslate || {};
 var NS = M && M.tinymce_mathslate || {};
+
 /* Constructor function for Snippet editor
  * @function NS.mSlots
  */
@@ -25,10 +27,11 @@ NS.mSlots = function() {
     var stackPointer = 0;
     var slots = [];
     this.slots = slots;
-/* save the state of the editor on the stack at location Stackpointer
- * @function saveState
- */
-    function saveState () {
+
+    /* save the state of the editor on the stack at location Stackpointer
+     * @function saveState
+     */
+    this.saveState = function() {
         stack.splice(stackPointer);
         var cs = slots.slice(0);
         var ci =[];
@@ -36,11 +39,11 @@ NS.mSlots = function() {
             ci.push(s.slice(0));
         });
         stack[stackPointer] = [cs, ci];
-    }
-/* restore a saved state of the editor from the stack
- * @function restoreState
- */
-    function restoreState() {
+    };
+    /* restore a saved state of the editor from the stack
+     * @function restoreState
+     */
+    this.restoreState = function() {
         slots.splice(0);
         if (slots[0]) {
             slots.pop();
@@ -57,21 +60,21 @@ NS.mSlots = function() {
             });
             slots.push(s);
         });
-    }
-/* Restore previous state after undo
- * @method redo
- */
+    };
+    /* Restore previous state after undo
+     * @method redo
+     */
     this.redo = function() {
         if (!stack[stackPointer + 1]) {
             return this.next || this;
         }
         stackPointer++;
-        restoreState();
+        this.restoreState();
         return this;
     };
-/* Restore earlier stored state and decrement pointer
- * @method undo
- */
+    /* Restore earlier stored state and decrement pointer
+     * @method undo
+     */
     this.undo = function() {
         if (stackPointer === 0) {
             return this.previous || this;
@@ -81,13 +84,13 @@ NS.mSlots = function() {
             slots[0].pop();
             return this;
             }
-        restoreState();
+        this.restoreState();
         return this;
     };
-/* Create an expression from json of a snippet passed
- * @method createItem
- * @param string json
- */
+    /* Create an expression from json of a snippet passed
+     * @method createItem
+     * @param string json
+     */
     this.createItem = function(json) {
         function findBlank(snippet) {
             if (Array.isArray(snippet[2])) {
@@ -112,10 +115,10 @@ NS.mSlots = function() {
             findBlank(newMath);
         return newMath;
     };
-/* Locate a draggable expression by its currently assigned ID
- * @method getItemById
- * @param string id
- */
+    /* Locate a draggable expression by its currently assigned ID
+     * @method getItemById
+     * @param string id
+     */
     this.getItemByID = function(id) {
         var str;
         this.slots.forEach(function(slot) {
@@ -124,11 +127,11 @@ NS.mSlots = function() {
             });
         });
         return str;},
-/* Determine whether ID corresponds to a valid draggable expression
- * @method isItem
- * @param string id
- * @return boolean
- */
+    /* Determine whether ID corresponds to a valid draggable expression
+     * @method isItem
+     * @param string id
+     * @return boolean
+     */
     this.isItem = function(id) {
         var found = false;
         this.slots.forEach(function(slot) {
@@ -138,11 +141,11 @@ NS.mSlots = function() {
             });
         });
         return found;},
-/* Delete an expression and return the snippet of the expression
- * @method removeSnippet
- * @param string id
- * @return array
- */
+    /* Delete an expression and return the snippet of the expression
+     * @method removeSnippet
+     * @param string id
+     * @return array
+     */
     this.removeSnippet = function(id) {
         var item = 0;
         this.slots.forEach(function(slot) {
@@ -155,11 +158,11 @@ NS.mSlots = function() {
         });
         return item;
     },
-/* Insert the snippet of an expression before expression with given ID
- * @method removeSnippet
- * @param string id
- * @param array s
- */
+    /* Insert the snippet of an expression before expression with given ID
+     * @method removeSnippet
+     * @param string id
+     * @param array s
+     */
     this.insertSnippet = function(id, s) {
         var item = 0;
         this.slots.forEach(function(slot) {
@@ -175,24 +178,24 @@ NS.mSlots = function() {
         });
         stackPointer++;
         this.next = null;
-        saveState();
+        this.saveState();
         return ;
     },
-/* Add new expression to workspace following all others
- * @method append
- * @param array element
- */
+    /* Add new expression to workspace following all others
+     * @method append
+     * @param array element
+     */
     this.append = function(element) {
         slots[0].push(element);
         stackPointer++;
         this.next = null;
-        saveState();
+        this.saveState();
         return ;
     },
-/* Iterate through all draggable expressions executing callback
- * @method forEach
- * @param function f
- */
+    /* Iterate through all draggable expressions executing callback
+     * @method forEach
+     * @param function f
+     */
     this.forEach = function(f) {
         this.slots.forEach(function(slot) {
             slot.forEach(function(m) {
@@ -200,9 +203,9 @@ NS.mSlots = function() {
                 });
             });
         },
-/* Assign new IDs to all elements to avoid inference of MathJax with YUI in display
- * @method rekey
- */
+    /* Assign new IDs to all elements to avoid inference of MathJax with YUI in display
+     * @method rekey
+     */
     this.rekey = function() {
         var buffer = this;
         this.slots.forEach(function(s) {
@@ -225,10 +228,10 @@ NS.mSlots = function() {
             
         });
     },
-/* Return output in various formats
- * @method output
- * @param string format
- */
+    /* Return output in various formats
+     * @method output
+     * @param string format
+     */
     this.output = function(format) {
             function generateMarkup (s) {
                var str = '';
@@ -263,10 +266,10 @@ NS.mSlots = function() {
                });
             return str;
     };
-/* Return output in various formats with html tags included to display in browser
- * @method output
- * @param string format
- */
+    /* Return output in various formats with html tags included to display in browser
+     * @method output
+     * @param string format
+     */
     this.preview = function(format) {
             function generateMarkup (s) {
                var str = '';
@@ -312,10 +315,10 @@ NS.mSlots = function() {
                });
             return str;
     };
-/* Mark expression with current ID as selected
- * @method select
- * @param string id
- */
+    /* Mark expression with current ID as selected
+     * @method select
+     * @param string id
+     */
     this.select = function(id) {
         selected = null;
         this.slots.forEach(function(slot) {
@@ -324,11 +327,11 @@ NS.mSlots = function() {
             });
         });
     };
-/* Get ID of the selected expression
- * @method getSelected
- * @param string id
- * @return string || false
- */
+    /* Get ID of the selected expression
+     * @method getSelected
+     * @param string id
+     * @return string || false
+     */
     this.getSelected = function() {
         return selected && selected[1].id;
     };
