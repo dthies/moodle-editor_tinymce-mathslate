@@ -116,7 +116,7 @@ NS.Editor = function(editorID, config, params) {
         fillToolBox: function(tools, toolboxID) {
             var tabs = {children: []};
             var tabview;
-            MathJax.Hub.Register.StartupHook('TeX Jax Config', function() {
+            MathJax.Hub.Register.StartupHook('TeX Jax Config', [this, function() {
                 if (!params.texInput) {
                     return;
                 }
@@ -127,9 +127,13 @@ NS.Editor = function(editorID, config, params) {
                         + "<mrow class=\"MJX-TeXAtom-ORD\"><mi>E</mi></mrow></mpadded>"
                         + "<mspace width=\"-.115em\" /> <mi>X</mi> </math></span>",
                     content: '<span id="' + latexToolID
-                        + '"><input id="latex-input" type="text" style="position: absolute"></input></span>'
+                        + '"></input></span>'
                 });
-            });
+                mje.toolbar.append('<input id="tex-input" type="text" />');
+                mje.toolbar.on('submit', function(e) {
+                    e.preventDefault();
+                });
+            }]);
             MathJax.Hub.Register.StartupHook('End', function() {
                 tools.forEach(function(tab) {
                     var q = Y.Node.create('<p></p>');
@@ -239,7 +243,7 @@ NS.Editor = function(editorID, config, params) {
      * @function focusTeXinput Make sure TeX input is ready to receive key
      */
     this.focusTeXInput = function(e) {
-       var input = Y.one('#' + latexToolID + ' #latex-input');
+       var input = this.mje.toolbar.one('#tex-input');
        if (!input) {
            return;
        }
@@ -249,7 +253,7 @@ NS.Editor = function(editorID, config, params) {
        input.focus();
     };
 
-    Y.one(editorID + ', #' + toolboxID).after('click', this.focusTeXInput, this);
+    Y.one(editorID + ', #' + toolboxID).on('click', this.focusTeXInput, this);
 
     this.node.on('key', this.focusTeXInput, 'down:', this);
 };

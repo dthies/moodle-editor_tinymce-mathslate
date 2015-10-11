@@ -42,7 +42,7 @@ NS.MathJaxEditor = function(id) {
     se.slots.push(this.math);
     var shim, ddnodes;
     this.workspace = Y.one(id).append('<div id="canvas" class="' + CSS.WORKSPACE + '"/>');
-    var toolbar = Y.one(id).appendChild(Y.Node.create('<form></form>'));
+    this.toolbar = Y.one(id).appendChild(Y.Node.create('<form></form>'));
     var preview = Y.one(id).appendChild(Y.Node.create('<div class="' + CSS.PANEL + '"/>'));
     preview.delegate('click', function(e) {
         ddnodes.one('#' + this.getAttribute('id')).handleClick(e);
@@ -94,10 +94,10 @@ NS.MathJaxEditor = function(id) {
            + M.util.get_string('help', 'tinymce_mathslate') + '">'
            + '<math><mi>&#xE47C;</mi></math>'
            + '</button>');
-    toolbar.appendChild(clear);
-    toolbar.appendChild(undo);
-    toolbar.appendChild(redo);
-    toolbar.appendChild(help);
+    this.toolbar.appendChild(clear);
+    this.toolbar.appendChild(undo);
+    this.toolbar.appendChild(redo);
+    this.toolbar.appendChild(help);
 
     redo.on('click', function() {
         se = se.redo();
