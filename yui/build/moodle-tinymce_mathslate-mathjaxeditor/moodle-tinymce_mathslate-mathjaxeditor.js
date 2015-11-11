@@ -37,9 +37,11 @@ var SELECTORS = {
        
 //Constructor for equation workspace
 NS.MathJaxEditor = function(id) {
+    MathJax.Ajax.Require("[Mathslate]/snippeteditor.js");
     this.math = [];
-    var se = new NS.mSlots();
-    se.slots.push(this.math);
+    var se,
+        context = this; 
+
     var shim, ddnodes;
     this.workspace = Y.one(id).append('<div id="canvas" class="' + CSS.WORKSPACE + '"/>');
     this.toolbar = Y.one(id).appendChild(Y.Node.create('<form></form>'));
@@ -114,7 +116,8 @@ NS.MathJaxEditor = function(id) {
             se.removeSnippet(Y.one(id + ' ' + SELECTORS.SELECTED).getAttribute('id'));
         } else {
             this.math = [];
-            se.next = new NS.mSlots();
+            //se.next = new NS.mSlots();
+            se.next = new MathJax.Mathslate.mSlots();
             se.next.previous = se;
             se = se.next;
             se.slots.push(this.math);
@@ -360,7 +363,7 @@ NS.MathJaxEditor = function(id) {
             se.removeSnippet(Y.one(id + ' ' + SELECTORS.SELECTED).getAttribute('id'));
         } else {
             this.math = [];
-            se.next = new NS.mSlots();
+            se.next = new MathJax.Mathslate.mSlots();
             se.next.previous = se;
             se = se.next;
             se.slots.push(this.math);
@@ -422,7 +425,13 @@ NS.MathJaxEditor = function(id) {
         this.math = se.slots[0];
         this.render();
     };
-    this.render();
+
+    MathJax.Hub.Register.StartupHook("Snippet Editor Ready", function () {
+        se = new MathJax.Mathslate.mSlots();
+        se.slots.push(context.math);
+        context.render();
+    });
+
 };
 
 
