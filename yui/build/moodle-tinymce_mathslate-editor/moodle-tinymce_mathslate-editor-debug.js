@@ -157,7 +157,10 @@ NS.Editor = function(editorID, config, params) {
                     Y.one('#' + toolboxID).setHTML('');
                     tabview.render('#' + toolboxID);
                     if (Y.one('#' + latexToolID)) {
-                        new NS.TeXTool('#' + latexToolID, function(json) {mje.addMath(json);});
+                        MathJax.Ajax.Require("[Mathslate]/textool.js");
+                        MathJax.Hub.Register.StartupHook('TeX Input Tool Ready', function() {
+                            new MathJax.Mathslate.TeXTool('#' + latexToolID, function(json) {mje.addMath(json);});
+                        });
                     }
                 }
                 MathJax.Hub.Queue(["Typeset", MathJax.Hub, toolboxID]);

@@ -14,10 +14,14 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+MathJax.Ajax.Require("[Mathslate]/snippeteditor.js");
+
 MathJax.Hub.Register.StartupHook("TeX Jax Ready", function () {
 
 MathJax.Mathslate = MathJax.Mathslate || {};
 var NS = MathJax.Mathslate;
+
+MathJax.Hub.Register.StartupHook("Snippet Editor Ready", function () {
 
 /* Constructor function for an editor of a page.
  * @method Editor
@@ -29,26 +33,14 @@ NS.TeXTool = function(editorID, addMath) {
     //var input = Y.one('#tex-input');
     var input = document.getElementById('tex-input');
     //var tool = Y.Node.create('<span>\\[ \\]</span>');
-    var tool = document.getElementById(editorID).appendChild('<span>\\[ \\]</span>');
-/*
-    if (addMath) {
-        tool.on('click', function() {
-            addMath(tool.json);
-        });
-    }
-*/
-//    Y.one(editorID).appendChild(tool);
+
+    var toolID = 'MJX-' + NS.guid();
+    document.getElementById(editorID).innerHTML = '<span id="' + toolID + '" draggable="true" >\\[ \\]</span>';
+    var tool = document.getElementById(toolID);
     input.focus();
-/*
-    var drag = new Y.DD.Drag({node: tool});
-    drag.on('drag:end', function() {
-        this.get('node').setStyle('top' , '0');
-        this.get('node').setStyle('left' , '0');
-    });
-*/
     tool.toMathML = function(callback) {
         var mml;
-        var jax = window.MathJax.Hub.getAllJax(this.generateID())[0];
+        var jax = window.MathJax.Hub.getAllJax(toolID)[0];
         try {
             mml = jax.root.toMathML("");
         } catch(err) {
@@ -57,12 +49,13 @@ NS.TeXTool = function(editorID, addMath) {
         }
         window.MathJax.Callback(callback)(mml);
     };
-    input.on ('change', function() {
-        var jax = window.MathJax.Hub.getAllJax(tool.generateID())[0];
-        var tex = this.getDOMNode().value;
+    input.addEventListener('keyup', this.processTeXInput);
+    this.processTeXInput = function() {
+        var jax = window.MathJax.Hub.getAllJax(toolID)[0];
+        var tex = input.value;
         if (!jax) {return;}
         var output = '';
-        window.MathJax.Hub.Queue(['Text', jax, this.getDOMNode().value]);
+        window.MathJax.Hub.Queue(['Text', jax, input.value]);
 
         var parse = function (mml) {
             if (/<mtext mathcolor="red">/.test(mml) || /<merror/.test(mml)) {
@@ -118,15 +111,34 @@ NS.TeXTool = function(editorID, addMath) {
                 return;
             }
             tool.json = JSON.stringify(["mrow", {"tex": [tex]}, JSON.parse(output)[2]]);
-            // drag.set('data', tool.json);
             addMath(tool.json);
             input.select();
         });
+    };
+    //input.onchange = this.processTeXInput;
+    input.addEventListener('change', this.processTeXInput, true);
+    if (addMath) {
+        //tool.on('click', function() {
+        tool.onclick = function() {
+            addMath(tool.json);
+        };
+    }
+/*
+    var drag = new Y.DD.Drag({node: tool});
+    drag.on('drag:end', function() {
+        this.get('node').setStyle('top' , '0');
+        this.get('node').setStyle('left' , '0');
     });
+*/
+            // drag.set('data', tool.json);
 
+    MathJax.Hub.Queue(['Typeset', MathJax.Hub, toolID]);
 };
 
+});
+
 MathJax.Hub.Startup.signal.Post("TeX Input Tool Ready");
+
 });
 
 MathJax.Ajax.loadComplete("[Mathslate]/textool.js");
