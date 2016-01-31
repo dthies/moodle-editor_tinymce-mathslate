@@ -435,4 +435,4 @@ NS.MathJaxEditor = function(id) {
 };
 
 
-}, '@VERSION@', {"requires": ["moodle-tinymce_mathslate-snippeteditor", "dd-drop"]});
+}, '@VERSION@', {"requires": ["dd-drop"]});

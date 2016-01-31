@@ -280,7 +280,6 @@ NS.Editor = function(editorID, config, params) {
         "tabview",
         "io-base",
         "json",
-        "moodle-tinymce_mathslate-textool",
         "moodle-tinymce_mathslate-mathjaxeditor"
     ]
 });
