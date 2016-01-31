@@ -159,7 +159,16 @@ NS.Editor = function(editorID, config, params) {
                     if (Y.one('#' + latexToolID)) {
                         MathJax.Ajax.Require("[Mathslate]/textool.js");
                         MathJax.Hub.Register.StartupHook('TeX Input Tool Ready', function() {
-                            new MathJax.Mathslate.TeXTool('#' + latexToolID, function(json) {mje.addMath(json);});
+                            var drag = new Y.DD.Drag({node: Y.one('#' + latexToolID)});
+                            new MathJax.Mathslate.TeXTool('#' + latexToolID, function(json) {
+                                mje.addMath(json);
+                                drag.set('data', json);
+                            });
+                            drag.on('drag:end', function() {
+                                this.get('node').setStyle('top' , '0');
+                                this.get('node').setStyle('left' , '0');
+                            });
+
                         });
                     }
                 }
