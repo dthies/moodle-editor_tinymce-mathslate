@@ -101,30 +101,6 @@ NS.MathJaxEditor = function(id) {
     this.toolbar.appendChild(redo);
     this.toolbar.appendChild(help);
 
-    redo.on('click', function() {
-        se = se.redo();
-        this.math = se.slots[0];
-        this.render();
-    }, this);
-    undo.on('click', function() {
-        se = se.undo();
-        this.math = se.slots[0];
-        this.render();
-    }, this);
-    clear.on('click', function() {
-        if (Y.one(id + ' ' + SELECTORS.SELECTED)) {
-            se.removeSnippet(Y.one(id + ' ' + SELECTORS.SELECTED).getAttribute('id'));
-        } else {
-            this.math = [];
-            //se.next = new NS.mSlots();
-            se.next = new MathJax.Mathslate.mSlots();
-            se.next.previous = se;
-            se = se.next;
-            se.slots.push(this.math);
-        }
-        this.render();
-    }, this);
-
     help.on('click', function() {
         preview.setHTML('<iframe src="' + NS.help + '" style="width: '
             + preview.getStyle('width') + '" class="' + CSS.HELPBOX + '"/>');
@@ -425,6 +401,10 @@ NS.MathJaxEditor = function(id) {
         this.math = se.slots[0];
         this.render();
     };
+
+    redo.on('click', this.redo, this);
+    undo.on('click', this.undo, this);
+    clear.on('click', this.clear, this);
 
     MathJax.Hub.Register.StartupHook("Snippet Editor Ready", function () {
         se = new MathJax.Mathslate.mSlots();
