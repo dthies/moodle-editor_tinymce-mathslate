@@ -56,84 +56,183 @@ NS.MathJaxEditor = function(id) {
     }, this);
 
     //Place buttons for internal editor functions
-/*
-    var undo = Y.Node.create('<button type="button" class="'
-           + CSS.UNDO + '">' + '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
-           + M.util.image_url('undo', 'editor_tinymce')
-           + '" title="' + M.util.get_string('undo', 'tinymce_mathslate') + '"/></button>');
-    var redo = Y.Node.create('<button type="button" class="'
-           + CSS.REDO + '">' + '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
-           + M.util.image_url('redo', 'editor_tinymce') + '" title="'
-           + M.util.get_string('redo', 'tinymce_mathslate') + '"/></button>');
-    var clear = Y.Node.create('<button type="button" class="'
-           + CSS.CLEAR + '">' + '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
-           + M.util.image_url('delete', 'editor_tinymce') + '" title="'
-           + M.util.get_string('clear', 'tinymce_mathslate') + '"/></button>');
-    var help = Y.Node.create('<button type="button" class="'
-           + CSS.HELP + '">' + '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
-           + M.util.image_url('help', 'core') + '" title="'
-           + M.util.get_string('help', 'tinymce_mathslate') + '"/></button>');
-*/
 
-    var undo = Y.Node.create('<button type="button" class="' + CSS.UNDO + '"'
-           + '" title="' + M.util.get_string('undo', 'tinymce_mathslate') + '"/>'
-           + '<math><mo>&#x25C1;</mo></math>'
-           + '</button>');
+    var undo = document.createElement('button');
+        undo.type = 'button';
+        undo.title = M.util.get_string('redo', 'tinymce_mathslate');
+        undo['class'] = CSS.UNDO;
+        undo.innerHTML = '<math><mo>&#x25C1;</mo></math>';
+        undo = Y.one(undo);
 
-    var redo = Y.Node.create('<button type="button" class="' + CSS.REDO + '"'
-           + '" title="' + M.util.get_string('redo', 'tinymce_mathslate') + '"/>'
-           + '<math><mo>&#x25B7;</mo></math>'
-           + '</button>');
-    var clear = Y.Node.create('<button type="button" class="' + CSS.CLEAR + '"'
-           + '" title="' + M.util.get_string('clear', 'tinymce_mathslate') + '"/>'
-           + '<math><mi>&#x2718;</mi></math>'
-           + '</button>');
+    var redo = document.createElement('button');
+        redo.type = 'button';
+        redo.title = M.util.get_string('redo', 'tinymce_mathslate');
+        redo['class'] = CSS.REDO;
+        redo.innerHTML = '<math><mo>&#x25B7;</mo></math>';
+        redo = Y.one(redo);
 
-    var help = Y.Node.create('<button type="button" class="'
-           + CSS.HELP + '" title="'
-           + M.util.get_string('help', 'tinymce_mathslate') + '">'
-           + '<math><mi>&#xE47C;</mi></math>'
-           + '</button>');
+    var clear = document.createElement('button');
+        clear.type = 'button';
+        clear.title = M.util.get_string('clear', 'tinymce_mathslate');
+        clear['class'] = CSS.CLEAR;
+        clear.innerHTML = '<math><mi>&#x2718;</mi></math>';
+        clear = Y.one(clear);
+
+    var help = document.createElement('button');
+        help.type = 'button';
+        help.title = M.util.get_string('help', 'tinymce_mathslate');
+        help['class'] = CSS.HELP;
+        help.innerHTML = '<math><mi>&#xE47C;</mi></math>';
+        help = Y.one(help);
+
     this.toolbar.appendChild(clear);
     this.toolbar.appendChild(undo);
     this.toolbar.appendChild(redo);
     this.toolbar.appendChild(help);
 
+    /* Return snippet as MathML string
+     * @method toMathML
+     * @param object element
+     */
+    this.toMathML = function(element) {
+        if (typeof element !== "object") { return element; }
+        var str = '';
+        element.forEach(function(m) {
+            var attr;
+            if (typeof m !== "object") { return; }
+            str += '<' + m[0];
+            if (m[1] && (typeof m[1] === "object")) {
+                for (attr in m[1]) {
+                    if (typeof m[1][attr] !== "object") {
+                        str += " " + attr + '="' + m[1][attr] + '"';
+                    }
+                }
+            }
+            str += '>';
+            if (m[2]) {
+                str += this.toMathML(m[2]);
+            }
+            str += '</' + m[0] + '>';
+        }, this);
+        return str;
+    };
+
+    /* Reset the editor display and reinitialize drag and drop
+     * @method render
+     */
+    this.render = function() {
+        se.rekey();
+        var jax = MathJax.Hub.getAllJax(canvas.get('node').getDOMNode())[0];
+        if (jax) {
+            MathJax.Hub.Queue(["Text", jax, '<math>' + this.toMathML(this.math) + '</math>']);
+        } else {
+            canvas.get('node').setHTML('');
+            MathJax.Hub.Queue(['addElement', MathJax.HTML, canvas.get('node').getDOMNode(), 'math', {display: "block"}, this.math]);
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, canvas.get('node').getDOMNode()]);
+        }
+        MathJax.Hub.Queue(['makeDraggable', this]);
+
+    };
+
+    /* Method for add adding an object to the workspace
+     * @method addMath
+     * @param string json
+     */
+    this.addMath = function(json) {
+        if (!json) {
+            return;
+        }
+        if (Y.one(id + ' ' + SELECTORS.SELECTED)) {
+            se.insertSnippet(Y.one(id + ' ' + SELECTORS.SELECTED).getAttribute('id'), se.createItem(json));
+        } else {
+            se.append(se.createItem(json));
+        }
+        this.render();
+    };
+    /* Unselect the selected node if any
+     * @method clear
+     */
+    this.clear = function() {
+        if (Y.one(id + ' ' + SELECTORS.SELECTED)) {
+            se.removeSnippet(Y.one(id + ' ' + SELECTORS.SELECTED).getAttribute('id'));
+        } else {
+            this.math = [];
+            se.next = new MathJax.Mathslate.mSlots();
+            se.next.previous = se;
+            se = se.next;
+            se.slots.push(this.math);
+        }
+        this.render();
+    };
+    /* Return output in various formats
+     * @method output
+     * @param string format
+     */
+    this.output = function(format) {
+        function cleanSnippet(s) {
+            if (typeof s !== "object") { return s; }
+            var t = s.slice(0);
+            t.forEach(function(m, index) {
+                if (typeof m !== "object") { return; }
+                if (m[1] && m[1]['class']) {
+                    t[index] = '[]';
+                    return;
+                }
+                if (m[1] && m[1].id) {
+                    delete m[1].id;
+                }
+                if (m[2]) {
+                    m[2] = cleanSnippet(m[2]);
+                }
+            });
+            return t;
+        }
+        switch(format) {
+            case 'MathML': return canvas.get('node').one('script').getHTML();
+            case 'HTML': return canvas.get('node').one('span').getHTML();
+            case 'JSON': return Y.JSON.stringify(cleanSnippet(this.math));
+            default: return se.output(format);
+        }
+    };
+    /* Get HTML representation of the constructed mathematics
+     * @method getHTML
+     * @return String HTML rendering of the editor content
+     */
+    this.getHTML = function() {
+        return canvas.get('node').one('span').getHTML();
+    };
+
+    /* Change back to state undone
+     * @method redo
+     */
+    this.redo = function() {
+        se = se.redo();
+        this.math = se.slots[0];
+        this.render();
+    };
+
+    /* Restore to last saved state
+     * @method undo
+     */
+    this.undo = function() {
+        se = se.undo();
+        this.math = se.slots[0];
+        this.render();
+    };
+
+    MathJax.Hub.Register.StartupHook("Snippet Editor Ready", function () {
+        se = new MathJax.Mathslate.mSlots();
+        se.slots.push(context.math);
+        context.render();
+    });
+
+    redo.on('click', this.redo, this);
+    undo.on('click', this.undo, this);
+    clear.on('click', this.clear, this);
     help.on('click', function() {
         preview.setHTML('<iframe src="' + NS.help + '" style="width: '
             + preview.getStyle('width') + '" class="' + CSS.HELPBOX + '"/>');
     });
-
-    /* Create drop shim above workspace
-     * @function makeDrops
-     *
-     */
-    this.makeDrops = function() {
-        shim = Y.Node.create('<span></span>');
-        shim.setHTML(se.preview().replace(/div/g, 'span').replace(/<\/*br>/g, ''));
-        Y.one(id).appendChild(shim);
-        shim.all('span').each(function (s) {
-            if (!canvas.get('node').one('#' + s.getAttribute('id'))) {
-                return;
-            }
-            s.appendChild('<span style="position: relative; opacity: 0"><math display="inline">' +
-                this.toMathML([Y.JSON.parse(se.getItemByID(s.getAttribute('id')))]).replace(/id="[^"]*"/,'') +
-                '</math></span>');
-            s.setAttribute('style', 'position: absolute; top: 0; left: 0; margin: 0px; z-index: +1');
-        }, this);
-        shim.all('span').each(function (s) {
-            if (!canvas.get('node').one('#' + s.getAttribute('id'))) {
-                return;
-            }
-            var rect = canvas.get('node').one('#' + s.getAttribute('id')).getDOMNode().getBoundingClientRect();
-            var srect = s.getDOMNode().getBoundingClientRect();
-            s.setStyle('top', rect.top - srect.top);
-            s.setStyle('left', rect.left - srect.left);
-            s.setStyle('width', rect.width);
-            s.setStyle('height', rect.height);
-        });
-        MathJax.Hub.Queue(['Typeset', MathJax.Hub, shim.getDOMNode()]);
-    };
 
     /* Add drag and drop functionality
      * @function makeDraggable
@@ -270,144 +369,36 @@ NS.MathJaxEditor = function(id) {
 
         });
     };
-    /* Return snippet as MathML string
-     * @method toMathML
-     * @param object element
+
+    /* Create drop shim above workspace
+     * @function makeDrops
+     *
      */
-    this.toMathML = function(element) {
-        if (typeof element !== "object") { return element; }
-        var str = '';
-        element.forEach(function(m) {
-            var attr;
-            if (typeof m !== "object") { return; }
-            str += '<' + m[0];
-            if (m[1] && (typeof m[1] === "object")) {
-                for (attr in m[1]) {
-                    if (typeof m[1][attr] !== "object") {
-                        str += " " + attr + '="' + m[1][attr] + '"';
-                    }
-                }
+    this.makeDrops = function() {
+        shim = Y.Node.create('<span></span>');
+        shim.setHTML(se.preview().replace(/div/g, 'span').replace(/<\/*br>/g, ''));
+        Y.one(id).appendChild(shim);
+        shim.all('span').each(function (s) {
+            if (!canvas.get('node').one('#' + s.getAttribute('id'))) {
+                return;
             }
-            str += '>';
-            if (m[2]) {
-                str += this.toMathML(m[2]);
-            }
-            str += '</' + m[0] + '>';
+            s.appendChild('<span style="position: relative; opacity: 0"><math display="inline">' +
+                this.toMathML([Y.JSON.parse(se.getItemByID(s.getAttribute('id')))]).replace(/id="[^"]*"/,'') +
+                '</math></span>');
+            s.setAttribute('style', 'position: absolute; top: 0; left: 0; margin: 0px; z-index: +1');
         }, this);
-        return str;
+        shim.all('span').each(function (s) {
+            if (!canvas.get('node').one('#' + s.getAttribute('id'))) {
+                return;
+            }
+            var rect = canvas.get('node').one('#' + s.getAttribute('id')).getDOMNode().getBoundingClientRect();
+            var srect = s.getDOMNode().getBoundingClientRect();
+            s.setStyle('top', rect.top - srect.top);
+            s.setStyle('left', rect.left - srect.left);
+            s.setStyle('width', rect.width);
+            s.setStyle('height', rect.height);
+        });
+        MathJax.Hub.Queue(['Typeset', MathJax.Hub, shim.getDOMNode()]);
     };
-
-    /* Reset the editor display and reinitialize drag and drop
-     * @method render
-     */
-    this.render = function() {
-        se.rekey();
-        var jax = MathJax.Hub.getAllJax(canvas.get('node').getDOMNode())[0];
-        if (jax) {
-            MathJax.Hub.Queue(["Text", jax, '<math>' + this.toMathML(this.math) + '</math>']);
-        } else {
-            canvas.get('node').setHTML('');
-            MathJax.Hub.Queue(['addElement', MathJax.HTML, canvas.get('node').getDOMNode(), 'math', {display: "block"}, this.math]);
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub, canvas.get('node').getDOMNode()]);
-        }
-        MathJax.Hub.Queue(['makeDraggable', this]);
-
-    };
-
-    /* Method for add adding an object to the workspace
-     * @method addMath
-     * @param string json
-     */
-    this.addMath = function(json) {
-        if (!json) {
-            return;
-        }
-        if (Y.one(id + ' ' + SELECTORS.SELECTED)) {
-            se.insertSnippet(Y.one(id + ' ' + SELECTORS.SELECTED).getAttribute('id'), se.createItem(json));
-        } else {
-            se.append(se.createItem(json));
-        }
-        this.render();
-    };
-    /* Unselect the selected node if any
-     * @method clear
-     */
-    this.clear = function() {
-        if (Y.one(id + ' ' + SELECTORS.SELECTED)) {
-            se.removeSnippet(Y.one(id + ' ' + SELECTORS.SELECTED).getAttribute('id'));
-        } else {
-            this.math = [];
-            se.next = new MathJax.Mathslate.mSlots();
-            se.next.previous = se;
-            se = se.next;
-            se.slots.push(this.math);
-        }
-        this.render();
-    };
-    /* Return output in various formats
-     * @method output
-     * @param string format
-     */
-    this.output = function(format) {
-        function cleanSnippet(s) {
-            if (typeof s !== "object") { return s; }
-            var t = s.slice(0);
-            t.forEach(function(m, index) {
-                if (typeof m !== "object") { return; }
-                if (m[1] && m[1]['class']) {
-                    t[index] = '[]';
-                    return;
-                }
-                if (m[1] && m[1].id) {
-                    delete m[1].id;
-                }
-                if (m[2]) {
-                    m[2] = cleanSnippet(m[2]);
-                }
-            });
-            return t;
-        }
-        switch(format) {
-            case 'MathML': return canvas.get('node').one('script').getHTML();
-            case 'HTML': return canvas.get('node').one('span').getHTML();
-            case 'JSON': return Y.JSON.stringify(cleanSnippet(this.math));
-            default: return se.output(format);
-        }
-    };
-    /* Get HTML representation of the constructed mathematics
-     * @method getHTML
-     * @return String HTML rendering of the editor content
-     */
-    this.getHTML = function() {
-        return canvas.get('node').one('span').getHTML();
-    };
-
-    /* Change back to state undone
-     * @method redo
-     */
-    this.redo = function() {
-        se = se.redo();
-        this.math = se.slots[0];
-        this.render();
-    };
-
-    /* Restore to last saved state
-     * @method undo
-     */
-    this.undo = function() {
-        se = se.undo();
-        this.math = se.slots[0];
-        this.render();
-    };
-
-    redo.on('click', this.redo, this);
-    undo.on('click', this.undo, this);
-    clear.on('click', this.clear, this);
-
-    MathJax.Hub.Register.StartupHook("Snippet Editor Ready", function () {
-        se = new MathJax.Mathslate.mSlots();
-        se.slots.push(context.math);
-        context.render();
-    });
 
 };
