@@ -37,8 +37,7 @@ var SELECTORS = {
 NS.MathJaxEditor = function(id) {
     MathJax.Ajax.Require("[Mathslate]/snippeteditor.js");
     this.math = [];
-    var se,
-        context = this;
+    var se;
 
     var shim, ddnodes;
     this.workspace = Y.one(id).append('<div id="canvas" class="' + CSS.WORKSPACE + '"/>');
@@ -387,11 +386,11 @@ NS.MathJaxEditor = function(id) {
 
     };
 
-    MathJax.Hub.Register.StartupHook("Snippet Editor Ready", function () {
+    MathJax.Hub.Register.StartupHook("Snippet Editor Ready", [function (context) {
         se = new MathJax.Mathslate.mSlots();
         se.slots.push(context.math);
         context.render();
-    });
+    }, this]);
 
     redo.on('click', this.redo, this);
     undo.on('click', this.undo, this);
