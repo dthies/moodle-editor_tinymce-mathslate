@@ -58,24 +58,6 @@ NS.MathJaxEditor = function(id) {
     }, this);
 
     //Place buttons for internal editor functions
-/*
-    var undo = Y.Node.create('<button type="button" class="'
-           + CSS.UNDO + '">' + '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
-           + M.util.image_url('undo', 'editor_tinymce')
-           + '" title="' + M.util.get_string('undo', 'tinymce_mathslate') + '"/></button>');
-    var redo = Y.Node.create('<button type="button" class="'
-           + CSS.REDO + '">' + '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
-           + M.util.image_url('redo', 'editor_tinymce') + '" title="'
-           + M.util.get_string('redo', 'tinymce_mathslate') + '"/></button>');
-    var clear = Y.Node.create('<button type="button" class="'
-           + CSS.CLEAR + '">' + '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
-           + M.util.image_url('delete', 'editor_tinymce') + '" title="'
-           + M.util.get_string('clear', 'tinymce_mathslate') + '"/></button>');
-    var help = Y.Node.create('<button type="button" class="'
-           + CSS.HELP + '">' + '<img class="iiicon" aria-hidden="true" role="presentation" width="16" height="16" src="'
-           + M.util.image_url('help', 'core') + '" title="'
-           + M.util.get_string('help', 'tinymce_mathslate') + '"/></button>');
-*/
 
     var undo = document.createElement('button');
         undo.type = 'button';
@@ -135,23 +117,6 @@ NS.MathJaxEditor = function(id) {
             str += '</' + m[0] + '>';
         }, this);
         return str;
-    };
-
-    /* Reset the editor display and reinitialize drag and drop
-     * @method render
-     */
-    this.render = function() {
-        se.rekey();
-        var jax = MathJax.Hub.getAllJax(canvas.get('node').getDOMNode())[0];
-        if (jax) {
-            MathJax.Hub.Queue(["Text", jax, '<math>' + this.toMathML(this.math) + '</math>']);
-        } else {
-            canvas.get('node').setHTML('');
-            MathJax.Hub.Queue(['addElement', MathJax.HTML, canvas.get('node').getDOMNode(), 'math', {display: "block"}, this.math]);
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub, canvas.get('node').getDOMNode()]);
-        }
-        MathJax.Hub.Queue(['makeDraggable', this]);
-
     };
 
     /* Method for add adding an object to the workspace
@@ -239,20 +204,6 @@ NS.MathJaxEditor = function(id) {
         this.math = se.slots[0];
         this.render();
     };
-
-    MathJax.Hub.Register.StartupHook("Snippet Editor Ready", function () {
-        se = new MathJax.Mathslate.mSlots();
-        se.slots.push(context.math);
-        context.render();
-    });
-
-    redo.on('click', this.redo, this);
-    undo.on('click', this.undo, this);
-    clear.on('click', this.clear, this);
-    help.on('click', function() {
-        preview.setHTML('<iframe src="' + NS.help + '" style="width: '
-            + preview.getStyle('width') + '" class="' + CSS.HELPBOX + '"/>');
-    });
 
     /* Add drag and drop functionality
      * @function makeDraggable
@@ -420,6 +371,37 @@ NS.MathJaxEditor = function(id) {
         });
         MathJax.Hub.Queue(['Typeset', MathJax.Hub, shim.getDOMNode()]);
     };
+
+    /* Reset the editor display and reinitialize drag and drop
+     * @method render
+     */
+    this.render = function() {
+        se.rekey();
+        var jax = MathJax.Hub.getAllJax(canvas.get('node').getDOMNode())[0];
+        if (jax) {
+            MathJax.Hub.Queue(["Text", jax, '<math>' + this.toMathML(this.math) + '</math>']);
+        } else {
+            canvas.get('node').setHTML('');
+            MathJax.Hub.Queue(['addElement', MathJax.HTML, canvas.get('node').getDOMNode(), 'math', {display: "block"}, this.math]);
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, canvas.get('node').getDOMNode()]);
+        }
+        MathJax.Hub.Queue(['makeDraggable', this]);
+
+    };
+
+    MathJax.Hub.Register.StartupHook("Snippet Editor Ready", function () {
+        se = new MathJax.Mathslate.mSlots();
+        se.slots.push(context.math);
+        context.render();
+    });
+
+    redo.on('click', this.redo, this);
+    undo.on('click', this.undo, this);
+    clear.on('click', this.clear, this);
+    help.on('click', function() {
+        preview.setHTML('<iframe src="' + NS.help + '" style="width: '
+            + preview.getStyle('width') + '" class="' + CSS.HELPBOX + '"/>');
+    });
 
 };
 

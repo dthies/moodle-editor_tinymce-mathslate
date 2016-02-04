@@ -117,23 +117,6 @@ NS.MathJaxEditor = function(id) {
         return str;
     };
 
-    /* Reset the editor display and reinitialize drag and drop
-     * @method render
-     */
-    this.render = function() {
-        se.rekey();
-        var jax = MathJax.Hub.getAllJax(canvas.get('node').getDOMNode())[0];
-        if (jax) {
-            MathJax.Hub.Queue(["Text", jax, '<math>' + this.toMathML(this.math) + '</math>']);
-        } else {
-            canvas.get('node').setHTML('');
-            MathJax.Hub.Queue(['addElement', MathJax.HTML, canvas.get('node').getDOMNode(), 'math', {display: "block"}, this.math]);
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub, canvas.get('node').getDOMNode()]);
-        }
-        MathJax.Hub.Queue(['makeDraggable', this]);
-
-    };
-
     /* Method for add adding an object to the workspace
      * @method addMath
      * @param string json
@@ -219,20 +202,6 @@ NS.MathJaxEditor = function(id) {
         this.math = se.slots[0];
         this.render();
     };
-
-    MathJax.Hub.Register.StartupHook("Snippet Editor Ready", function () {
-        se = new MathJax.Mathslate.mSlots();
-        se.slots.push(context.math);
-        context.render();
-    });
-
-    redo.on('click', this.redo, this);
-    undo.on('click', this.undo, this);
-    clear.on('click', this.clear, this);
-    help.on('click', function() {
-        preview.setHTML('<iframe src="' + NS.help + '" style="width: '
-            + preview.getStyle('width') + '" class="' + CSS.HELPBOX + '"/>');
-    });
 
     /* Add drag and drop functionality
      * @function makeDraggable
@@ -400,5 +369,36 @@ NS.MathJaxEditor = function(id) {
         });
         MathJax.Hub.Queue(['Typeset', MathJax.Hub, shim.getDOMNode()]);
     };
+
+    /* Reset the editor display and reinitialize drag and drop
+     * @method render
+     */
+    this.render = function() {
+        se.rekey();
+        var jax = MathJax.Hub.getAllJax(canvas.get('node').getDOMNode())[0];
+        if (jax) {
+            MathJax.Hub.Queue(["Text", jax, '<math>' + this.toMathML(this.math) + '</math>']);
+        } else {
+            canvas.get('node').setHTML('');
+            MathJax.Hub.Queue(['addElement', MathJax.HTML, canvas.get('node').getDOMNode(), 'math', {display: "block"}, this.math]);
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, canvas.get('node').getDOMNode()]);
+        }
+        MathJax.Hub.Queue(['makeDraggable', this]);
+
+    };
+
+    MathJax.Hub.Register.StartupHook("Snippet Editor Ready", function () {
+        se = new MathJax.Mathslate.mSlots();
+        se.slots.push(context.math);
+        context.render();
+    });
+
+    redo.on('click', this.redo, this);
+    undo.on('click', this.undo, this);
+    clear.on('click', this.clear, this);
+    help.on('click', function() {
+        preview.setHTML('<iframe src="' + NS.help + '" style="width: '
+            + preview.getStyle('width') + '" class="' + CSS.HELPBOX + '"/>');
+    });
 
 };
