@@ -371,6 +371,38 @@ NS.MathJaxEditor = function(id) {
         MathJax.Hub.Queue(['Typeset', MathJax.Hub, shim.getDOMNode()]);
     };
 
+    /* Create drop shim above workspace
+     * @function makeDrops
+     *
+     */
+    this.makeDrops = function() {
+        shim = document.createElement('span');
+        shim.innerHTML = se.preview().replace(/div/g, 'span').replace(/<\/*br>/g, '');
+        Y.one(id).appendChild(shim);
+        var list = shim.getElementsByTagName('span');
+        for (var i = 0; i < list.length; i++) {
+            var s = list.item(i);
+            if (canvas.get('node').one('#' + s.id)) {
+                var content = document.createElement('span');
+                content.setAttribute('style', "position: relative; opacity: 0");
+                content.innerHTML = '<math display="inline">' +
+                    this.toMathML([Y.JSON.parse(se.getItemByID(s.getAttribute('id')))]).replace(/id="[^"]*"/,'') +
+                    '</math>';
+                s.appendChild(content);
+                s.setAttribute('style', 'position: absolute; top: 4.75px; left: 1.25px; margin: 0px; z-index: +1');
+
+                var rect = canvas.get('node').one('#' + s.id).getDOMNode().getBoundingClientRect();
+                var srect = s.getBoundingClientRect();
+                s.setAttribute('style', 'position: absolute; top: '
+                        + (rect.top - srect.top).toString()
+                        + 'px; left: ' + (rect.left - srect.left).toString()
+                        + 'px; z-index: +1');
+            }
+        }
+        MathJax.Hub.Queue(['Typeset', MathJax.Hub, shim]);
+        shim = Y.one(shim);
+    };
+
     /* Reset the editor display and reinitialize drag and drop
      * @method render
      */
