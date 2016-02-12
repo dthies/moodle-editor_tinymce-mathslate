@@ -89,6 +89,22 @@ NS.MathJaxEditor = function(id) {
     this.toolbar.appendChild(redo);
     this.toolbar.appendChild(help);
 
+    /* Reset the editor display and reinitialize drag and drop
+     * @method render
+     */
+    this.render = function() {
+        se.rekey();
+        var jax = MathJax.Hub.getAllJax(canvas.get('node').getDOMNode())[0];
+        if (jax) {
+            MathJax.Hub.Queue(["Text", jax, '<math>' + this.toMathML(this.math) + '</math>']);
+        } else {
+            canvas.get('node').setHTML('');
+            MathJax.Hub.Queue(['addElement', MathJax.HTML, canvas.get('node').getDOMNode(), 'math', {display: "block"}, this.math]);
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, canvas.get('node').getDOMNode()]);
+        }
+        MathJax.Hub.Queue(['makeDraggable', this]);
+    };
+
     /* Return snippet as MathML string
      * @method toMathML
      * @param object element
@@ -202,16 +218,10 @@ NS.MathJaxEditor = function(id) {
         this.render();
     };
 
-    /* Add drag and drop functionality
-     * @function makeDraggable
+    /* Update the TeX preview
+     * @function updatePreview
      */
-    this.makeDraggable = function() {
-        var context = this;
-        if (shim) {
-            shim.remove();
-        }
-        this.makeDrops();
-        ddnodes = shim;
+    this.updatePreview = function() {
         preview.setHTML('<div class="' + CSS.PREVIEW + '">' + se.preview('tex') + '</div>');
         if (se.getSelected() && preview.one('#' + se.getSelected())) {
             canvas.get('node').one('#' + se.getSelected()).addClass(CSS.SELECTED);
@@ -220,122 +230,189 @@ NS.MathJaxEditor = function(id) {
             canvas.get('node').one('#' + se.getSelected()).setAttribute('fill', 'green');
             preview.one('#' + se.getSelected()).addClass(CSS.SELECTED);
         }
+    };
 
-        se.forEach(function(m) {
-            var node = ddnodes.one('#' + m[1].id);
-            if (!node) {return;}
-            node.setAttribute('title', preview.one('#' + m[1].id).getHTML().replace(/<div *[^>]*>|<\/div>|<br>/g, ''));
-            node.handleClick = function(e) {
-                var selectedNode = ddnodes.one('#' + se.getSelected());
-                if (!selectedNode) {
+    this.doDD = function(m) {
+        var node = ddnodes.one('#' + m[1].id);
+        if (!node) {return;}
+        node.handleClick = function(e) {
+            var selectedNode = ddnodes.one('#' + se.getSelected());
+            if (!selectedNode) {
                     e.stopPropagation();
-                    se.select(this.getAttribute('id'));
-                    context.render();
+                se.select(this.getAttribute('id'));
+                return;
+            }
+            if (selectedNode === this) {
+                if (preview.one('#' + this.getAttribute('id')).test('.' + CSS.PREVIEW + ' >')) {
+                    se.select();
                     return;
                 }
-                if (selectedNode === this) {
-                    if (preview.one('#' + this.getAttribute('id')).test('.' + CSS.PREVIEW + ' >')) {
-                        se.select();
-                        context.render();
-                        return;
-                    }
-                    this.removeClass(CSS.SELECTED);
-                    preview.one('#' + this.getAttribute('id')).removeClass(CSS.SELECTED);
+                this.removeClass(CSS.SELECTED);
+                preview.one('#' + this.getAttribute('id')).removeClass(CSS.SELECTED);
+                canvas.get('node').one('#' + se.getSelected()).removeAttribute('mathcolor');
+                canvas.get('node').one('#' + se.getSelected()).removeAttribute('stroke');
+                canvas.get('node').one('#' + se.getSelected()).removeAttribute('fill');
+                se.select();
+                return;
+                }
+            if (selectedNode.one('#' + this.getAttribute('id'))) {
+                return;
+            }
+            e.stopPropagation();
+            se.insertSnippet(this.getAttribute('id'), se.removeSnippet(selectedNode.getAttribute('id')));
+            se.select();
+            context.render();
+        };
+        node.on('click', function(e) {
+        });
+        var selectedNode = ddnodes.one('#' + se.getSelected());
+        if (!dragenabled) {
+            return;
+        }
+        if ((!m[1] || !m[1]['class'] || m[1]['class'] !== 'blank') &&
+                !(selectedNode && preview.one('#' + se.getSelected()).one('#' + m[1].id))) {
+            var drag = new Y.DD.Drag({node: node,
+                moveOnEnd: false
+            });
+
+            drag.on('drag:start', function() {
+                if (canvas.get('node').one('#' + se.getSelected())) {
+                    preview.one('#' + se.getSelected()).removeClass(CSS.SELECTED);
+                    canvas.get('node').one('#' + se.getSelected()).removeClass(CSS.SELECTED);
                     canvas.get('node').one('#' + se.getSelected()).removeAttribute('mathcolor');
                     canvas.get('node').one('#' + se.getSelected()).removeAttribute('stroke');
                     canvas.get('node').one('#' + se.getSelected()).removeAttribute('fill');
                     se.select();
-                    return;
                 }
-                if (selectedNode.one('#' + this.getAttribute('id'))) {
-                    return;
-                }
-                e.stopPropagation();
-                se.insertSnippet(this.getAttribute('id'), se.removeSnippet(selectedNode.getAttribute('id')));
-                se.select();
-                context.render();
-            };
-            node.on('click', function(e) {
-                this.handleClick(e);
+                this.get('node').addClass(CSS.DRAGGEDNODE);
+                this.get('node').setAttribute('mathcolor', 'red');
+                ddnodes.one('#' + m[1].id).setAttribute('mathcolor', 'red');
+                ddnodes.one('#' + m[1].id).setAttribute('stroke', 'red');
+                this.get('dragNode').addClass(CSS.DRAGNODE);
+                this.get('dragNode').all('> span')
+                    .pop()
+                    .setStyle('opacity', '1');
             });
+            drag.on('drag:end', function() {
+                this.get('node').removeClass(CSS.DRAGGEDNODE);
+                this.get('node').removeAttribute('mathcolor');
+                this.get('node').removeAttribute('stroke');
+                this.get('dragNode').all('> span')
+                    .pop()
+                    .setStyle('opacity', '0');
+                this.get('dragNode').setStyles({top: 0, left: 0});
+            });
+        }
+
+        var drop = new Y.DD.Drop({node: node});
+        drop.on('drop:hit', function(e) {
+            var dragTarget = e.drag.get('node').get('id');
+            if (e.drag.get('data')) {
+                se.insertSnippet(m[1].id, se.createItem(e.drag.get('data')));
+            }
+            else if (dragTarget !== m[1].id && se.isItem(dragTarget) && !preview.one('#' + dragTarget).one('#' + m[1].id)) {
+                se.insertSnippet(e.drop.get('node').get('id'), se.removeSnippet(dragTarget));
+            }
+            this.render();
+        }, this);
+        drop.on('drop:enter', function(e) {
+            e.stopPropagation();
+            ddnodes.all(id + ' ' + SELECTORS.HIGHLIGHT).each(function(n) {
+                 n.removeClass(CSS.HIGHLIGHT);
+                 var id = n.getAttribute('id');
+                 if (canvas.get('node').one(id)) {
+                     canvas.get('node').one(id).removeClass(CSS.HIGHLIGHT);
+                     canvas.get('node').one(id).removeAttribute('mathcolor');
+                     canvas.get('node').one(id).removeAttribute('stroke');
+                     canvas.get('node').one(id).removeAttribute('fill');
+                 }
+            });
+            ddnodes.one('#' + m[1].id).addClass(CSS.HIGHLIGHT);
+            canvas.get('node').one('#' + m[1].id).addClass(CSS.HIGHLIGHT);
+            canvas.get('node').one('#' + m[1].id).setAttribute('mathcolor', 'yellow');
+            canvas.get('node').one('#' + m[1].id).setAttribute('stroke', 'yellow');
+            canvas.get('node').one('#' + m[1].id).setAttribute('fill', 'yellow');
+        });
+        drop.on('drop:exit', function(e) {
+            e.stopPropagation();
+            this.get('node').removeClass(CSS.HIGHLIGHT);
+            canvas.get('node').one('#' + m[1].id).removeClass(CSS.HIGHLIGHT);
+            canvas.get('node').one('#' + m[1].id).removeAttribute('mathcolor');
+            canvas.get('node').one('#' + m[1].id).removeAttribute('stroke');
+            canvas.get('node').one('#' + m[1].id).removeAttribute('fill');
+        });
+
+    };
+
+    this.setTitle = function(m) {
+        var node = ddnodes.one('#' + m[1].id);
+        if (!node) {return;}
+        node.setAttribute('expressionId', m[1].id);
+        node.setAttribute('title', preview.one('#' + m[1].id).getHTML().replace(/<div *[^>]*>|<\/div>|<br>/g, ''));
+        node.addClass('mathslate_dnd');
+
+    };
+
+    /* Add drag and drop functionality
+     * @function makeDraggable
+     */
+    this.makeDraggable = function() {
+        if (shim) {
+            shim.remove();
+        }
+        this.makeDrops();
+        ddnodes = shim;
+
+        this.updatePreview();
+
+        se.forEach(this.doDD, this);
+    };
+
+    /* Add drag and drop functionality
+     * @function makeDraggable
+     */
+    this.makeDraggable = function() {
+        if (shim) {
+            shim.remove();
+        }
+        this.makeDrops();
+        ddnodes = shim;
+
+        this.updatePreview();
+
+        se.forEach(this.setTitle, this);
+        se.forEach(this.doDD, this);
+        ddnodes.delegate('click', function(e) {
             var selectedNode = ddnodes.one('#' + se.getSelected());
-            if (!dragenabled) {
+            if (!selectedNode) {
+                e.stopPropagation();
+                se.select(e.currentTarget.getAttribute('id'));
+                this.render();
                 return;
             }
-            if ((!m[1] || !m[1]['class'] || m[1]['class'] !== 'blank') &&
-                    !(selectedNode && preview.one('#' + se.getSelected()).one('#' + m[1].id))) {
-                var drag = new Y.DD.Drag({node: node,
-                    moveOnEnd: false
-                });
-
-                drag.on('drag:start', function() {
-                    if (canvas.get('node').one('#' + se.getSelected())) {
-                        preview.one('#' + se.getSelected()).removeClass(CSS.SELECTED);
-                        canvas.get('node').one('#' + se.getSelected()).removeClass(CSS.SELECTED);
-                        canvas.get('node').one('#' + se.getSelected()).removeAttribute('mathcolor');
-                        canvas.get('node').one('#' + se.getSelected()).removeAttribute('stroke');
-                        canvas.get('node').one('#' + se.getSelected()).removeAttribute('fill');
-                        se.select();
-                    }
-                    this.get('node').addClass(CSS.DRAGGEDNODE);
-                    this.get('node').setAttribute('mathcolor', 'red');
-                    ddnodes.one('#' + m[1].id).setAttribute('mathcolor', 'red');
-                    ddnodes.one('#' + m[1].id).setAttribute('stroke', 'red');
-                    this.get('dragNode').addClass(CSS.DRAGNODE);
-                    this.get('dragNode').all('> span')
-                        .pop()
-                        .setStyle('opacity', '1');
-                });
-                drag.on('drag:end', function() {
-                    this.get('node').removeClass(CSS.DRAGGEDNODE);
-                    this.get('node').removeAttribute('mathcolor');
-                    this.get('node').removeAttribute('stroke');
-                    this.get('dragNode').all('> span')
-                        .pop()
-                        .setStyle('opacity', '0');
-                    this.get('dragNode').setStyles({top: 0, left: 0});
-                });
+            if (selectedNode === e.currentTarget) {
+                if (preview.one('#' + e.currentTarget.getAttribute('id')).test('.' + CSS.PREVIEW + ' >')) {
+                    se.select();
+                    this.render();
+                    return;
+                }
+                e.currentTarget.removeClass(CSS.SELECTED);
+                preview.one('#' + e.currentTarget.getAttribute('id')).removeClass(CSS.SELECTED);
+                canvas.get('node').one('#' + se.getSelected()).removeAttribute('mathcolor');
+                canvas.get('node').one('#' + se.getSelected()).removeAttribute('stroke');
+                canvas.get('node').one('#' + se.getSelected()).removeAttribute('fill');
+                se.select();
+                return;
+                }
+            if (selectedNode.one('#' + e.currentTarget.getAttribute('id'))) {
+                return;
             }
+            e.stopPropagation();
+            se.insertSnippet(e.currentTarget.getAttribute('id'), se.removeSnippet(selectedNode.getAttribute('id')));
+            se.select();
+            this.render();
+        }, '.mathslate_dnd', this);
 
-            var drop = new Y.DD.Drop({node: node});
-            drop.on('drop:hit', function(e) {
-                var dragTarget = e.drag.get('node').get('id');
-                if (e.drag.get('data')) {
-                    se.insertSnippet(m[1].id, se.createItem(e.drag.get('data')));
-                }
-                else if (dragTarget !== m[1].id && se.isItem(dragTarget) && !preview.one('#' + dragTarget).one('#' + m[1].id)) {
-                    se.insertSnippet(e.drop.get('node').get('id'), se.removeSnippet(dragTarget));
-                }
-                context.render();
-            });
-            drop.on('drop:enter', function(e) {
-                e.stopPropagation();
-                ddnodes.all(id + ' ' + SELECTORS.HIGHLIGHT).each(function(n) {
-                     n.removeClass(CSS.HIGHLIGHT);
-                     var id = n.getAttribute('id');
-                     if (canvas.get('node').one(id)) {
-                         canvas.get('node').one(id).removeClass(CSS.HIGHLIGHT);
-                         canvas.get('node').one(id).removeAttribute('mathcolor');
-                         canvas.get('node').one(id).removeAttribute('stroke');
-                         canvas.get('node').one(id).removeAttribute('fill');
-                     }
-                });
-                ddnodes.one('#' + m[1].id).addClass(CSS.HIGHLIGHT);
-                canvas.get('node').one('#' + m[1].id).addClass(CSS.HIGHLIGHT);
-                canvas.get('node').one('#' + m[1].id).setAttribute('mathcolor', 'yellow');
-                canvas.get('node').one('#' + m[1].id).setAttribute('stroke', 'yellow');
-                canvas.get('node').one('#' + m[1].id).setAttribute('fill', 'yellow');
-            });
-            drop.on('drop:exit', function(e) {
-                e.stopPropagation();
-                this.get('node').removeClass(CSS.HIGHLIGHT);
-                canvas.get('node').one('#' + m[1].id).removeClass(CSS.HIGHLIGHT);
-                canvas.get('node').one('#' + m[1].id).removeAttribute('mathcolor');
-                canvas.get('node').one('#' + m[1].id).removeAttribute('stroke');
-                canvas.get('node').one('#' + m[1].id).removeAttribute('fill');
-            });
-
-        });
     };
 
     /* Create drop shim above workspace
@@ -399,23 +476,6 @@ NS.MathJaxEditor = function(id) {
         }
         MathJax.Hub.Queue(['Typeset', MathJax.Hub, shim]);
         shim = Y.one(shim);
-    };
-
-    /* Reset the editor display and reinitialize drag and drop
-     * @method render
-     */
-    this.render = function() {
-        se.rekey();
-        var jax = MathJax.Hub.getAllJax(canvas.get('node').getDOMNode())[0];
-        if (jax) {
-            MathJax.Hub.Queue(["Text", jax, '<math>' + this.toMathML(this.math) + '</math>']);
-        } else {
-            canvas.get('node').setHTML('');
-            MathJax.Hub.Queue(['addElement', MathJax.HTML, canvas.get('node').getDOMNode(), 'math', {display: "block"}, this.math]);
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub, canvas.get('node').getDOMNode()]);
-        }
-        MathJax.Hub.Queue(['makeDraggable', this]);
-
     };
 
     MathJax.Hub.Register.StartupHook("Snippet Editor Ready", [function (context) {
