@@ -1,6 +1,7 @@
 {
   "moodle-tinymce_mathslate-mathjaxeditor" : {
       "requires" : [
+          "drag-delegate",
           "dd-drop"
       ]
   }

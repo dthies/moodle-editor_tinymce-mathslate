@@ -234,118 +234,6 @@ NS.MathJaxEditor = function(id) {
         }
     };
 
-    this.doDD = function(m) {
-        var node = ddnodes.one('#' + m[1].id);
-        if (!node) {return;}
-        node.handleClick = function(e) {
-            var selectedNode = ddnodes.one('#' + se.getSelected());
-            if (!selectedNode) {
-                    e.stopPropagation();
-                se.select(this.getAttribute('id'));
-                return;
-            }
-            if (selectedNode === this) {
-                if (preview.one('#' + this.getAttribute('id')).test('.' + CSS.PREVIEW + ' >')) {
-                    se.select();
-                    return;
-                }
-                this.removeClass(CSS.SELECTED);
-                preview.one('#' + this.getAttribute('id')).removeClass(CSS.SELECTED);
-                canvas.get('node').one('#' + se.getSelected()).removeAttribute('mathcolor');
-                canvas.get('node').one('#' + se.getSelected()).removeAttribute('stroke');
-                canvas.get('node').one('#' + se.getSelected()).removeAttribute('fill');
-                se.select();
-                return;
-                }
-            if (selectedNode.one('#' + this.getAttribute('id'))) {
-                return;
-            }
-            e.stopPropagation();
-            se.insertSnippet(this.getAttribute('id'), se.removeSnippet(selectedNode.getAttribute('id')));
-            se.select();
-            context.render();
-        };
-        node.on('click', function(e) {
-        });
-        var selectedNode = ddnodes.one('#' + se.getSelected());
-        if (!dragenabled) {
-            return;
-        }
-        if ((!m[1] || !m[1]['class'] || m[1]['class'] !== 'blank') &&
-                !(selectedNode && preview.one('#' + se.getSelected()).one('#' + m[1].id))) {
-            var drag = new Y.DD.Drag({node: node,
-                moveOnEnd: false
-            });
-
-            drag.on('drag:start', function() {
-                if (canvas.get('node').one('#' + se.getSelected())) {
-                    preview.one('#' + se.getSelected()).removeClass(CSS.SELECTED);
-                    canvas.get('node').one('#' + se.getSelected()).removeClass(CSS.SELECTED);
-                    canvas.get('node').one('#' + se.getSelected()).removeAttribute('mathcolor');
-                    canvas.get('node').one('#' + se.getSelected()).removeAttribute('stroke');
-                    canvas.get('node').one('#' + se.getSelected()).removeAttribute('fill');
-                    se.select();
-                }
-                this.get('node').addClass(CSS.DRAGGEDNODE);
-                this.get('node').setAttribute('mathcolor', 'red');
-                ddnodes.one('#' + m[1].id).setAttribute('mathcolor', 'red');
-                ddnodes.one('#' + m[1].id).setAttribute('stroke', 'red');
-                this.get('dragNode').addClass(CSS.DRAGNODE);
-                this.get('dragNode').all('> span')
-                    .pop()
-                    .setStyle('opacity', '1');
-            });
-            drag.on('drag:end', function() {
-                this.get('node').removeClass(CSS.DRAGGEDNODE);
-                this.get('node').removeAttribute('mathcolor');
-                this.get('node').removeAttribute('stroke');
-                this.get('dragNode').all('> span')
-                    .pop()
-                    .setStyle('opacity', '0');
-                this.get('dragNode').setStyles({top: 0, left: 0});
-            });
-        }
-
-        var drop = new Y.DD.Drop({node: node});
-        drop.on('drop:hit', function(e) {
-            var dragTarget = e.drag.get('node').get('id');
-            if (e.drag.get('data')) {
-                se.insertSnippet(m[1].id, se.createItem(e.drag.get('data')));
-            }
-            else if (dragTarget !== m[1].id && se.isItem(dragTarget) && !preview.one('#' + dragTarget).one('#' + m[1].id)) {
-                se.insertSnippet(e.drop.get('node').get('id'), se.removeSnippet(dragTarget));
-            }
-            this.render();
-        }, this);
-        drop.on('drop:enter', function(e) {
-            e.stopPropagation();
-            ddnodes.all(id + ' ' + SELECTORS.HIGHLIGHT).each(function(n) {
-                 n.removeClass(CSS.HIGHLIGHT);
-                 var id = n.getAttribute('id');
-                 if (canvas.get('node').one(id)) {
-                     canvas.get('node').one(id).removeClass(CSS.HIGHLIGHT);
-                     canvas.get('node').one(id).removeAttribute('mathcolor');
-                     canvas.get('node').one(id).removeAttribute('stroke');
-                     canvas.get('node').one(id).removeAttribute('fill');
-                 }
-            });
-            ddnodes.one('#' + m[1].id).addClass(CSS.HIGHLIGHT);
-            canvas.get('node').one('#' + m[1].id).addClass(CSS.HIGHLIGHT);
-            canvas.get('node').one('#' + m[1].id).setAttribute('mathcolor', 'yellow');
-            canvas.get('node').one('#' + m[1].id).setAttribute('stroke', 'yellow');
-            canvas.get('node').one('#' + m[1].id).setAttribute('fill', 'yellow');
-        });
-        drop.on('drop:exit', function(e) {
-            e.stopPropagation();
-            this.get('node').removeClass(CSS.HIGHLIGHT);
-            canvas.get('node').one('#' + m[1].id).removeClass(CSS.HIGHLIGHT);
-            canvas.get('node').one('#' + m[1].id).removeAttribute('mathcolor');
-            canvas.get('node').one('#' + m[1].id).removeAttribute('stroke');
-            canvas.get('node').one('#' + m[1].id).removeAttribute('fill');
-        });
-
-    };
-
     this.setTitle = function(m) {
         var node = ddnodes.one('#' + m[1].id);
         if (!node) {return;}
@@ -367,23 +255,16 @@ NS.MathJaxEditor = function(id) {
 
         this.updatePreview();
 
-        se.forEach(this.doDD, this);
+        se.forEach(this.setTitle);
+
+        this.addListeners();
     };
 
     /* Add drag and drop functionality
-     * @function makeDraggable
+     * @function addListeners
      */
-    this.makeDraggable = function() {
-        if (shim) {
-            shim.remove();
-        }
-        this.makeDrops();
-        ddnodes = shim;
+    this.addListeners = function() {
 
-        this.updatePreview();
-
-        se.forEach(this.setTitle, this);
-        se.forEach(this.doDD, this);
         ddnodes.delegate('click', function(e) {
             var selectedNode = ddnodes.one('#' + se.getSelected());
             if (!selectedNode) {
@@ -415,6 +296,111 @@ NS.MathJaxEditor = function(id) {
             this.render();
         }, '.mathslate_dnd', this);
 
+        var del = new Y.DD.Delegate({
+            container: ddnodes,
+            moveOnEnd: false,
+            nodes: '.mathslate_dnd'
+        });
+        Y.DD.DDM.on('drag:start', function(e) {
+            var drag = e.target;
+            if (drag.get('node').hasClass('mathslate_dnd')) {
+                drag.get('node').addClass(CSS.DRAGGEDNODE);
+                drag.get('dragNode').addClass(CSS.DRAGNODE);
+                drag.get('dragNode').all('> span')
+                    .pop()
+                    .setStyle('opacity', '1');
+            }
+        });
+        Y.DD.DDM.on('drag:end', function(e) {
+            var drag = e.target;
+            if (drag.get('node').hasClass('mathslate_dnd')) {
+                drag.get('node').removeClass(CSS.DRAGGEDNODE);
+                drag.get('node').removeAttribute('mathcolor');
+                drag.get('node').removeAttribute('stroke');
+                drag.get('dragNode').all('> span')
+                    .pop()
+                    .setStyle('opacity', '0');
+                drag.get('dragNode').setStyles({top: 0, left: 0});
+                e.stopPropagation();
+            }
+        });
+        this.workspace.all('.mathslate_dnd').each(function(n) {
+            new Y.DD.Drop({
+               node: n
+            });
+        });
+        Y.DD.DDM.on('drop:hit', function(e) {
+            if (!e.target.get('node').hasClass('mathslate_dnd')) {
+                return;
+            }
+            var dragTarget = e.drag.get('node').get('id');
+            var id = e.target.get('node').getAttribute('id');
+            if (e.drag.get('data')) {
+                se.insertSnippet(id, se.createItem(e.drag.get('data')));
+            }
+            else if (dragTarget !== id && se.isItem(dragTarget) && !preview.one('#' + dragTarget).one('#' + id)) {
+                se.insertSnippet(e.drop.get('node').get('id'), se.removeSnippet(dragTarget));
+            }
+            else {
+                return;
+            }
+            e.stopPropagation();
+            this.render();
+        }, this);
+        Y.DD.DDM.on('drop:enter', function(e) {
+            if (!e.target.get('node').hasClass('mathslate_dnd')) {
+                return;
+            }
+            e.stopPropagation();
+            var id = e.target.get('node').getAttribute('id');
+            //ddnodes.all(id + ' ' + SELECTORS.HIGHLIGHT)
+            //canvas.get('node').all(id + ' ' + SELECTORS.HIGHLIGHT)
+            canvas.get('node').all(SELECTORS.HIGHLIGHT)
+                .removeAttribute('mathcolor')
+                .removeAttribute('stroke')
+                .removeAttribute('fill')
+                .removeClass(CSS.HIGHLIGHT);
+            ddnodes.all(SELECTORS.HIGHLIGHT)
+                .removeClass(CSS.HIGHLIGHT);
+            if(ddnodes.one('#' + id)) {
+                ddnodes.one('#' + id).addClass(CSS.HIGHLIGHT);
+            }
+            canvas.get('node').one('#' + id).addClass(CSS.HIGHLIGHT);
+            canvas.get('node').one('#' + id)
+                .setAttribute('mathcolor', 'yellow')
+                .setAttribute('stroke', 'yellow')
+                .setAttribute('fill', 'yellow');
+        });
+        Y.DD.DDM.on('drop:exit', function(e) {
+            if (!e.target.get('node') || !e.target.get('node').hasClass('mathslate_dnd')) {
+                return;
+            }
+            var id = e.target.get('node').getAttribute('id');
+            if (canvas.get('node').one('#' + id).test(CSS.HIGHLIGHT)) {
+                canvas.get('node').one('#' + id)
+                    .removeAttribute('mathcolor')
+                    .removeAttribute('stroke')
+                    .removeAttribute('fill')
+                    .removeClass(CSS.HIGHLIGHT);
+                e.target.get('node')
+                    .removeClass(CSS.HIGHLIGHT);
+                canvas.get('node').all('#' + id + '[stroke=yellow]')
+                    .removeAttribute('fill')
+                    .removeAttribute('stroke');
+                canvas.get('node').all('#' + id + '[mathcolor=yellow]')
+                    .removeAttribute('mathcolor');
+            }
+            else {
+                e.target.get('node')
+                    .addClass(CSS.HIGHLIGHT);
+                canvas.get('node').one('#' + id)
+                    .setAttribute('mathcolor', 'yellow')
+                    .setAttribute('stroke', 'yellow')
+                    .setAttribute('fill', 'yellow')
+                    .addClass(CSS.HIGHLIGHT);
+                e.stopPropagation();
+            }
+        });
     };
 
     /* Create drop shim above workspace
@@ -497,4 +483,4 @@ NS.MathJaxEditor = function(id) {
 };
 
 
-}, '@VERSION@', {"requires": ["dd-drop"]});
+}, '@VERSION@', {"requires": ["drag-delegate", "dd-drop"]});
