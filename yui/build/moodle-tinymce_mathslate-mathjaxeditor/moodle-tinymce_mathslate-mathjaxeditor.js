@@ -35,24 +35,29 @@ var SELECTORS = {
     HIGHLIGHT: '.' + CSS.HIGHLIGHT
 };
 
+var shim, ddnodes;
+
 //Constructor for equation workspace
 NS.MathJaxEditor = function(id) {
     MathJax.Ajax.Require("[Mathslate]/snippeteditor.js");
 
-    var shim, ddnodes;
+    this.workspace = Y.one(id).getDOMNode();
+    this.init();
+};
 
-    this.init = function() {
+NS.MathJaxEditor.prototype = {
+
+    init: function() {
         this.math = [];
 
-        this.canvas = document.createElement('div')
+        this.canvas = document.createElement('div');
         this.canvas.id = 'canvas';
         this.canvas.setAttribute('class', CSS.WORKSPACE);
-        this.workspace = Y.one(id).getDOMNode();
         this.workspace.appendChild(this.canvas);
 
         this.addToolbar();
 
-        var preview = Y.one(id).appendChild(Y.Node.create('<div class="' + CSS.PANEL + '"/>'));
+        var preview = Y.one(this.workspace).appendChild(Y.Node.create('<div class="' + CSS.PANEL + '"/>'));
         preview.delegate('click', function(e) {
             ddnodes.one('#' + this.getAttribute('id')).handleClick(e);
         }, 'div');
@@ -72,12 +77,12 @@ NS.MathJaxEditor = function(id) {
             context.render();
         }, this]);
 
-    }
+    },
 
     /* Reset the editor display and reinitialize drag and drop
      * @method render
      */
-    this.render = function() {
+    render: function() {
         this.se.rekey();
         var jax = MathJax.Hub.getAllJax(this.workspace)[0];
         if (jax) {
@@ -88,13 +93,13 @@ NS.MathJaxEditor = function(id) {
             MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.workspace.firstChild]);
         }
         MathJax.Hub.Queue(['makeDraggable', this]);
-    };
+    },
 
     /* Return snippet as MathML string
      * @method toMathML
      * @param object element
      */
-    this.toMathML = function(element) {
+    toMathML: function(element) {
         if (typeof element !== "object") { return element; }
         var str = '';
         element.forEach(function(m) {
@@ -115,29 +120,30 @@ NS.MathJaxEditor = function(id) {
             str += '</' + m[0] + '>';
         }, this);
         return str;
-    };
+    },
 
     /* Method for add adding an object to the workspace
      * @method addMath
      * @param string json
      */
-    this.addMath = function(json) {
+    addMath: function(json) {
         if (!json) {
             return;
         }
-        if (Y.one(id + ' ' + SELECTORS.SELECTED)) {
-            this.se.insertSnippet(Y.one(id + ' ' + SELECTORS.SELECTED).getAttribute('id'), this.se.createItem(json));
+        if (Y.one(this.workspace).one(SELECTORS.SELECTED)) {
+            this.se.insertSnippet(Y.one(this.workspace).one(SELECTORS.SELECTED).getAttribute('id'), this.se.createItem(json));
         } else {
             this.se.append(this.se.createItem(json));
         }
         this.render();
-    };
+    },
+
     /* Unselect the selected node if any
      * @method clear
      */
-    this.clear = function() {
-        if (Y.one(id + ' ' + SELECTORS.SELECTED)) {
-            this.se.removeSnippet(Y.one(id + ' ' + SELECTORS.SELECTED).getAttribute('id'));
+    clear: function() {
+        if (Y.one(this.workspace).one(SELECTORS.SELECTED)) {
+            this.se.removeSnippet(Y.one(this.workspace).one(SELECTORS.SELECTED).getAttribute('id'));
         } else {
             this.math = [];
             this.se.next = new MathJax.Mathslate.mSlots();
@@ -146,12 +152,13 @@ NS.MathJaxEditor = function(id) {
             this.se.slots.push(this.math);
         }
         this.render();
-    };
+    },
+
     /* Return output in various formats
      * @method output
      * @param string format
      */
-    this.output = function(format) {
+    output: function(format) {
         function cleanSnippet(s) {
             if (typeof s !== "object") { return s; }
             var t = s.slice(0);
@@ -176,37 +183,38 @@ NS.MathJaxEditor = function(id) {
             case 'JSON': return Y.JSON.stringify(cleanSnippet(this.math));
             default: return this.se.output(format);
         }
-    };
+    },
+
     /* Get HTML representation of the constructed mathematics
      * @method getHTML
      * @return String HTML rendering of the editor content
      */
-    this.getHTML = function() {
+    getHTML: function() {
         return this.workspace.firstChild.innerHTML;
-    };
+    },
 
     /* Change back to state undone
      * @method redo
      */
-    this.redo = function() {
+    redo: function() {
         this.se = this.se.redo();
         this.math = this.se.slots[0];
         this.render();
-    };
+    },
 
     /* Restore to last saved state
      * @method undo
      */
-    this.undo = function() {
+    undo: function() {
         this.se = this.se.undo();
         this.math = this.se.slots[0];
         this.render();
-    };
+    },
 
     /* Update the TeX preview
      * @function updatePreview
      */
-    this.updatePreview = function() {
+    updatePreview: function() {
         this.preview.setHTML('<div class="' + CSS.PREVIEW + '">' + this.se.preview('tex') + '</div>');
         if (this.se.getSelected() && this.preview.one('#' + this.se.getSelected())) {
             Y.one(this.workspace).one('#' + this.se.getSelected()).addClass(CSS.SELECTED);
@@ -217,21 +225,21 @@ NS.MathJaxEditor = function(id) {
                 .setAttribute('fill', 'green');
             this.preview.one('#' + this.se.getSelected()).addClass(CSS.SELECTED);
         }
-    };
+    },
 
-    this.setTitle = function(m) {
+    setTitle: function(m) {
         var node = ddnodes.one('#' + m[1].id);
         if (!node) {return;}
         node.setAttribute('expressionId', m[1].id);
         node.setAttribute('title', this.preview.one('#' + m[1].id).getHTML().replace(/<div *[^>]*>|<\/div>|<br>/g, ''));
         node.addClass('mathslate_dnd');
 
-    };
+    },
 
     /* Add drag and drop functionality
      * @function makeDraggable
      */
-    this.makeDraggable = function() {
+    makeDraggable: function() {
         if (shim) {
             shim.remove();
         }
@@ -246,12 +254,12 @@ NS.MathJaxEditor = function(id) {
         });
 
         this.addListeners();
-    };
+    },
 
     /* Add drag and drop functionality
      * @function addListeners
      */
-    this.addListeners = function() {
+    addListeners: function() {
 
         ddnodes.delegate('click', function(e) {
             var selectedNode = ddnodes.one('#' + this.se.getSelected());
@@ -285,11 +293,12 @@ NS.MathJaxEditor = function(id) {
             this.render();
         }, '.mathslate_dnd', this);
 
-        var del = new Y.DD.Delegate({
+        new Y.DD.Delegate({
             container: ddnodes,
             moveOnEnd: false,
             nodes: '.mathslate_dnd'
         });
+
         Y.DD.DDM.on('drag:start', function(e) {
             var drag = e.target;
             if (drag.get('node').hasClass('mathslate_dnd')) {
@@ -314,11 +323,13 @@ NS.MathJaxEditor = function(id) {
                 e.stopPropagation();
             }
         }, this);
+
         Y.one(this.workspace).all('.mathslate_dnd').each(function(n) {
             new Y.DD.Drop({
                node: n
             });
         });
+
         Y.DD.DDM.on('drop:hit', function(e) {
             if (!e.target.get('node').hasClass('mathslate_dnd')) {
                 return;
@@ -337,6 +348,7 @@ NS.MathJaxEditor = function(id) {
             e.stopPropagation();
             this.render();
         }, this);
+
         Y.DD.DDM.on('drop:enter', function(e) {
             if (!e.target.get('node').hasClass('mathslate_dnd')) {
                 return;
@@ -359,6 +371,7 @@ NS.MathJaxEditor = function(id) {
                 .setAttribute('stroke', 'yellow')
                 .setAttribute('fill', 'yellow');
         }, this);
+
         Y.DD.DDM.on('drop:exit', function(e) {
             if (!e.target.get('node') || !e.target.get('node').hasClass('mathslate_dnd')) {
                 return;
@@ -389,16 +402,16 @@ NS.MathJaxEditor = function(id) {
                 e.stopPropagation();
             }
         }, this);
-    };
+    },
 
     /* Create drop shim above workspace
      * @function makeDrops
      *
      */
-    this.makeDrops = function() {
+    YUImakeDrops: function() {
         shim = Y.Node.create('<span></span>');
         shim.setHTML(this.se.preview().replace(/div/g, 'span').replace(/<\/*br>/g, ''));
-        Y.one(id).appendChild(shim);
+        Y.one(this.workspace).appendChild(shim);
         shim.all('span').each(function (s) {
             if (!Y.one(this.workspace).one('#' + s.getAttribute('id'))) {
                 return;
@@ -420,13 +433,13 @@ NS.MathJaxEditor = function(id) {
             s.setStyle('height', rect.height);
         });
         MathJax.Hub.Queue(['Typeset', MathJax.Hub, shim.getDOMNode()]);
-    };
+    },
 
     /* Create drop shim above workspace
      * @function makeDrops
      *
      */
-    this.makeDrops = function() {
+    makeDrops: function() {
         shim = document.createElement('span');
         shim.innerHTML = this.se.preview().replace(/div/g, 'span').replace(/<\/*br>/g, '');
         this.workspace.appendChild(shim);
@@ -452,14 +465,14 @@ NS.MathJaxEditor = function(id) {
         }
         MathJax.Hub.Queue(['Typeset', MathJax.Hub, shim]);
         shim = Y.one(shim);
-    };
+    },
 
     /* Create a toolbar for editing functions
      *
      * @function addToolbar
      *
      */
-    this.addToolbar = function() {
+    addToolbar: function() {
 
         //Place buttons for internal editor functions
 
@@ -506,9 +519,6 @@ NS.MathJaxEditor = function(id) {
                 + this.preview.getStyle('width') + '" class="' + CSS.HELPBOX + '"/>');
         }, this);
     }
-
-    this.init();
-
 };
 
 
