@@ -33,7 +33,7 @@ var SELECTORS = {
     HIGHLIGHT: '.' + CSS.HIGHLIGHT
 };
 
-var shim, ddnodes;
+var shim;
 
 //Constructor for equation workspace
 NS.MathJaxEditor = function(id) {
@@ -46,6 +46,7 @@ NS.MathJaxEditor = function(id) {
 NS.MathJaxEditor.prototype = {
 
     init: function() {
+        var ddnodes = Y.one(shim);
         this.math = [];
 
         this.canvas = document.createElement('div');
@@ -55,7 +56,11 @@ NS.MathJaxEditor.prototype = {
 
         this.addToolbar();
 
-        var preview = Y.one(this.workspace).appendChild(Y.Node.create('<div class="' + CSS.PANEL + '"/>'));
+        var panel = document.createElement('div');
+        panel['class'] = CSS.PANEL;
+        this.workspace.appendChild(panel);
+        //var preview = Y.one(this.workspace).appendChild(Y.Node.create('<div class="' + CSS.PANEL + '"/>'));
+        var preview = Y.one(panel);
         preview.delegate('click', function(e) {
             ddnodes.one('#' + this.getAttribute('id')).handleClick(e);
         }, 'div');
@@ -226,6 +231,7 @@ NS.MathJaxEditor.prototype = {
     },
 
     setTitle: function(m) {
+        var ddnodes = Y.one(shim);
         var node = ddnodes.one('#' + m[1].id);
         if (!node) {return;}
         node.setAttribute('expressionId', m[1].id);
@@ -242,7 +248,6 @@ NS.MathJaxEditor.prototype = {
             shim.remove();
         }
         this.makeDrops();
-        ddnodes = shim;
 
         this.updatePreview();
 
@@ -259,6 +264,7 @@ NS.MathJaxEditor.prototype = {
      */
     addListeners: function() {
 
+        var ddnodes = Y.one(shim);
         ddnodes.delegate('click', function(e) {
             var selectedNode = ddnodes.one('#' + this.se.getSelected());
             if (!selectedNode) {
@@ -348,6 +354,7 @@ NS.MathJaxEditor.prototype = {
         }, this);
 
         Y.DD.DDM.on('drop:enter', function(e) {
+            var ddnodes = Y.one(shim);
             if (!e.target.get('node').hasClass('mathslate_dnd')) {
                 return;
             }
@@ -413,7 +420,8 @@ NS.MathJaxEditor.prototype = {
         var list = shim.getElementsByTagName('span');
         for (var i = 0; i < list.length; i++) {
             var s = list.item(i);
-            if (Y.one(this.workspace).one('#' + s.id)) {
+            //if (Y.one(this.workspace).one('#' + s.id)) {
+            if (this.se.getItemByID(s.getAttribute('id')) {
                 var content = document.createElement('span');
                 content.setAttribute('style', "position: relative; opacity: 0");
                 content.innerHTML = '<math display="inline">' +
@@ -431,7 +439,6 @@ NS.MathJaxEditor.prototype = {
             }
         }
         MathJax.Hub.Queue(['Typeset', MathJax.Hub, shim]);
-        shim = Y.one(shim);
     },
 
     /* Create a toolbar for editing functions
