@@ -408,37 +408,6 @@ NS.MathJaxEditor.prototype = {
      * @function makeDrops
      *
      */
-    YUImakeDrops: function() {
-        shim = Y.Node.create('<span></span>');
-        shim.setHTML(this.se.preview().replace(/div/g, 'span').replace(/<\/*br>/g, ''));
-        Y.one(this.workspace).appendChild(shim);
-        shim.all('span').each(function (s) {
-            if (!Y.one(this.workspace).one('#' + s.getAttribute('id'))) {
-                return;
-            }
-            s.appendChild('<span style="position: relative; opacity: 0"><math display="inline">' +
-                this.toMathML([Y.JSON.parse(this.se.getItemByID(s.getAttribute('id')))]).replace(/id="[^"]*"/,'') +
-                '</math></span>');
-            s.setAttribute('style', 'position: absolute; top: 0; left: 0; margin: 0px; z-index: +1');
-        }, this);
-        shim.all('span').each(function (s) {
-            if (!Y.one(this.workspace).one('#' + s.getAttribute('id'))) {
-                return;
-            }
-            var rect = Y.one(this.workspace).one('#' + s.getAttribute('id')).getDOMNode().getBoundingClientRect();
-            var srect = s.getDOMNode().getBoundingClientRect();
-            s.setStyle('top', rect.top - srect.top);
-            s.setStyle('left', rect.left - srect.left);
-            s.setStyle('width', rect.width);
-            s.setStyle('height', rect.height);
-        });
-        MathJax.Hub.Queue(['Typeset', MathJax.Hub, shim.getDOMNode()]);
-    },
-
-    /* Create drop shim above workspace
-     * @function makeDrops
-     *
-     */
     makeDrops: function() {
         shim = document.createElement('span');
         shim.innerHTML = this.se.preview().replace(/div/g, 'span').replace(/<\/*br>/g, '');
