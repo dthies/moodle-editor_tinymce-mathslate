@@ -135,7 +135,7 @@ padding: 1px
 
 .mathslate-tinymce .mathslate-toolbox .yui3-tab-label {
     height: 2em;
-    width: 3.25em
+    width: 4em
 }
 
 .mathslate-tinymce .mathslate-toolbox .yui3-tab-selected .yui3-tab-focused {
@@ -146,7 +146,7 @@ padding: 1px
 .mathslate-tinymce .mathslate-toolbox .yui3-tab-selected .yui3-tab-label {
     background: #444;
     background-image: none;
-    background: linear-gradient(to bottom,#AAA,#444)
+    background: linear-gradient(to bottom,#AAA,#444) !important
 }
 
 .mathslate-tinymce .mathslate-toolbox .yui3-tabview-list {
