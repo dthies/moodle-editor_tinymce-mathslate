@@ -15,20 +15,27 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * DragMath integration settings.
+ * TinyMCE Mathslate integration upgrade 
  *
  * @package   tinymce_mathslate
- * @copyright 2014 Daniel Thies <dthies@ccal.edu>
+ * @copyright 2017 Daniel Thies <dthies@ccal.edu>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
 
-if ($ADMIN->fulltree) {
-    $settings->add(new admin_setting_configcheckbox('tinymce_mathslate/requiretex',
-        get_string('requiretex', 'tinymce_mathslate'), get_string('requiretex_desc', 'tinymce_mathslate'), 0));
-    $settings->add(new admin_setting_configtext('tinymce_mathslate/mathjaxurl',
-        get_string('mathjaxurl', 'tinymce_mathslate'), get_string('mathjaxurl_desc', 'tinymce_mathslate'),
-        'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js', PARAM_RAW));
+/**
+ * @param int $oldversion the version we are upgrading from
+ * @return bool result
+ */
+function xmldb_tinymce_mathslate_upgrade($oldversion) {
+    global $CFG;
 
+    if ($oldversion < 2015041704) {
+        $mathjaxurl = get_config('tinymce_mathslate', 'mathjaxurl');
+	if ($mathjaxurl == 'https://cdn.mathjax.org/mathjax/latest/MathJax.js') {
+            set_config('mathjaxurl', 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js', 'tinymce_mathslate');
+        }
+        upgrade_plugin_savepoint(true, 2015041704, 'tinymce', 'mathslate');
+    }
 }
