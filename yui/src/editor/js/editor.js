@@ -17,7 +17,6 @@
 
 if (M) {M.tinymce_mathslate = M.tinymce_mathslate || {};}
 var NS = M && M.tinymce_mathslate || {};
-var MathJax = window.MathJax;
 var CSS = {
    TOOLBOX: 'mathslate-toolbox',
    DRAGNODE: 'mathslate-toolbox-drag',
@@ -32,13 +31,11 @@ var CSS = {
  * @param string config
  */
 NS.Editor = function(editorID, config, params) {
+    var MathJax = window.MathJax;
     params = params || {texInput: true};
     var me = this;
     this.node = Y.one(editorID);
     this.node.setHTML(M.util.get_string('nomathjax', 'tinymce_mathslate'));
-    if (typeof MathJax === 'undefined') {
-        return;
-    }
     // Disable CHTML preview in MathJax 2.5+
     MathJax.Hub.processSectionDelay = 0;
 

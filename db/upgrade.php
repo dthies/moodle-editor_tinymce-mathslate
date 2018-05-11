@@ -33,7 +33,7 @@ function xmldb_tinymce_mathslate_upgrade($oldversion) {
 
     if ($oldversion < 2015041704) {
         $mathjaxurl = get_config('tinymce_mathslate', 'mathjaxurl');
-	if ($mathjaxurl == 'https://cdn.mathjax.org/mathjax/latest/MathJax.js') {
+        if ($mathjaxurl == 'https://cdn.mathjax.org/mathjax/latest/MathJax.js') {
             set_config('mathjaxurl', 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js', 'tinymce_mathslate');
         }
         upgrade_plugin_savepoint(true, 2015041704, 'tinymce', 'mathslate');

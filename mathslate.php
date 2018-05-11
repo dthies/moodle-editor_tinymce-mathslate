@@ -26,7 +26,8 @@ define('NO_MOODLE_COOKIES', true);
 
 require('../../../../../config.php');
 
-$PAGE->set_context(context_system::instance());
+$context = context_system::instance();
+$PAGE->set_context($context);
 $PAGE->set_url('/lib/editor/tinymce/plugins/mathslate/mathslate.php');
 $PAGE->set_pagelayout('embedded');
 $PAGE->set_title(get_string('title', 'tinymce_mathslate'));
@@ -62,8 +63,16 @@ $htmllang = get_html_lang();
 $PAGE->requires->js('/lib/editor/tinymce/tiny_mce/' . $editor->version . '/tiny_mce_popup.js', true);
 
 // Load MathJax.
-$PAGE->requires->js( new moodle_url(get_config('tinymce_mathslate')->mathjaxurl . '?config=TeX-MML-AM_HTMLorMML,Safe'),true);
-
+$filterstate = filter_get_global_states()['mathjaxloader'];
+if (is_null($filterstate) || $filterstate->active == TEXTFILTER_DISABLED ||
+        $filterstate->active == TEXTFILTER_OFF ||
+        get_config('core', 'version') < 2016120500) {
+    // The mathjaxloader filter is unavailable so load MathJax in the header with url given.
+    $PAGE->requires->js( new moodle_url(get_config('tinymce_mathslate')->mathjaxurl . '?config=TeX-MML-AM_HTMLorMML,Safe'),true);
+} else {
+    // The mathjaxloader filter is a enabled so prompt it to load.
+    $tex = format_text('\(  \)', FORMAT_HTML, array('context' => $context));
+}
 
 $PAGE->requires->strings_for_js(array( 'nomathjax', 'clear', 'undo', 'redo', 'help'), 'tinymce_mathslate');
 $PAGE->requires->strings_for_js(array( 'mathslate', 'cancel', 'cancel_desc',
@@ -72,7 +81,7 @@ $PAGE->requires->strings_for_js(array( 'mathslate', 'cancel', 'cancel_desc',
 
 $elementid = $PAGE->bodyid;
 
-// Loads YUI and MathJax it is included in theme.
+// Loads YUI and MathJax if it is included in theme.
 print $OUTPUT->header();
 
 $PAGE->requires->yui_module('moodle-tinymce_mathslate-dialogue',

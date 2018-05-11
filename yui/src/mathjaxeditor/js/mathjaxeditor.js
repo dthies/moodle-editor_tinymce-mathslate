@@ -16,8 +16,7 @@
  */
 M.tinymce_mathslate = M.tinymce_mathslate || {};
 var NS = M && M.tinymce_mathslate || {};
-var MathJax = window.MathJax,
-    dragenabled = true;
+var dragenabled = true;
 var CSS = {
     SELECTED: 'mathslate-selected',
     WORKSPACE: 'mathslate-workspace',
@@ -35,6 +34,7 @@ var SELECTORS = {
        
 //Constructor for equation workspace
 NS.MathJaxEditor = function(id) {
+    var MathJax = window.MathJax;
     var math = [];
     var se = new NS.mSlots();
     se.slots.push(math);

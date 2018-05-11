@@ -25,6 +25,7 @@ M.tinymce_mathslate = M.tinymce_mathslate || {};
 var CSS = {
    EDITOR: 'mathslate-tinymce'
 };
+
 var NS = M.tinymce_mathslate;
     /**
      * The window used to hold the editor.
@@ -66,9 +67,22 @@ var NS = M.tinymce_mathslate;
         M.tinymce_mathslate.config = params.config || M.tinymce_mathslate.config;
         M.tinymce_mathslate.help = params.help || M.tinymce_mathslate.help;
         var dialogue = Y.one('#' + params.elementid);
+        M.tinymce_mathslate.dialogue = dialogue;
         
         var editorID = dialogue.one('.mathslate-container').generateID();
         Y.one('#' + editorID).addClass(CSS.EDITOR);
+
+        if (typeof window.MathJax === 'undefined') {
+            window.MathJax = {AuthorInit: function () {
+                window.MathJax.Hub.Register.StartupHook("End", NS.editorInit);
+            }};
+        } else {
+            window.MathJax.Hub.Register.StartupHook("End", NS.editorInit);
+        }
+    };
+
+    NS.editorInit = function() {
+        var editorID = M.tinymce_mathslate.dialogue.one('.mathslate-container').generateID();
         var me = new M.tinymce_mathslate.Editor('#' + editorID, M.tinymce_mathslate.config);
 
         var cancel = Y.one('#' + editorID).appendChild(Y.Node.create('<button title="'
@@ -77,10 +91,6 @@ var NS = M.tinymce_mathslate;
         cancel.on('click', function() {
             window.tinyMCEPopup.close();
         });
-        if (typeof MathJax === 'undefined') {
-            return;
-        }
-
         var displayTex = Y.one('#' + editorID).appendChild(Y.Node.create('<button title="'
             + M.util.get_string('display_desc', 'tinymce_mathslate') + '">'
             + M.util.get_string('display', 'tinymce_mathslate') + '</button>'));
@@ -106,8 +116,6 @@ var NS = M.tinymce_mathslate;
             });
             
         window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub, me.node.generateID()]);
-
-        M.tinymce_mathslate.dialogue = dialogue;
         
     };
 
