@@ -47,7 +47,8 @@
     color: #888;
 }
 
-.mathslate-tinymce .mathslate-toolbox-drag, .mathslate-workspace-drag {
+.mathslate-tinymce .mathslate-toolbox-drag,
+.mathslate-workspace-drag {
     color: #fff;
 }
 
@@ -129,8 +130,7 @@
 }
 
 .mathslate-tinymce .mathslate-toolbox .yui3-tabview-panel {
-    background: #eee;
-    background: radial-gradient(#eee, #bbb)
+    background: #eee radial-gradient(#eee, #bbb);
 }
 
 .mathslate-tinymce .mathslate-toolbox .yui3-tab-label {
@@ -139,14 +139,11 @@
 }
 
 .mathslate-tinymce .mathslate-toolbox .yui3-tab-selected .yui3-tab-focused {
-    background-image: none ;
     background: linear-gradient(to top, #444, #888)
 }
 
 .mathslate-tinymce .mathslate-toolbox .yui3-tab-selected .yui3-tab-label {
-    background: #444;
-    background-image: none;
-    background: linear-gradient(to bottom, #aaa, #444) !important;
+    background: #444 linear-gradient(to bottom, #aaa, #444) !important;
 }
 
 .mathslate-tinymce .mathslate-toolbox .yui3-tabview-list {
