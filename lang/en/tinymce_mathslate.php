@@ -43,3 +43,4 @@ $string['nomathjax'] = '<p>MathJax does not seem to be present on this site. In 
 
 /* All lang strings used from TinyMCE JavaScript code must be named 'pluginname:stringname', nono need to create langs/en_dlg.js */
 $string['mathslate:desc'] = 'Insert equation';
+$string['privacy:metadata'] = 'The TinyMCE Mathslate plugin does not store any personal data.';
