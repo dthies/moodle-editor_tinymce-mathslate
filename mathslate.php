@@ -68,7 +68,8 @@ if (is_null($filterstate) || $filterstate->active == TEXTFILTER_DISABLED ||
         $filterstate->active == TEXTFILTER_OFF ||
         get_config('core', 'version') < 2016120500) {
     // The mathjaxloader filter is unavailable so load MathJax in the header with url given.
-    $PAGE->requires->js( new moodle_url(get_config('tinymce_mathslate')->mathjaxurl . '?config=TeX-MML-AM_HTMLorMML,Safe'),true);
+    $PAGE->requires->js(new moodle_url(get_config('tinymce_mathslate')->mathjaxurl,
+            array('config' => 'TeX-MML-AM_HTMLorMML,Safe')), true);
 } else {
     // The mathjaxloader filter is a enabled so prompt it to load.
     $tex = format_text('\(  \)', FORMAT_HTML, array('context' => $context));

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * TinyMCE Mathslate integration upgrade 
+ * TinyMCE Mathslate integration upgrade
  *
  * @package   tinymce_mathslate
  * @copyright 2017 Daniel Thies <dthies@ccal.edu>
@@ -29,7 +29,6 @@ defined('MOODLE_INTERNAL') || die;
  * @return bool result
  */
 function xmldb_tinymce_mathslate_upgrade($oldversion) {
-    global $CFG;
 
     if ($oldversion < 2015041704) {
         $mathjaxurl = get_config('tinymce_mathslate', 'mathjaxurl');
