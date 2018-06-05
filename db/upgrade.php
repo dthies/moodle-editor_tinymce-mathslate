@@ -37,4 +37,5 @@ function xmldb_tinymce_mathslate_upgrade($oldversion) {
         }
         upgrade_plugin_savepoint(true, 2015041704, 'tinymce', 'mathslate');
     }
+    return true;
 }
