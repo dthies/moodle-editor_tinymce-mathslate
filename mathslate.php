@@ -65,12 +65,11 @@ $PAGE->requires->js('/lib/editor/tinymce/tiny_mce/' . $editor->version . '/tiny_
 // Load MathJax.
 $filterstate = filter_get_global_states()['mathjaxloader'];
 if (is_null($filterstate) || $filterstate->active == TEXTFILTER_DISABLED ||
-        $filterstate->active == TEXTFILTER_OFF ||
         get_config('core', 'version') < 2016120500) {
     // The mathjaxloader filter is unavailable so load MathJax in the header with url given.
     $PAGE->requires->js(new moodle_url(get_config('tinymce_mathslate')->mathjaxurl,
             array('config' => 'TeX-MML-AM_HTMLorMML,Safe')), true);
-} else {
+} else if ($filterstate->active != TEXTFILTER_OFF) {
     // The mathjaxloader filter is a enabled so prompt it to load.
     $tex = format_text('\(  \)', FORMAT_HTML, array('context' => $context));
 }
@@ -85,12 +84,16 @@ $elementid = $PAGE->bodyid;
 // Loads YUI and MathJax if it is included in theme.
 print $OUTPUT->header();
 
-$PAGE->requires->yui_module('moodle-tinymce_mathslate-dialogue',
-                                'M.tinymce_mathslate.init',
-                                array(array('elementid' => $elementid,
-                                   'config' => $CFG->wwwroot . '/lib/editor/tinymce/plugins/mathslate/config.json',
-                                   'help' => $CFG->wwwroot . '/lib/editor/tinymce/plugins/mathslate/help.php')));
+if (!is_null($filterstate) && $filterstate->active == TEXTFILTER_OFF) {
+    print get_string('nomathjax', 'tinymce_mathslate');
+} else { 
+    $PAGE->requires->yui_module('moodle-tinymce_mathslate-dialogue',
+                                    'M.tinymce_mathslate.init',
+                                    array(array('elementid' => $elementid,
+                                       'config' => $CFG->wwwroot . '/lib/editor/tinymce/plugins/mathslate/config.json',
+                                       'help' => $CFG->wwwroot . '/lib/editor/tinymce/plugins/mathslate/help.php')));
 
-print $OUTPUT->container('', 'mathslate-container');
+    print $OUTPUT->container('', 'mathslate-container');
+}
 
 print $OUTPUT->footer();

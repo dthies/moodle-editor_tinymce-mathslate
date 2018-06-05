@@ -1,3 +1,8 @@
+Version 1.1.1
+   Checks whether Moodle MathJax filter is loanding configuration
+   globally and tthen avoids loading its own configuration. This fixes
+   some problems loading for Moodle 3.2+.
+
 Version 1.1
 
 This release adds to the original 1.0 version some technical improvements.
