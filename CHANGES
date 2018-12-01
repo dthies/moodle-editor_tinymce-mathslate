@@ -1,3 +1,7 @@
+Version 1.1.2 
+   Updates the style.css and javascript source to conform to coding style.
+   This fixes issues in Grunt and SASS compilation.
+
 Version 1.1.1
    Checks whether Moodle MathJax filter is loanding configuration
    globally and tthen avoids loading its own configuration. This fixes
