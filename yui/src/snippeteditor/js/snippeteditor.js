@@ -103,7 +103,7 @@ NS.mSlots = function() {
                 });
             }
         }
-   
+
         var newID = 'MJX-' + Y.Node.create('<span></span').generateID();
         var newMath;
 
@@ -222,7 +222,7 @@ NS.mSlots = function() {
                     }
                 });
             }
-            
+
         });
     },
 /* Return output in various formats

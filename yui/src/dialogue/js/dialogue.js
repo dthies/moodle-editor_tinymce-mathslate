@@ -68,7 +68,7 @@ var NS = M.tinymce_mathslate;
         M.tinymce_mathslate.help = params.help || M.tinymce_mathslate.help;
         var dialogue = Y.one('#' + params.elementid);
         M.tinymce_mathslate.dialogue = dialogue;
-        
+
         var editorID = dialogue.one('.mathslate-container').generateID();
         Y.one('#' + editorID).addClass(CSS.EDITOR);
 
@@ -114,8 +114,8 @@ var NS = M.tinymce_mathslate;
             window.tinyMCEPopup.editor.execCommand('mceInsertContent', false,  '\\(' + me.output('tex') + '\\)');
             window.tinyMCEPopup.close();
             });
-            
+
         window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub, me.node.generateID()]);
-        
+
     };
 

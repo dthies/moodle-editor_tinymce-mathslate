@@ -33,7 +33,7 @@ var SELECTORS = {
     SELECTED: '.' + CSS.SELECTED,
     HIGHLIGHT: '.' + CSS.HIGHLIGHT
 };
-       
+
 //Constructor for equation workspace
 NS.MathJaxEditor = function(id) {
     var MathJax = window.MathJax;
@@ -122,7 +122,7 @@ NS.MathJaxEditor = function(id) {
         }
         render();
     });
- 
+
     help.on('click', function() {
         preview.setHTML('<iframe src="' + NS.help + '" style="width: '
             + preview.getStyle('width') + '" class="' + CSS.HELPBOX + '"/>');
@@ -158,7 +158,7 @@ NS.MathJaxEditor = function(id) {
         });
         MathJax.Hub.Queue(['Typeset', MathJax.Hub, shim.getDOMNode()]);
     }
-        
+
     /* Add drag and drop functionality
      * @function makeDraggable
      */
@@ -176,7 +176,7 @@ NS.MathJaxEditor = function(id) {
             canvas.get('node').one('#' + se.getSelected()).setAttribute('fill', 'green');
             preview.one('#' + se.getSelected()).addClass(CSS.SELECTED);
         }
-            
+
         se.forEach(function(m) {
             var node = ddnodes.one('#' + m[1].id);
             if (!node) {return;}
@@ -290,7 +290,7 @@ NS.MathJaxEditor = function(id) {
                 canvas.get('node').one('#' + m[1].id).removeAttribute('stroke');
                 canvas.get('node').one('#' + m[1].id).removeAttribute('fill');
             });
-            
+
         });
     }
     /* Return snippet as MathML string

@@ -40,7 +40,6 @@
 
 .mathslate-tinymce .mathslate-workspace .mathslate-selected {
     color: green;
-    mathcolor: green;
 }
 
 .mathslate-tinymce .mathslate-workspace-dragged {
@@ -63,9 +62,6 @@
 
 .mathslate-tinymce .mathslate-preview div {
     padding-left: 10px;
-}
-
-.mathslate-tinymce .mathslate-preview .mathslate-selected div {
 }
 
 .mathslate-tinymce .mathslate-preview .mathslate-selected {
@@ -104,9 +100,6 @@
     }
 }
 
-.mathslate-tinymce .mathslate-editor {
-}
-
 .mathslate-tinymce .mathslate-workspace {
     background-color: #333;
     color: #eee;
@@ -139,11 +132,11 @@
 }
 
 .mathslate-tinymce .mathslate-toolbox .yui3-tab-selected .yui3-tab-focused {
-    background: linear-gradient(to top, #444, #888)
+    background: linear-gradient(to top, #444, #888);
 }
 
 .mathslate-tinymce .mathslate-toolbox .yui3-tab-selected .yui3-tab-label {
-    background: #444 linear-gradient(to bottom, #aaa, #444) !important;
+    background: #444 linear-gradient(to bottom, #aaa, #444);
 }
 
 .mathslate-tinymce .mathslate-toolbox .yui3-tabview-list {
@@ -151,16 +144,7 @@
 }
 
 .mathslate-tinymce .yui3-tabview-panel {
-height: 100px;
-}
-
-.mathslate-tinymce .mathslate-delete-button {
-}
-
-.mathslate-tinymce .mathslate-undo-button {
-}
-
-.mathslate-tinymce .mathslate-redo-button {
+    height: 100px;
 }
 
 .mathslate-tinymce form button {
@@ -168,7 +152,4 @@ height: 100px;
     height: 24px;
     text-align: center;
     padding: 0;
-}
-
-.mathslate-tinymce .mathslate-help-box {
 }
