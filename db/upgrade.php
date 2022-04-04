@@ -30,12 +30,16 @@ defined('MOODLE_INTERNAL') || die;
  */
 function xmldb_tinymce_mathslate_upgrade($oldversion) {
 
-    if ($oldversion < 2015041704) {
+    if ($oldversion < 2015041708) {
         $mathjaxurl = get_config('tinymce_mathslate', 'mathjaxurl');
-        if ($mathjaxurl == 'https://cdn.mathjax.org/mathjax/latest/MathJax.js') {
-            set_config('mathjaxurl', 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js', 'tinymce_mathslate');
+        if (
+            $mathjaxurl == 'https://cdn.mathjax.org/mathjax/latest/MathJax.js'
+            || $mathjaxurl == 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js'
+            || $mathjaxurl == 'https://cdn.jsdelivr.net/npm/mathjax@2.7.8/MathJax.js'
+        ) {
+            set_config('mathjaxurl', 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js', 'tinymce_mathslate');
         }
-        upgrade_plugin_savepoint(true, 2015041704, 'tinymce', 'mathslate');
+        upgrade_plugin_savepoint(true, 2015041708, 'tinymce', 'mathslate');
     }
     return true;
 }

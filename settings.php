@@ -25,10 +25,17 @@
 defined('MOODLE_INTERNAL') || die;
 
 if ($ADMIN->fulltree) {
-    $settings->add(new admin_setting_configcheckbox('tinymce_mathslate/requiretex',
-        get_string('requiretex', 'tinymce_mathslate'), get_string('requiretex_desc', 'tinymce_mathslate'), 0));
-    $settings->add(new admin_setting_configtext('tinymce_mathslate/mathjaxurl',
-        get_string('mathjaxurl', 'tinymce_mathslate'), get_string('mathjaxurl_desc', 'tinymce_mathslate'),
-        'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js', PARAM_RAW));
-
+    $settings->add(new admin_setting_configcheckbox(
+        'tinymce_mathslate/requiretex',
+        get_string('requiretex', 'tinymce_mathslate'),
+        get_string('requiretex_desc', 'tinymce_mathslate'),
+        0
+    ));
+    $settings->add( new admin_setting_configtext(
+        'tinymce_mathslate/mathjaxurl',
+        get_string('mathjaxurl', 'tinymce_mathslate'),
+        get_string('mathjaxurl_desc', 'tinymce_mathslate'),
+        'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+        PARAM_RAW
+    ));
 }
